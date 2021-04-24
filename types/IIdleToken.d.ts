@@ -24,6 +24,7 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 interface IIdleTokenInterface extends ethers.utils.Interface {
   functions: {
     "balanceOf(address)": FunctionFragment;
+    "decimals()": FunctionFragment;
     "getAPRs()": FunctionFragment;
     "getAvgAPR()": FunctionFragment;
     "getGovTokensAmounts(address)": FunctionFragment;
@@ -40,6 +41,7 @@ interface IIdleTokenInterface extends ethers.utils.Interface {
   };
 
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
+  encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
   encodeFunctionData(functionFragment: "getAPRs", values?: undefined): string;
   encodeFunctionData(functionFragment: "getAvgAPR", values?: undefined): string;
   encodeFunctionData(
@@ -82,6 +84,7 @@ interface IIdleTokenInterface extends ethers.utils.Interface {
   ): string;
 
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getAPRs", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getAvgAPR", data: BytesLike): Result;
   decodeFunctionResult(
@@ -170,6 +173,10 @@ export class IIdleToken extends Contract {
       account: string,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
+
+    decimals(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    "decimals()"(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     getAPRs(
       overrides?: CallOverrides
@@ -293,6 +300,10 @@ export class IIdleToken extends Contract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  decimals(overrides?: CallOverrides): Promise<BigNumber>;
+
+  "decimals()"(overrides?: CallOverrides): Promise<BigNumber>;
+
   getAPRs(
     overrides?: CallOverrides
   ): Promise<
@@ -407,6 +418,10 @@ export class IIdleToken extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    decimals(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "decimals()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     getAPRs(
       overrides?: CallOverrides
     ): Promise<
@@ -518,6 +533,10 @@ export class IIdleToken extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    decimals(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "decimals()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     getAPRs(overrides?: CallOverrides): Promise<BigNumber>;
 
     "getAPRs()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -621,6 +640,10 @@ export class IIdleToken extends Contract {
       account: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    decimals(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "decimals()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getAPRs(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

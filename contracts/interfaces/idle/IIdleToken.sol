@@ -12,6 +12,7 @@ interface IIdleToken {
   function tokenPrice() external view returns (uint256 price);
   function getAPRs() external view returns (address[] memory addresses, uint256[] memory aprs);
   function getAvgAPR() external view returns (uint256 avgApr);
+  function decimals() external view returns (uint256);
   function balanceOf(address account) external view returns (uint256);
   function getGovTokensAmounts(address _usr) external view returns (uint256[] memory _amounts);
   function openRebalance(uint256[] calldata _newAllocations) external returns (bool, uint256 avgApr);

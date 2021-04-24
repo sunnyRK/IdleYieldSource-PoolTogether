@@ -49,7 +49,7 @@ contract IdleYieldSource is IYieldSource, Initializable {
     function balanceOfToken(address addr) public view override returns (uint256) {
         if (balances[addr] == 0) return 0;
         uint256 redeemPrice = IIdleTokenHelper(iIdleTokenHelper).getRedeemPrice(idleToken);
-        uint256 totalBalanceOfToken = balances[addr].mul(redeemPrice.div(1e18));
+        uint256 totalBalanceOfToken = balances[addr].mul(redeemPrice.div(10 ** IIdleToken(idleToken).decimals()));
         return totalBalanceOfToken;
     }
 
