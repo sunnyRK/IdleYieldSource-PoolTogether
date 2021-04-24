@@ -11,11 +11,11 @@
     
     yarn 
  
-3). Test TestCases in commanline  
+3). Test TestCases in commanline For Mainnet fork
         
     npx hardhat test
 
-4). Test script for prizepool
+4). Test script for prizepool For Mainnet fork
 
     npx hardhat run .\scripts\idleYiledSourceScript.ts
 
