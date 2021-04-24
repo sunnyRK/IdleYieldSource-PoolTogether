@@ -2,10 +2,11 @@
 
 ## Setup
 
-1). Make `.env` file on root folder add below variable with your config
-    i). MNEMONIC=""
-    ii). INFURA_API_KEY=""
-    iii). ALCHEMY_API_KEY=""
+1). Make `.env` file on root folder add below variable with your config,  
+
+    i). MNEMONIC=""  
+    ii). INFURA_API_KEY=""  
+    iii). ALCHEMY_API_KEY=""  
 
 2). Install Dependency by 
     
