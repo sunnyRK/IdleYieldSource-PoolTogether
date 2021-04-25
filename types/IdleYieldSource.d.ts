@@ -23,7 +23,8 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface IdleYieldSourceInterface extends ethers.utils.Interface {
   functions: {
-    "_sharesToToken(uint256)": FunctionFragment;
+    "_totalShare()": FunctionFragment;
+    "assetManager()": FunctionFragment;
     "balanceOfToken(address)": FunctionFragment;
     "balances(address)": FunctionFragment;
     "depositToken()": FunctionFragment;
@@ -31,16 +32,25 @@ interface IdleYieldSourceInterface extends ethers.utils.Interface {
     "iIdleTokenHelper()": FunctionFragment;
     "idleToken()": FunctionFragment;
     "initialize(address,address)": FunctionFragment;
+    "owner()": FunctionFragment;
     "redeemToken(uint256)": FunctionFragment;
+    "renounceOwnership()": FunctionFragment;
+    "setAssetManager(address)": FunctionFragment;
+    "sponsor(uint256)": FunctionFragment;
     "supplyTokenTo(uint256,address)": FunctionFragment;
-    "totalDepositedAssets()": FunctionFragment;
     "totalUnderlyingAssets()": FunctionFragment;
+    "transferERC20(address,address,uint256)": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
     "underlyingAsset()": FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: "_sharesToToken",
-    values: [BigNumberish]
+    functionFragment: "_totalShare",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "assetManager",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "balanceOfToken",
@@ -64,8 +74,21 @@ interface IdleYieldSourceInterface extends ethers.utils.Interface {
     functionFragment: "initialize",
     values: [string, string]
   ): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "redeemToken",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "renounceOwnership",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setAssetManager",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "sponsor",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -73,12 +96,16 @@ interface IdleYieldSourceInterface extends ethers.utils.Interface {
     values: [BigNumberish, string]
   ): string;
   encodeFunctionData(
-    functionFragment: "totalDepositedAssets",
+    functionFragment: "totalUnderlyingAssets",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "totalUnderlyingAssets",
-    values?: undefined
+    functionFragment: "transferERC20",
+    values: [string, string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership",
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "underlyingAsset",
@@ -86,7 +113,11 @@ interface IdleYieldSourceInterface extends ethers.utils.Interface {
   ): string;
 
   decodeFunctionResult(
-    functionFragment: "_sharesToToken",
+    functionFragment: "_totalShare",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "assetManager",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -108,20 +139,34 @@ interface IdleYieldSourceInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "idleToken", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "redeemToken",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setAssetManager",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "sponsor", data: BytesLike): Result;
+  decodeFunctionResult(
     functionFragment: "supplyTokenTo",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "totalDepositedAssets",
+    functionFragment: "totalUnderlyingAssets",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "totalUnderlyingAssets",
+    functionFragment: "transferERC20",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -130,10 +175,22 @@ interface IdleYieldSourceInterface extends ethers.utils.Interface {
   ): Result;
 
   events: {
+    "AssetManagerTransferred(address,address)": EventFragment;
     "IdleYieldSourceInitialized(address)": EventFragment;
+    "OwnershipTransferred(address,address)": EventFragment;
+    "RedeemedToken(address,uint256,uint256)": EventFragment;
+    "Sponsored(address,uint256)": EventFragment;
+    "SuppliedTokenTo(address,uint256,uint256,address)": EventFragment;
+    "TransferredERC20(address,address,uint256,address)": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "AssetManagerTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "IdleYieldSourceInitialized"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "RedeemedToken"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Sponsored"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SuppliedTokenTo"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "TransferredERC20"): EventFragment;
 }
 
 export class IdleYieldSource extends Contract {
@@ -180,15 +237,13 @@ export class IdleYieldSource extends Contract {
   interface: IdleYieldSourceInterface;
 
   functions: {
-    _sharesToToken(
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    _totalShare(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    "_sharesToToken(uint256)"(
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    "_totalShare()"(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    assetManager(overrides?: CallOverrides): Promise<[string]>;
+
+    "assetManager()"(overrides?: CallOverrides): Promise<[string]>;
 
     balanceOfToken(
       addr: string,
@@ -235,50 +290,96 @@ export class IdleYieldSource extends Contract {
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
+    owner(overrides?: CallOverrides): Promise<[string]>;
+
+    "owner()"(overrides?: CallOverrides): Promise<[string]>;
+
     redeemToken(
-      amount: BigNumberish,
+      redeemAmount: BigNumberish,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
     "redeemToken(uint256)"(
+      redeemAmount: BigNumberish,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    renounceOwnership(overrides?: Overrides): Promise<ContractTransaction>;
+
+    "renounceOwnership()"(overrides?: Overrides): Promise<ContractTransaction>;
+
+    setAssetManager(
+      newAssetManager: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    "setAssetManager(address)"(
+      newAssetManager: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    sponsor(
+      amount: BigNumberish,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    "sponsor(uint256)"(
       amount: BigNumberish,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
     supplyTokenTo(
-      amount: BigNumberish,
+      mintAmount: BigNumberish,
       to: string,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
     "supplyTokenTo(uint256,address)"(
-      amount: BigNumberish,
+      mintAmount: BigNumberish,
       to: string,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
-    totalDepositedAssets(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    "totalDepositedAssets()"(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     totalUnderlyingAssets(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     "totalUnderlyingAssets()"(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    transferERC20(
+      erc20Token: string,
+      to: string,
+      amount: BigNumberish,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    "transferERC20(address,address,uint256)"(
+      erc20Token: string,
+      to: string,
+      amount: BigNumberish,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    "transferOwnership(address)"(
+      newOwner: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
 
     underlyingAsset(overrides?: CallOverrides): Promise<[string]>;
 
     "underlyingAsset()"(overrides?: CallOverrides): Promise<[string]>;
   };
 
-  _sharesToToken(
-    amount: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
+  _totalShare(overrides?: CallOverrides): Promise<BigNumber>;
 
-  "_sharesToToken(uint256)"(
-    amount: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
+  "_totalShare()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+  assetManager(overrides?: CallOverrides): Promise<string>;
+
+  "assetManager()"(overrides?: CallOverrides): Promise<string>;
 
   balanceOfToken(addr: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -322,50 +423,96 @@ export class IdleYieldSource extends Contract {
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
+  owner(overrides?: CallOverrides): Promise<string>;
+
+  "owner()"(overrides?: CallOverrides): Promise<string>;
+
   redeemToken(
-    amount: BigNumberish,
+    redeemAmount: BigNumberish,
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
   "redeemToken(uint256)"(
+    redeemAmount: BigNumberish,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  renounceOwnership(overrides?: Overrides): Promise<ContractTransaction>;
+
+  "renounceOwnership()"(overrides?: Overrides): Promise<ContractTransaction>;
+
+  setAssetManager(
+    newAssetManager: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  "setAssetManager(address)"(
+    newAssetManager: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  sponsor(
+    amount: BigNumberish,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  "sponsor(uint256)"(
     amount: BigNumberish,
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
   supplyTokenTo(
-    amount: BigNumberish,
+    mintAmount: BigNumberish,
     to: string,
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
   "supplyTokenTo(uint256,address)"(
-    amount: BigNumberish,
+    mintAmount: BigNumberish,
     to: string,
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
-  totalDepositedAssets(overrides?: CallOverrides): Promise<BigNumber>;
-
-  "totalDepositedAssets()"(overrides?: CallOverrides): Promise<BigNumber>;
-
   totalUnderlyingAssets(overrides?: CallOverrides): Promise<BigNumber>;
 
   "totalUnderlyingAssets()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+  transferERC20(
+    erc20Token: string,
+    to: string,
+    amount: BigNumberish,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  "transferERC20(address,address,uint256)"(
+    erc20Token: string,
+    to: string,
+    amount: BigNumberish,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  transferOwnership(
+    newOwner: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  "transferOwnership(address)"(
+    newOwner: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
 
   underlyingAsset(overrides?: CallOverrides): Promise<string>;
 
   "underlyingAsset()"(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
-    _sharesToToken(
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    _totalShare(overrides?: CallOverrides): Promise<BigNumber>;
 
-    "_sharesToToken(uint256)"(
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    "_totalShare()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    assetManager(overrides?: CallOverrides): Promise<string>;
+
+    "assetManager()"(overrides?: CallOverrides): Promise<string>;
 
     balanceOfToken(addr: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -409,35 +556,80 @@ export class IdleYieldSource extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    owner(overrides?: CallOverrides): Promise<string>;
+
+    "owner()"(overrides?: CallOverrides): Promise<string>;
+
     redeemToken(
-      amount: BigNumberish,
+      redeemAmount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     "redeemToken(uint256)"(
-      amount: BigNumberish,
+      redeemAmount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    supplyTokenTo(
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    "renounceOwnership()"(overrides?: CallOverrides): Promise<void>;
+
+    setAssetManager(
+      newAssetManager: string,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    "setAssetManager(address)"(
+      newAssetManager: string,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    sponsor(amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
+
+    "sponsor(uint256)"(
       amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    supplyTokenTo(
+      mintAmount: BigNumberish,
       to: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
     "supplyTokenTo(uint256,address)"(
-      amount: BigNumberish,
+      mintAmount: BigNumberish,
       to: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    totalDepositedAssets(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "totalDepositedAssets()"(overrides?: CallOverrides): Promise<BigNumber>;
-
     totalUnderlyingAssets(overrides?: CallOverrides): Promise<BigNumber>;
 
     "totalUnderlyingAssets()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    transferERC20(
+      erc20Token: string,
+      to: string,
+      amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "transferERC20(address,address,uint256)"(
+      erc20Token: string,
+      to: string,
+      amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "transferOwnership(address)"(
+      newOwner: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     underlyingAsset(overrides?: CallOverrides): Promise<string>;
 
@@ -445,21 +637,72 @@ export class IdleYieldSource extends Contract {
   };
 
   filters: {
+    AssetManagerTransferred(
+      previousAssetManager: string | null,
+      newAssetManager: string | null
+    ): TypedEventFilter<
+      [string, string],
+      { previousAssetManager: string; newAssetManager: string }
+    >;
+
     IdleYieldSourceInitialized(
       idleToken: string | null
     ): TypedEventFilter<[string], { idleToken: string }>;
+
+    OwnershipTransferred(
+      previousOwner: string | null,
+      newOwner: string | null
+    ): TypedEventFilter<
+      [string, string],
+      { previousOwner: string; newOwner: string }
+    >;
+
+    RedeemedToken(
+      from: string | null,
+      shares: null,
+      amount: null
+    ): TypedEventFilter<
+      [string, BigNumber, BigNumber],
+      { from: string; shares: BigNumber; amount: BigNumber }
+    >;
+
+    Sponsored(
+      from: string | null,
+      amount: null
+    ): TypedEventFilter<
+      [string, BigNumber],
+      { from: string; amount: BigNumber }
+    >;
+
+    SuppliedTokenTo(
+      from: string | null,
+      shares: null,
+      amount: null,
+      to: string | null
+    ): TypedEventFilter<
+      [string, BigNumber, BigNumber, string],
+      { from: string; shares: BigNumber; amount: BigNumber; to: string }
+    >;
+
+    TransferredERC20(
+      from: string | null,
+      to: string | null,
+      amount: null,
+      token: string | null
+    ): TypedEventFilter<
+      [string, string, BigNumber, string],
+      { from: string; to: string; amount: BigNumber; token: string }
+    >;
   };
 
   estimateGas: {
-    _sharesToToken(
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    _totalShare(overrides?: CallOverrides): Promise<BigNumber>;
 
-    "_sharesToToken(uint256)"(
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    "_totalShare()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    assetManager(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "assetManager()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     balanceOfToken(addr: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -503,35 +746,80 @@ export class IdleYieldSource extends Contract {
       overrides?: Overrides
     ): Promise<BigNumber>;
 
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "owner()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     redeemToken(
-      amount: BigNumberish,
+      redeemAmount: BigNumberish,
       overrides?: Overrides
     ): Promise<BigNumber>;
 
     "redeemToken(uint256)"(
+      redeemAmount: BigNumberish,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    renounceOwnership(overrides?: Overrides): Promise<BigNumber>;
+
+    "renounceOwnership()"(overrides?: Overrides): Promise<BigNumber>;
+
+    setAssetManager(
+      newAssetManager: string,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    "setAssetManager(address)"(
+      newAssetManager: string,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    sponsor(amount: BigNumberish, overrides?: Overrides): Promise<BigNumber>;
+
+    "sponsor(uint256)"(
       amount: BigNumberish,
       overrides?: Overrides
     ): Promise<BigNumber>;
 
     supplyTokenTo(
-      amount: BigNumberish,
+      mintAmount: BigNumberish,
       to: string,
       overrides?: Overrides
     ): Promise<BigNumber>;
 
     "supplyTokenTo(uint256,address)"(
-      amount: BigNumberish,
+      mintAmount: BigNumberish,
       to: string,
       overrides?: Overrides
     ): Promise<BigNumber>;
 
-    totalDepositedAssets(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "totalDepositedAssets()"(overrides?: CallOverrides): Promise<BigNumber>;
-
     totalUnderlyingAssets(overrides?: CallOverrides): Promise<BigNumber>;
 
     "totalUnderlyingAssets()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    transferERC20(
+      erc20Token: string,
+      to: string,
+      amount: BigNumberish,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    "transferERC20(address,address,uint256)"(
+      erc20Token: string,
+      to: string,
+      amount: BigNumberish,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    "transferOwnership(address)"(
+      newOwner: string,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
 
     underlyingAsset(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -539,15 +827,13 @@ export class IdleYieldSource extends Contract {
   };
 
   populateTransaction: {
-    _sharesToToken(
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    _totalShare(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    "_sharesToToken(uint256)"(
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    "_totalShare()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    assetManager(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "assetManager()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     balanceOfToken(
       addr: string,
@@ -601,34 +887,54 @@ export class IdleYieldSource extends Contract {
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "owner()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     redeemToken(
-      amount: BigNumberish,
+      redeemAmount: BigNumberish,
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
     "redeemToken(uint256)"(
+      redeemAmount: BigNumberish,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    renounceOwnership(overrides?: Overrides): Promise<PopulatedTransaction>;
+
+    "renounceOwnership()"(overrides?: Overrides): Promise<PopulatedTransaction>;
+
+    setAssetManager(
+      newAssetManager: string,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    "setAssetManager(address)"(
+      newAssetManager: string,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    sponsor(
+      amount: BigNumberish,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    "sponsor(uint256)"(
       amount: BigNumberish,
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
     supplyTokenTo(
-      amount: BigNumberish,
+      mintAmount: BigNumberish,
       to: string,
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
     "supplyTokenTo(uint256,address)"(
-      amount: BigNumberish,
+      mintAmount: BigNumberish,
       to: string,
       overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    totalDepositedAssets(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "totalDepositedAssets()"(
-      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     totalUnderlyingAssets(
@@ -637,6 +943,30 @@ export class IdleYieldSource extends Contract {
 
     "totalUnderlyingAssets()"(
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    transferERC20(
+      erc20Token: string,
+      to: string,
+      amount: BigNumberish,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    "transferERC20(address,address,uint256)"(
+      erc20Token: string,
+      to: string,
+      amount: BigNumberish,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    "transferOwnership(address)"(
+      newOwner: string,
+      overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
     underlyingAsset(overrides?: CallOverrides): Promise<PopulatedTransaction>;
