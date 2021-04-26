@@ -20,4 +20,8 @@
 
     npx hardhat run .\scripts\idleYiledSourceScript.ts
 
+5). Check test coverage
+
+    npx hardhat coverage
+
 #### Will Share more details regarding project here.
