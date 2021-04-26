@@ -12,6 +12,7 @@ export type { IIdleTokenHelper } from "./IIdleTokenHelper";
 export type { IProtocolYieldSource } from "./IProtocolYieldSource";
 export type { IYieldSource } from "./IYieldSource";
 export type { GenericProxyFactory } from "./GenericProxyFactory";
+export type { IdleYieldSourceHarness } from "./IdleYieldSourceHarness";
 
 export { OwnableUpgradeable__factory } from "./factories/OwnableUpgradeable__factory";
 export { IERC20Upgradeable__factory } from "./factories/IERC20Upgradeable__factory";
@@ -24,3 +25,4 @@ export { IIdleTokenHelper__factory } from "./factories/IIdleTokenHelper__factory
 export { IProtocolYieldSource__factory } from "./factories/IProtocolYieldSource__factory";
 export { IYieldSource__factory } from "./factories/IYieldSource__factory";
 export { GenericProxyFactory__factory } from "./factories/GenericProxyFactory__factory";
+export { IdleYieldSourceHarness__factory } from "./factories/IdleYieldSourceHarness__factory";

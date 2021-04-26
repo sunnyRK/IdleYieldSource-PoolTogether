@@ -5,7 +5,8 @@ import 'hardhat-abi-exporter';
 import 'hardhat-deploy';
 import 'hardhat-deploy-ethers';
 // import 'hardhat-gas-reporter';
-import 'solidity-coverage';
+require("solidity-coverage");
+
 require('dotenv').config()
 
 import { HardhatUserConfig } from 'hardhat/config';

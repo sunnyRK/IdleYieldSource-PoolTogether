@@ -9,13 +9,11 @@ import {
   BigNumber,
   BigNumberish,
   PopulatedTransaction,
-} from "ethers";
-import {
   Contract,
   ContractTransaction,
   Overrides,
   CallOverrides,
-} from "@ethersproject/contracts";
+} from "ethers";
 import { BytesLike } from "@ethersproject/bytes";
 import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
@@ -23,11 +21,16 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface GenericProxyFactoryInterface extends ethers.utils.Interface {
   functions: {
+    "c_0xf7dcbad1(bytes32)": FunctionFragment;
     "create(address,bytes)": FunctionFragment;
     "create2(address,bytes32,bytes)": FunctionFragment;
     "predictDeterministicAddress(address,bytes32)": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "c_0xf7dcbad1",
+    values: [BytesLike]
+  ): string;
   encodeFunctionData(
     functionFragment: "create",
     values: [string, BytesLike]
@@ -41,6 +44,10 @@ interface GenericProxyFactoryInterface extends ethers.utils.Interface {
     values: [string, BytesLike]
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "c_0xf7dcbad1",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "create", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "create2", data: BytesLike): Result;
   decodeFunctionResult(
@@ -99,30 +106,40 @@ export class GenericProxyFactory extends Contract {
   interface: GenericProxyFactoryInterface;
 
   functions: {
+    c_0xf7dcbad1(
+      c__0xf7dcbad1: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[void]>;
+
+    "c_0xf7dcbad1(bytes32)"(
+      c__0xf7dcbad1: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[void]>;
+
     create(
       _instance: string,
       _data: BytesLike,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     "create(address,bytes)"(
       _instance: string,
       _data: BytesLike,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     create2(
       _instance: string,
       _salt: BytesLike,
       _data: BytesLike,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     "create2(address,bytes32,bytes)"(
       _instance: string,
       _salt: BytesLike,
       _data: BytesLike,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     predictDeterministicAddress(
@@ -138,30 +155,40 @@ export class GenericProxyFactory extends Contract {
     ): Promise<[string]>;
   };
 
+  c_0xf7dcbad1(
+    c__0xf7dcbad1: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<void>;
+
+  "c_0xf7dcbad1(bytes32)"(
+    c__0xf7dcbad1: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<void>;
+
   create(
     _instance: string,
     _data: BytesLike,
-    overrides?: Overrides
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   "create(address,bytes)"(
     _instance: string,
     _data: BytesLike,
-    overrides?: Overrides
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   create2(
     _instance: string,
     _salt: BytesLike,
     _data: BytesLike,
-    overrides?: Overrides
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   "create2(address,bytes32,bytes)"(
     _instance: string,
     _salt: BytesLike,
     _data: BytesLike,
-    overrides?: Overrides
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   predictDeterministicAddress(
@@ -177,6 +204,16 @@ export class GenericProxyFactory extends Contract {
   ): Promise<string>;
 
   callStatic: {
+    c_0xf7dcbad1(
+      c__0xf7dcbad1: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "c_0xf7dcbad1(bytes32)"(
+      c__0xf7dcbad1: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     create(
       _instance: string,
       _data: BytesLike,
@@ -227,30 +264,40 @@ export class GenericProxyFactory extends Contract {
   };
 
   estimateGas: {
+    c_0xf7dcbad1(
+      c__0xf7dcbad1: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "c_0xf7dcbad1(bytes32)"(
+      c__0xf7dcbad1: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     create(
       _instance: string,
       _data: BytesLike,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     "create(address,bytes)"(
       _instance: string,
       _data: BytesLike,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     create2(
       _instance: string,
       _salt: BytesLike,
       _data: BytesLike,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     "create2(address,bytes32,bytes)"(
       _instance: string,
       _salt: BytesLike,
       _data: BytesLike,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     predictDeterministicAddress(
@@ -267,30 +314,40 @@ export class GenericProxyFactory extends Contract {
   };
 
   populateTransaction: {
+    c_0xf7dcbad1(
+      c__0xf7dcbad1: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "c_0xf7dcbad1(bytes32)"(
+      c__0xf7dcbad1: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     create(
       _instance: string,
       _data: BytesLike,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     "create(address,bytes)"(
       _instance: string,
       _data: BytesLike,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     create2(
       _instance: string,
       _salt: BytesLike,
       _data: BytesLike,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     "create2(address,bytes32,bytes)"(
       _instance: string,
       _salt: BytesLike,
       _data: BytesLike,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     predictDeterministicAddress(

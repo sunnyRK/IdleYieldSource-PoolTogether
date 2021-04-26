@@ -56,8 +56,7 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     );
 
     constructor(address _idleToken) {
-        idleToken = _idleToken;
-        underlyingAsset = IIdleToken(idleToken).token();
+        initialize(_idleToken);
     }
 
 
@@ -66,43 +65,63 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     function initialize(
         address _idleToken
     ) public initializer {
+        __Ownable_init();
+
         idleToken = _idleToken;
         underlyingAsset = IIdleToken(idleToken).token();
-        
+
         emit IdleYieldSourceInitialized(idleToken);
     }
 
     /// @notice Returns the ERC20 asset token used for deposits.
     /// @return The ERC20 asset token
-    function depositToken() public view override returns (address) {
+    function depositToken() external view override returns (address) {
         return (underlyingAsset);
     }
 
     /// @notice Returns the total balance (in asset tokens).  This includes the deposits and interest.
     /// @return The underlying balance of asset tokens
-    function balanceOfToken(address addr) public view override returns (uint256) {
+    function balanceOfToken(address addr) external override returns (uint256) {
         if (balances[addr] == 0) return 0;
         return _sharesToToken(balances[addr]);
     }
 
     /// @notice Calculates the balance of Total idle Tokens Contract hasv
     /// @return balance of Idle Tokens
-    function _totalShare() public view returns(uint256) {
+    function _totalShare() internal view returns(uint256) {
         return IIdleToken(idleToken).balanceOf(address(this));
+    }
+
+    /// @notice Get The Total underlying assets in yield source
+    /// @return Total underlying assets
+    function _totalUnderlyingAssets() internal view returns (uint256) {
+        return (totalUnderlyingAssets);
     }
 
     /// @notice Calculates the number of shares that should be mint or burned when a user deposit or withdraw
     /// @param tokens Amount of tokens
     /// @return Number of shares
     function _tokenToShares(uint256 tokens) internal view returns (uint256) {
-        return tokens.mul(_totalShare()).div(totalUnderlyingAssets);
+        uint256 shares = 0;
+        if(_totalShare() == 0) {
+            shares = tokens;
+        } else {
+            shares = tokens.mul(_totalShare()).div(_totalUnderlyingAssets()); 
+        }
+        return shares;
     }
 
     /// @notice Calculates the number of tokens a user has in the yield source
     /// @param shares Amount of shares
     /// @return Number of tokens
     function _sharesToToken(uint256 shares) internal view returns (uint256) { 
-        return shares.mul(totalUnderlyingAssets).div(_totalShare());
+        uint256 tokens = 0;
+        if(_totalShare() == 0) {
+            tokens = shares;
+        } else {
+            tokens = shares.mul(_totalUnderlyingAssets()).div(_totalShare()); 
+        }
+        return tokens;
     }
 
     /// @notice Deposit asset tokens to Aave
@@ -122,7 +141,6 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
         uint256 mintedTokens = _depositToIdle(mintAmount);
         balances[to] = balances[to].add(mintedTokens);
         totalUnderlyingAssets = totalUnderlyingAssets.add(mintAmount);
-        console.log('mintedTokens', mintedTokens);
         emit SuppliedTokenTo(msg.sender, mintedTokens, mintAmount, to);
     }
 

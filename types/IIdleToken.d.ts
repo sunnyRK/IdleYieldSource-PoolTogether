@@ -9,13 +9,11 @@ import {
   BigNumber,
   BigNumberish,
   PopulatedTransaction,
-} from "ethers";
-import {
   Contract,
   ContractTransaction,
   Overrides,
   CallOverrides,
-} from "@ethersproject/contracts";
+} from "ethers";
 import { BytesLike } from "@ethersproject/bytes";
 import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
@@ -210,69 +208,81 @@ export class IIdleToken extends Contract {
 
     govTokens(
       arg0: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     "govTokens(uint256)"(
       arg0: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     mintIdleToken(
       _amount: BigNumberish,
       _skipWholeRebalance: boolean,
       _referral: string,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     "mintIdleToken(uint256,bool,address)"(
       _amount: BigNumberish,
       _skipWholeRebalance: boolean,
       _referral: string,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     openRebalance(
       _newAllocations: BigNumberish[],
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     "openRebalance(uint256[])"(
       _newAllocations: BigNumberish[],
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    rebalance(overrides?: Overrides): Promise<ContractTransaction>;
+    rebalance(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
-    "rebalance()"(overrides?: Overrides): Promise<ContractTransaction>;
+    "rebalance()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
-    rebalanceWithGST(overrides?: Overrides): Promise<ContractTransaction>;
+    rebalanceWithGST(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
-    "rebalanceWithGST()"(overrides?: Overrides): Promise<ContractTransaction>;
+    "rebalanceWithGST()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     redeemIdleToken(
       _amount: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     "redeemIdleToken(uint256)"(
       _amount: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     redeemInterestBearingTokens(
       _amount: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     "redeemInterestBearingTokens(uint256)"(
       _amount: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    token(overrides?: Overrides): Promise<ContractTransaction>;
+    token(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
-    "token()"(overrides?: Overrides): Promise<ContractTransaction>;
+    "token()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     tokenPrice(
       overrides?: CallOverrides
@@ -284,12 +294,12 @@ export class IIdleToken extends Contract {
 
     userAvgPrices(
       arg0: string,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     "userAvgPrices(address)"(
       arg0: string,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
 
@@ -332,69 +342,81 @@ export class IIdleToken extends Contract {
 
   govTokens(
     arg0: BigNumberish,
-    overrides?: Overrides
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   "govTokens(uint256)"(
     arg0: BigNumberish,
-    overrides?: Overrides
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   mintIdleToken(
     _amount: BigNumberish,
     _skipWholeRebalance: boolean,
     _referral: string,
-    overrides?: Overrides
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   "mintIdleToken(uint256,bool,address)"(
     _amount: BigNumberish,
     _skipWholeRebalance: boolean,
     _referral: string,
-    overrides?: Overrides
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   openRebalance(
     _newAllocations: BigNumberish[],
-    overrides?: Overrides
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   "openRebalance(uint256[])"(
     _newAllocations: BigNumberish[],
-    overrides?: Overrides
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  rebalance(overrides?: Overrides): Promise<ContractTransaction>;
+  rebalance(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
-  "rebalance()"(overrides?: Overrides): Promise<ContractTransaction>;
+  "rebalance()"(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
-  rebalanceWithGST(overrides?: Overrides): Promise<ContractTransaction>;
+  rebalanceWithGST(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
-  "rebalanceWithGST()"(overrides?: Overrides): Promise<ContractTransaction>;
+  "rebalanceWithGST()"(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   redeemIdleToken(
     _amount: BigNumberish,
-    overrides?: Overrides
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   "redeemIdleToken(uint256)"(
     _amount: BigNumberish,
-    overrides?: Overrides
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   redeemInterestBearingTokens(
     _amount: BigNumberish,
-    overrides?: Overrides
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   "redeemInterestBearingTokens(uint256)"(
     _amount: BigNumberish,
-    overrides?: Overrides
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  token(overrides?: Overrides): Promise<ContractTransaction>;
+  token(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
-  "token()"(overrides?: Overrides): Promise<ContractTransaction>;
+  "token()"(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   tokenPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -402,12 +424,12 @@ export class IIdleToken extends Contract {
 
   userAvgPrices(
     arg0: string,
-    overrides?: Overrides
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   "userAvgPrices(address)"(
     arg0: string,
-    overrides?: Overrides
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
@@ -555,78 +577,96 @@ export class IIdleToken extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    govTokens(arg0: BigNumberish, overrides?: Overrides): Promise<BigNumber>;
+    govTokens(
+      arg0: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     "govTokens(uint256)"(
       arg0: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     mintIdleToken(
       _amount: BigNumberish,
       _skipWholeRebalance: boolean,
       _referral: string,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     "mintIdleToken(uint256,bool,address)"(
       _amount: BigNumberish,
       _skipWholeRebalance: boolean,
       _referral: string,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     openRebalance(
       _newAllocations: BigNumberish[],
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     "openRebalance(uint256[])"(
       _newAllocations: BigNumberish[],
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    rebalance(overrides?: Overrides): Promise<BigNumber>;
+    rebalance(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
-    "rebalance()"(overrides?: Overrides): Promise<BigNumber>;
+    "rebalance()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
-    rebalanceWithGST(overrides?: Overrides): Promise<BigNumber>;
+    rebalanceWithGST(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
-    "rebalanceWithGST()"(overrides?: Overrides): Promise<BigNumber>;
+    "rebalanceWithGST()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     redeemIdleToken(
       _amount: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     "redeemIdleToken(uint256)"(
       _amount: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     redeemInterestBearingTokens(
       _amount: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     "redeemInterestBearingTokens(uint256)"(
       _amount: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    token(overrides?: Overrides): Promise<BigNumber>;
+    token(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
-    "token()"(overrides?: Overrides): Promise<BigNumber>;
+    "token()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     tokenPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
     "tokenPrice()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-    userAvgPrices(arg0: string, overrides?: Overrides): Promise<BigNumber>;
+    userAvgPrices(
+      arg0: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     "userAvgPrices(address)"(
       arg0: string,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
 
@@ -665,69 +705,81 @@ export class IIdleToken extends Contract {
 
     govTokens(
       arg0: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     "govTokens(uint256)"(
       arg0: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     mintIdleToken(
       _amount: BigNumberish,
       _skipWholeRebalance: boolean,
       _referral: string,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     "mintIdleToken(uint256,bool,address)"(
       _amount: BigNumberish,
       _skipWholeRebalance: boolean,
       _referral: string,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     openRebalance(
       _newAllocations: BigNumberish[],
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     "openRebalance(uint256[])"(
       _newAllocations: BigNumberish[],
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    rebalance(overrides?: Overrides): Promise<PopulatedTransaction>;
+    rebalance(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
-    "rebalance()"(overrides?: Overrides): Promise<PopulatedTransaction>;
+    "rebalance()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
-    rebalanceWithGST(overrides?: Overrides): Promise<PopulatedTransaction>;
+    rebalanceWithGST(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
-    "rebalanceWithGST()"(overrides?: Overrides): Promise<PopulatedTransaction>;
+    "rebalanceWithGST()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     redeemIdleToken(
       _amount: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     "redeemIdleToken(uint256)"(
       _amount: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     redeemInterestBearingTokens(
       _amount: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     "redeemInterestBearingTokens(uint256)"(
       _amount: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    token(overrides?: Overrides): Promise<PopulatedTransaction>;
+    token(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
-    "token()"(overrides?: Overrides): Promise<PopulatedTransaction>;
+    "token()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     tokenPrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -735,12 +787,12 @@ export class IIdleToken extends Contract {
 
     userAvgPrices(
       arg0: string,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     "userAvgPrices(address)"(
       arg0: string,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };
 }

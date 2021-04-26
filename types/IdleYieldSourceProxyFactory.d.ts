@@ -9,13 +9,11 @@ import {
   BigNumber,
   BigNumberish,
   PopulatedTransaction,
-} from "ethers";
-import {
   Contract,
   ContractTransaction,
   Overrides,
   CallOverrides,
-} from "@ethersproject/contracts";
+} from "ethers";
 import { BytesLike } from "@ethersproject/bytes";
 import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
@@ -104,13 +102,13 @@ export class IdleYieldSourceProxyFactory extends Contract {
     createNewProxy(
       _idleToken: string,
       _iIdleTokenHelper: string,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     "createNewProxy(address,address)"(
       _idleToken: string,
       _iIdleTokenHelper: string,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     iGenericProxyFactory(overrides?: CallOverrides): Promise<[string]>;
@@ -125,13 +123,13 @@ export class IdleYieldSourceProxyFactory extends Contract {
   createNewProxy(
     _idleToken: string,
     _iIdleTokenHelper: string,
-    overrides?: Overrides
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   "createNewProxy(address,address)"(
     _idleToken: string,
     _iIdleTokenHelper: string,
-    overrides?: Overrides
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   iGenericProxyFactory(overrides?: CallOverrides): Promise<string>;
@@ -170,13 +168,13 @@ export class IdleYieldSourceProxyFactory extends Contract {
     createNewProxy(
       _idleToken: string,
       _iIdleTokenHelper: string,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     "createNewProxy(address,address)"(
       _idleToken: string,
       _iIdleTokenHelper: string,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     iGenericProxyFactory(overrides?: CallOverrides): Promise<BigNumber>;
@@ -192,13 +190,13 @@ export class IdleYieldSourceProxyFactory extends Contract {
     createNewProxy(
       _idleToken: string,
       _iIdleTokenHelper: string,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     "createNewProxy(address,address)"(
       _idleToken: string,
       _iIdleTokenHelper: string,
-      overrides?: Overrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     iGenericProxyFactory(
