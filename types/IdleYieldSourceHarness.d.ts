@@ -24,8 +24,6 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
     "assetManager()": FunctionFragment;
     "balanceOfToken(address)": FunctionFragment;
     "balances(address)": FunctionFragment;
-    "c_0x467d6965(bytes32)": FunctionFragment;
-    "c_0x721a63dc(bytes32)": FunctionFragment;
     "depositToken()": FunctionFragment;
     "idleToken()": FunctionFragment;
     "initialize(address)": FunctionFragment;
@@ -55,14 +53,6 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(functionFragment: "balances", values: [string]): string;
-  encodeFunctionData(
-    functionFragment: "c_0x467d6965",
-    values: [BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "c_0x721a63dc",
-    values: [BytesLike]
-  ): string;
   encodeFunctionData(
     functionFragment: "depositToken",
     values?: undefined
@@ -136,14 +126,6 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "balances", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "c_0x467d6965",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "c_0x721a63dc",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "depositToken",
     data: BytesLike
@@ -282,26 +264,6 @@ export class IdleYieldSourceHarness extends Contract {
       arg0: string,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
-
-    c_0x467d6965(
-      c__0x467d6965: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[void]>;
-
-    "c_0x467d6965(bytes32)"(
-      c__0x467d6965: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[void]>;
-
-    c_0x721a63dc(
-      c__0x721a63dc: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[void]>;
-
-    "c_0x721a63dc(bytes32)"(
-      c__0x721a63dc: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[void]>;
 
     depositToken(overrides?: CallOverrides): Promise<[string]>;
 
@@ -469,26 +431,6 @@ export class IdleYieldSourceHarness extends Contract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  c_0x467d6965(
-    c__0x467d6965: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<void>;
-
-  "c_0x467d6965(bytes32)"(
-    c__0x467d6965: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<void>;
-
-  c_0x721a63dc(
-    c__0x721a63dc: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<void>;
-
-  "c_0x721a63dc(bytes32)"(
-    c__0x721a63dc: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<void>;
-
   depositToken(overrides?: CallOverrides): Promise<string>;
 
   "depositToken()"(overrides?: CallOverrides): Promise<string>;
@@ -651,26 +593,6 @@ export class IdleYieldSourceHarness extends Contract {
       arg0: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
-
-    c_0x467d6965(
-      c__0x467d6965: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    "c_0x467d6965(bytes32)"(
-      c__0x467d6965: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    c_0x721a63dc(
-      c__0x721a63dc: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    "c_0x721a63dc(bytes32)"(
-      c__0x721a63dc: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<void>;
 
     depositToken(overrides?: CallOverrides): Promise<string>;
 
@@ -888,26 +810,6 @@ export class IdleYieldSourceHarness extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    c_0x467d6965(
-      c__0x467d6965: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "c_0x467d6965(bytes32)"(
-      c__0x467d6965: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    c_0x721a63dc(
-      c__0x721a63dc: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "c_0x721a63dc(bytes32)"(
-      c__0x721a63dc: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     depositToken(overrides?: CallOverrides): Promise<BigNumber>;
 
     "depositToken()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1075,26 +977,6 @@ export class IdleYieldSourceHarness extends Contract {
 
     "balances(address)"(
       arg0: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    c_0x467d6965(
-      c__0x467d6965: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "c_0x467d6965(bytes32)"(
-      c__0x467d6965: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    c_0x721a63dc(
-      c__0x721a63dc: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "c_0x721a63dc(bytes32)"(
-      c__0x721a63dc: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

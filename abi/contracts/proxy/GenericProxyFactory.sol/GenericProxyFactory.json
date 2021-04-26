@@ -21,19 +21,6 @@
   {
     "inputs": [
       {
-        "internalType": "bytes32",
-        "name": "c__0xf7dcbad1",
-        "type": "bytes32"
-      }
-    ],
-    "name": "c_0xf7dcbad1",
-    "outputs": [],
-    "stateMutability": "pure",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "address",
         "name": "_instance",
         "type": "address"

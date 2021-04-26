@@ -19,7 +19,7 @@ async function main() {
   let accounts = await ethers.getSigners();
     const accountToImpersonate = '0xF977814e90dA44bFA03b6295A0616a897441aceC' // dai rich
     const idleToken = '0x3fE7940616e5Bc47b0775a0dccf6237893353bB4' //idleDai
-    const iIdleTokenHelper = '0x04Ce60ed10F6D2CfF3AA015fc7b950D13c113be5'
+    // const iIdleTokenHelper = '0x04Ce60ed10F6D2CfF3AA015fc7b950D13c113be5'
 
     await hre.network.provider.request({
       method: "hardhat_impersonateAccount",
@@ -42,15 +42,15 @@ async function main() {
     info('Deploying IdleYieldSource...');
     
     let IdleYieldSource = await ethers.getContractFactory('IdleYieldSource', signer);
-    let IdleYieldSource_Instance = await IdleYieldSource.deploy(idleToken, iIdleTokenHelper);
+    let IdleYieldSource_Instance = await IdleYieldSource.deploy(idleToken);
 
     let genericProxyFactoryContract = await ethers.getContractFactory('GenericProxyFactory');
     let hardhatGenericProxyFactory = await genericProxyFactoryContract.deploy()
 
     let IdleYieldSourceInterface = new ethers.utils.Interface(IdleYieldSourceAbi)   
     let bytesOfInterface = IdleYieldSourceInterface.encodeFunctionData(
-                            IdleYieldSourceInterface.getFunction("initialize(address,address)"), 
-                            [idleToken, iIdleTokenHelper]
+                            IdleYieldSourceInterface.getFunction("initialize(address)"), 
+                            [idleToken]
                         )
     let newInstanceOfYieldSource = await hardhatGenericProxyFactory.create(IdleYieldSource_Instance.address, bytesOfInterface)
     const receipt = await ethers.provider.getTransactionReceipt(newInstanceOfYieldSource.hash);

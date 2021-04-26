@@ -219,32 +219,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "c__0x467d6965",
-        "type": "bytes32"
-      }
-    ],
-    "name": "c_0x467d6965",
-    "outputs": [],
-    "stateMutability": "pure",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "c__0x721a63dc",
-        "type": "bytes32"
-      }
-    ],
-    "name": "c_0x721a63dc",
-    "outputs": [],
-    "stateMutability": "pure",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "depositToken",
     "outputs": [
