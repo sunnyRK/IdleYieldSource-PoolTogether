@@ -15,7 +15,8 @@ const {
 	parseEther
 } = require('@ethersproject/units')
 import {
-	ethers
+	ethers,
+	waffle
 } from 'hardhat';
 import * as hre from "hardhat"
 import {
@@ -50,32 +51,23 @@ import {
 const toWei = ethers.utils.parseEther;
 
 describe('GenericProxyFactory', () => {
-	let genericProxyFactoryContract: ContractFactory
-	let hardhatGenericProxyFactory: Contract
-	let testErc20Contract: Contract
-	let testSigner: Signer
-	let erc20ContractInterface: Interface
 
-	let predictedAddress: string
 	let contractsOwner: SignerWithAddress;
 	let yieldSourceOwner: SignerWithAddress;
 	let wallet2: SignerWithAddress;
 
 	let provider: JsonRpcProvider;
 
-	let idleTokenContract: any;
 	let idleYieldSource: any;
-	let idleYieldSourceProxy: any;
 	let erc20Token: ERC20;
 	let underlyingToken: any;
 	let idletoken: any;
-
-	let IdleYieldSourceProxyFactory: any
-	let hardhatIdleYieldSourceProxyFactory: any
 	let maxValue: any
+
 	beforeEach(async() => {
 		[contractsOwner, yieldSourceOwner, wallet2] = await ethers.getSigners();
 		maxValue = "115792089237316195423570985008687907853269984665640564039457584007913129639935"
+        provider = waffle.provider;
 
 		erc20Token = ((await deployMockContract(
 			contractsOwner,
@@ -95,11 +87,34 @@ describe('GenericProxyFactory', () => {
 		);
 		const hardhatIdleYieldSourceHarness = await IdleYieldSource.deploy(idletoken.address)
 
+		const genericProxyFactoryContract = await ethers.getContractFactory('GenericProxyFactory');
+		const hardhatGenericProxyFactory = await genericProxyFactoryContract.deploy()
+
+		const idleYieldSourceProxyFactory = await ethers.getContractFactory(
+			'IdleYieldSourceProxyFactoryHarness'
+		);
+		const hardhatIdleYieldSourceProxyFactory = (await idleYieldSourceProxyFactory.deploy(
+				hardhatIdleYieldSourceHarness.address, 
+				hardhatGenericProxyFactory.address
+			) as unknown) as IdleYieldSourceProxyFactoryHarness;
+	  
+		const initializeTx = await hardhatIdleYieldSourceProxyFactory.createNewProxy(
+			idletoken.address
+		);
+		const receipt = await provider.getTransactionReceipt(initializeTx.hash);
+
+		const proxyCreatedEvent = hardhatGenericProxyFactory.interface.parseLog(
+			receipt.logs[0],
+		);
+
+		expect(proxyCreatedEvent.name).to.equal('ProxyCreated');
+
 		idleYieldSource = (await ethers.getContractAt(
 			'IdleYieldSourceHarness',
-			hardhatIdleYieldSourceHarness.address,
+			proxyCreatedEvent.args[0],
 			contractsOwner,
 		) as unknown) as IdleYieldSourceHarness;
+		
 	})
 
 	describe('create()', () => {
@@ -313,49 +328,6 @@ describe('GenericProxyFactory', () => {
 			await expect(
 				idleYieldSource.connect(yieldSourceOwner).redeemToken(redeemAmount),
 			).to.be.revertedWith('RedeemToken: Not Enough Deposited');
-		});
-	});
-
-
-	describe('transferERC20()', () => {
-		it('should transferERC20 if contractsOwner', async() => {
-			const transferAmount = toWei('10');
-
-			await erc20Token.mock.transfer.withArgs(wallet2.address, transferAmount).returns(true);
-
-			await idleYieldSource
-				.connect(contractsOwner)
-				.transferERC20(erc20Token.address, wallet2.address, transferAmount);
-		});
-
-		it('should transferERC20 if assetManager', async() => {
-			const transferAmount = toWei('10');
-
-			await erc20Token.mock.transfer
-				.withArgs(yieldSourceOwner.address, transferAmount)
-				.returns(true);
-
-			await idleYieldSource.connect(contractsOwner).setAssetManager(wallet2.address);
-
-			await idleYieldSource
-				.connect(wallet2)
-				.transferERC20(erc20Token.address, yieldSourceOwner.address, transferAmount);
-		});
-
-		it('should not allow to transfer idleToken', async() => {
-			await expect(
-				idleYieldSource
-				.connect(contractsOwner)
-				.transferERC20(idletoken.address, wallet2.address, toWei('10')),
-			).to.be.revertedWith('IdleTokenYieldSource/idleToken-transfer-not-allowed');
-		});
-
-		it('should fail to transferERC20 if not contractOwner or assetManager', async() => {
-			await expect(
-				idleYieldSource
-				.connect(wallet2)
-				.transferERC20(erc20Token.address, yieldSourceOwner.address, toWei('10')),
-			).to.be.revertedWith('OwnerOrAssetManager: caller is not owner or asset manager');
 		});
 	});
 

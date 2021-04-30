@@ -73,14 +73,14 @@ async function main() {
     const idleYieldSourcePrizePoolConfig = {
       yieldSource: createdEvent.args[0],
       maxExitFeeMantissa: ethers.utils.parseUnits('0.5', 18),
-      maxTimelockDuration: 1001,
+      maxTimelockDuration: 1000,
     };
 
     const block = await getBlock(await getBlockNumber());
     const multipleWinnersConfig = {
       rngService: RNGBlockhash.address,
       prizePeriodStart: block.timestamp,
-      prizePeriodSeconds: 1,
+      prizePeriodSeconds: 60,
       ticketName: 'Ticket',
       ticketSymbol: 'TICK',
       sponsorshipName: 'Sponsorship',
@@ -150,13 +150,13 @@ async function main() {
     // await daiContract.transfer(createdEvent.args[0], daiProfits);
     // await daiContract.transfer(IdleYieldSource_Instance.address, daiProfits);
 
-    // await send('evm_increaseTime', [1000]);
-    // await send('evm_mine', []);
+    await send('evm_increaseTime', [10000]);
+    await send('evm_mine', []);
 
     info('Starting award...');
     await prizeStrategy.startAward();
 
-    await send('evm_increaseTime', [1]);
+    await send('evm_increaseTime', [100000]);
     await send('evm_mine', []);
 
     info('Completing award...');
@@ -195,7 +195,7 @@ async function main() {
 
     const withdrawTx = await prizePool.withdrawInstantlyFrom(
       contractsOwner.address,
-      ticketBal0,
+      '10000000000000000000000',
       ticket.address,
       earlyExitFee.exitFee,
     );

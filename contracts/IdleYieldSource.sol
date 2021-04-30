@@ -6,7 +6,6 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol"; 
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
-import "./access/AssetManager.sol";
 import "./interfaces/pooltogether/IProtocolYieldSource.sol";
 import "./interfaces/idle/IIdleToken.sol";
 import "./interfaces/idle/IIdleTokenHelper.sol";
@@ -14,7 +13,7 @@ import "hardhat/console.sol";
 
 /// @title An pooltogether yield source for Idle token
 /// @author Sunny Radadiya
-contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuardUpgradeable, AssetManager  {
+contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuardUpgradeable  {
     using SafeMathUpgradeable for uint256;
     using SafeERC20Upgradeable for IERC20Upgradeable;
     mapping(address => uint256) public balances;
@@ -65,7 +64,6 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     function initialize(
         address _idleToken
     ) public initializer {
-        __Ownable_init();
 
         idleToken = _idleToken;
         underlyingAsset = IIdleToken(idleToken).token();
@@ -153,21 +151,9 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
         uint256 redeemedUnderlyingAsset = IIdleToken(idleToken).redeemIdleToken(_idleShare);
         balances[msg.sender] = balances[msg.sender].sub(_idleShare);
         totalUnderlyingAssets = totalUnderlyingAssets.sub(redeemAmount);
-        console.log('redeemedUnderlyingAsset: ', redeemedUnderlyingAsset);
         IERC20Upgradeable(underlyingAsset).safeTransfer(msg.sender, redeemedUnderlyingAsset);
         emit RedeemedToken(msg.sender, _idleShare, redeemAmount);
         return redeemedUnderlyingAsset;
-    }
-
-    /// @notice Transfer ERC20 tokens other than the aAtokens held by this contract to the recipient address
-    /// @dev This function is only callable by the owner or asset manager
-    /// @param erc20Token The ERC20 token to transfer
-    /// @param to The recipient of the tokens
-    /// @param amount The amount of tokens to transfer
-    function transferERC20(IERC20Upgradeable erc20Token, address to, uint256 amount) external override onlyOwnerOrAssetManager {
-        require(address(erc20Token) != address(idleToken), "IdleTokenYieldSource/idleToken-transfer-not-allowed");
-        erc20Token.safeTransfer(to, amount);
-        emit TransferredERC20(msg.sender, to, amount, erc20Token);
     }
 
     /// @notice Allows someone to deposit into the yield source without receiving any shares
