@@ -153,6 +153,7 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
         uint256 redeemedUnderlyingAsset = IIdleToken(idleToken).redeemIdleToken(_idleShare);
         balances[msg.sender] = balances[msg.sender].sub(_idleShare);
         totalUnderlyingAssets = totalUnderlyingAssets.sub(redeemAmount);
+        console.log('redeemedUnderlyingAsset: ', redeemedUnderlyingAsset);
         IERC20Upgradeable(underlyingAsset).safeTransfer(msg.sender, redeemedUnderlyingAsset);
         emit RedeemedToken(msg.sender, _idleShare, redeemAmount);
         return redeemedUnderlyingAsset;

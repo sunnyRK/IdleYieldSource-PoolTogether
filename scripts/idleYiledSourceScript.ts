@@ -170,27 +170,10 @@ async function main() {
     })
     const awarded = awardLogs.find(event => event && event.name === 'Awarded')
     if (awarded) {
-      console.log(`Awarded ${ethers.utils.formatUnits(awarded.args.amount, 18)} token`)
+      console.log(`Awarded ${ethers.utils.formatUnits(awarded.args.amount, 18)} token`)      
     } else {
       console.log(`No prizes`)
     }
-
-    // const awardLogs = awardReceipt.logs.map((log) => {
-    //   try {
-    //     console.log('log', log)
-    //     return prizePool.interface.parseLog(log);
-    //   } catch (e) {
-    //     console.log('e', e)
-    //     return null;
-    //   }
-    // });
-    // console.log('awardLogs', awardLogs)
-
-    // const awarded = awardLogs.find((event) => event && event.name === 'Awarded');
-    // console.log('awarded', awarded)
-
-    // success(`Awarded ${ethers.utils.formatUnits(awarded?.args?.amount, 18)} DAI!`);
-    // console.log('ethers.utils.formatUnits(awarded?.args?.amount, 18)', ethers.utils.formatUnits(awarded?.args?.amount, 18))
 
     info('Withdrawing...');
     const ticketAddress = await prizeStrategy.ticket();

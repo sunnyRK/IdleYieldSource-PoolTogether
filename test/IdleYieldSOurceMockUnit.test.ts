@@ -175,21 +175,6 @@ describe('GenericProxyFactory', () => {
 			await idletoken.mock.balanceOf.withArgs(idleYieldSource.address).returns(toWei('200'));
 			expect(await idleYieldSource.tokenToShares(toWei('10'))).to.equal(toWei('10'));
 		});
-
-		// not used
-		// // it('should fail to return shares if idle Token total supply increases too much', async () => { // failing here
-		// //     await idleYieldSource.mint(yieldSourceOwner.address, toWei('100'));
-		// //     await idleYieldSource.mintTotalUnderlyingAsset(toWei('100'));
-		// //     await idletoken.mock.balanceOf.withArgs(idleYieldSource.address).returns(toWei('100'));
-		// //     expect(await idleYieldSource.tokenToShares(toWei('10'))).to.equal(toWei('10'));
-		// //     // await idleYieldSource.mint(yieldSourceOwner.address, toWei('1000000000000000000000000000000'));
-		// //     // await idleYieldSource.mintTotalUnderlyingAsset(toWei('1000000000000000000000000000000'));
-		// //     await idletoken.mock.balanceOf.withArgs(idleYieldSource.address).returns(toWei('1000000000000000000000000000100'));
-		// //     // expect(await idleYieldSource.tokenToShares(toWei('10'))).to.equal(toWei('10'));});
-		// //     // await underlyingToken.mock.transferFrom.withArgs(yieldSourceOwner.address, idleYieldSource.address, toWei('100'));
-		// //     // await underlyingToken.mock.approve.withArgs(idletoken.address, toWei('100'));
-		// //     await expect(idleYieldSource.supplyTokenTo(toWei('1'), wallet2.address)).to.be.revertedWith('ATokenYieldSource/shares-equal-zero');
-		// // });
 	});
 
 	describe('_sharesToToken()', () => {
