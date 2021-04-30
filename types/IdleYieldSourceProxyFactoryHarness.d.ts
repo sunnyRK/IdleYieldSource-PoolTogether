@@ -19,7 +19,8 @@ import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
-interface IdleYieldSourceProxyFactoryInterface extends ethers.utils.Interface {
+interface IdleYieldSourceProxyFactoryHarnessInterface
+  extends ethers.utils.Interface {
   functions: {
     "createNewProxy(address)": FunctionFragment;
     "iGenericProxyFactory()": FunctionFragment;
@@ -55,7 +56,7 @@ interface IdleYieldSourceProxyFactoryInterface extends ethers.utils.Interface {
   events: {};
 }
 
-export class IdleYieldSourceProxyFactory extends Contract {
+export class IdleYieldSourceProxyFactoryHarness extends Contract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -96,7 +97,7 @@ export class IdleYieldSourceProxyFactory extends Contract {
     toBlock?: string | number | undefined
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: IdleYieldSourceProxyFactoryInterface;
+  interface: IdleYieldSourceProxyFactoryHarnessInterface;
 
   functions: {
     createNewProxy(

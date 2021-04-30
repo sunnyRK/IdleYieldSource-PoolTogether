@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { OwnableUpgradeable } from "./OwnableUpgradeable";
+export type { ERC20Upgradeable } from "./ERC20Upgradeable";
 export type { IERC20Upgradeable } from "./IERC20Upgradeable";
 export type { AssetManager } from "./AssetManager";
 export type { IdleYieldSource } from "./IdleYieldSource";
@@ -13,8 +14,12 @@ export type { IProtocolYieldSource } from "./IProtocolYieldSource";
 export type { IYieldSource } from "./IYieldSource";
 export type { GenericProxyFactory } from "./GenericProxyFactory";
 export type { IdleYieldSourceHarness } from "./IdleYieldSourceHarness";
+export type { IdleYieldSourceProxyFactoryHarness } from "./IdleYieldSourceProxyFactoryHarness";
+export type { ERC20ReturnTrueMockUpgradeable } from "./ERC20ReturnTrueMockUpgradeable";
+export type { SafeERC20WrapperUpgradeable } from "./SafeERC20WrapperUpgradeable";
 
 export { OwnableUpgradeable__factory } from "./factories/OwnableUpgradeable__factory";
+export { ERC20Upgradeable__factory } from "./factories/ERC20Upgradeable__factory";
 export { IERC20Upgradeable__factory } from "./factories/IERC20Upgradeable__factory";
 export { AssetManager__factory } from "./factories/AssetManager__factory";
 export { IdleYieldSource__factory } from "./factories/IdleYieldSource__factory";
@@ -26,3 +31,6 @@ export { IProtocolYieldSource__factory } from "./factories/IProtocolYieldSource_
 export { IYieldSource__factory } from "./factories/IYieldSource__factory";
 export { GenericProxyFactory__factory } from "./factories/GenericProxyFactory__factory";
 export { IdleYieldSourceHarness__factory } from "./factories/IdleYieldSourceHarness__factory";
+export { IdleYieldSourceProxyFactoryHarness__factory } from "./factories/IdleYieldSourceProxyFactoryHarness__factory";
+export { ERC20ReturnTrueMockUpgradeable__factory } from "./factories/ERC20ReturnTrueMockUpgradeable__factory";
+export { SafeERC20WrapperUpgradeable__factory } from "./factories/SafeERC20WrapperUpgradeable__factory";

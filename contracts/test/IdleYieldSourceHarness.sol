@@ -15,8 +15,14 @@ contract IdleYieldSourceHarness is IdleYieldSource {
   }
 
   function mint(address account, uint256 amount) public returns (bool) {
-    // balances[account] = balances[account].add(amount);
-    supplyTokenTo(amount, account);
+    balances[account] = balances[account].add(amount);
+    // supplyTokenTo(amount, account);
+    return true;
+  }
+
+  function mintTotalUnderlyingAsset(uint256 amount) public returns (bool) {
+    totalUnderlyingAssets = totalUnderlyingAssets.add(amount);
+    // supplyTokenTo(amount, account);
     return true;
   }
 

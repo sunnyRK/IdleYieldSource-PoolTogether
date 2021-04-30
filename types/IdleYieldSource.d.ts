@@ -211,13 +211,13 @@ export class IdleYieldSource extends Contract {
 
     balanceOfToken(
       addr: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     "balanceOfToken(address)"(
       addr: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     balances(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -335,15 +335,12 @@ export class IdleYieldSource extends Contract {
 
   "assetManager()"(overrides?: CallOverrides): Promise<string>;
 
-  balanceOfToken(
-    addr: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+  balanceOfToken(addr: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   "balanceOfToken(address)"(
     addr: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   balances(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -634,14 +631,11 @@ export class IdleYieldSource extends Contract {
 
     "assetManager()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-    balanceOfToken(
-      addr: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
+    balanceOfToken(addr: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     "balanceOfToken(address)"(
       addr: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     balances(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
@@ -763,12 +757,12 @@ export class IdleYieldSource extends Contract {
 
     balanceOfToken(
       addr: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     "balanceOfToken(address)"(
       addr: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     balances(

@@ -28,6 +28,7 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
     "idleToken()": FunctionFragment;
     "initialize(address)": FunctionFragment;
     "mint(address,uint256)": FunctionFragment;
+    "mintTotalUnderlyingAsset(uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "redeemToken(uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
@@ -62,6 +63,10 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "mint",
     values: [string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "mintTotalUnderlyingAsset",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
@@ -133,6 +138,10 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "idleToken", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "mintTotalUnderlyingAsset",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "redeemToken",
@@ -250,13 +259,13 @@ export class IdleYieldSourceHarness extends Contract {
 
     balanceOfToken(
       addr: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     "balanceOfToken(address)"(
       addr: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     balances(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -291,6 +300,16 @@ export class IdleYieldSourceHarness extends Contract {
 
     "mint(address,uint256)"(
       account: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    mintTotalUnderlyingAsset(
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "mintTotalUnderlyingAsset(uint256)"(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -414,15 +433,12 @@ export class IdleYieldSourceHarness extends Contract {
 
   "assetManager()"(overrides?: CallOverrides): Promise<string>;
 
-  balanceOfToken(
-    addr: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+  balanceOfToken(addr: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   "balanceOfToken(address)"(
     addr: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   balances(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -457,6 +473,16 @@ export class IdleYieldSourceHarness extends Contract {
 
   "mint(address,uint256)"(
     account: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  mintTotalUnderlyingAsset(
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "mintTotalUnderlyingAsset(uint256)"(
     amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -617,6 +643,16 @@ export class IdleYieldSourceHarness extends Contract {
 
     "mint(address,uint256)"(
       account: string,
+      amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    mintTotalUnderlyingAsset(
+      amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    "mintTotalUnderlyingAsset(uint256)"(
       amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<boolean>;
@@ -793,14 +829,11 @@ export class IdleYieldSourceHarness extends Contract {
 
     "assetManager()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-    balanceOfToken(
-      addr: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
+    balanceOfToken(addr: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     "balanceOfToken(address)"(
       addr: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     balances(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
@@ -836,6 +869,16 @@ export class IdleYieldSourceHarness extends Contract {
 
     "mint(address,uint256)"(
       account: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    mintTotalUnderlyingAsset(
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "mintTotalUnderlyingAsset(uint256)"(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -962,12 +1005,12 @@ export class IdleYieldSourceHarness extends Contract {
 
     balanceOfToken(
       addr: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     "balanceOfToken(address)"(
       addr: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     balances(
@@ -1006,6 +1049,16 @@ export class IdleYieldSourceHarness extends Contract {
 
     "mint(address,uint256)"(
       account: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    mintTotalUnderlyingAsset(
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "mintTotalUnderlyingAsset(uint256)"(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;

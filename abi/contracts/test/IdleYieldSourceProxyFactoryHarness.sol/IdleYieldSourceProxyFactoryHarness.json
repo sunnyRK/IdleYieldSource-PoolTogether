@@ -57,7 +57,7 @@
     "name": "idleYieldSourceInstance",
     "outputs": [
       {
-        "internalType": "contract IdleYieldSource",
+        "internalType": "contract IdleYieldSourceHarness",
         "name": "",
         "type": "address"
       }

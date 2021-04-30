@@ -81,7 +81,7 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
 
     /// @notice Returns the total balance (in asset tokens).  This includes the deposits and interest.
     /// @return The underlying balance of asset tokens
-    function balanceOfToken(address addr) external override returns (uint256) {
+    function balanceOfToken(address addr) external view override returns (uint256) {
         if (balances[addr] == 0) return 0;
         return _sharesToToken(balances[addr]);
     }
@@ -106,7 +106,7 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
         if(_totalShare() == 0) {
             shares = tokens;
         } else {
-            shares = tokens.mul(_totalShare()).div(_totalUnderlyingAssets()); 
+            shares = tokens.mul(_totalShare()).div(_totalUnderlyingAssets());
         }
         return shares;
     }
@@ -119,7 +119,7 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
         if(_totalShare() == 0) {
             tokens = shares;
         } else {
-            tokens = shares.mul(_totalUnderlyingAssets()).div(_totalShare()); 
+            tokens = shares.mul(_totalUnderlyingAssets()).div(_totalShare());
         }
         return tokens;
     }
@@ -149,7 +149,7 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     /// @return The actual amount of tokens that were redeemed.
     function redeemToken(uint256 redeemAmount) public override nonReentrant returns (uint256) {
         uint256 _idleShare = _tokenToShares(redeemAmount);
-        require(balances[msg.sender] >= _idleShare, "RedeemToken:  Not Enough Deposited");
+        require(balances[msg.sender] >= _idleShare, "RedeemToken: Not Enough Deposited");
         uint256 redeemedUnderlyingAsset = IIdleToken(idleToken).redeemIdleToken(_idleShare);
         balances[msg.sender] = balances[msg.sender].sub(_idleShare);
         totalUnderlyingAssets = totalUnderlyingAssets.sub(redeemAmount);
