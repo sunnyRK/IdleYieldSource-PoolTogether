@@ -5,5 +5,5 @@ cache
 artifacts
 .env
 demo.ts
-test/idleYieldSourceOld.test.ts
-test/IdleYieldSourceUnit.test.ts
+idleYieldSourceOld.test.ts
+IdleYieldSourceUnit.test.ts
