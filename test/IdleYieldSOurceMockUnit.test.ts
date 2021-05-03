@@ -55,7 +55,6 @@ describe('GenericProxyFactory', () => {
 	let contractsOwner: SignerWithAddress;
 	let yieldSourceOwner: SignerWithAddress;
 	let wallet2: SignerWithAddress;
-
 	let provider: JsonRpcProvider;
 
 	let idleYieldSource: any;
