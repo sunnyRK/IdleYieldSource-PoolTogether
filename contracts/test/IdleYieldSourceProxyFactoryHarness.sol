@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity 0.8.4;
 
 import "./IdleYieldSourceHarness.sol";
 import "../interfaces/GenericProxyFactory/IGenericProxyFactory.sol";
@@ -18,7 +18,8 @@ contract IdleYieldSourceProxyFactoryHarness {
         public returns (address instanceCreated, bytes memory result) {
             (instanceCreated, result)= iGenericProxyFactory.create(
                 address(idleYieldSourceInstance),
-                abi.encodeWithSignature('initialize(address)', _idleToken)
+                ''
+                // abi.encodeWithSignature('initialize(address)', _idleToken)
             );
     }
 }

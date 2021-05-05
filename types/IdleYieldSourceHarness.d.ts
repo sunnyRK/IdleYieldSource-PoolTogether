@@ -26,6 +26,7 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
     "depositToken()": FunctionFragment;
     "idleToken()": FunctionFragment;
     "initialize(address)": FunctionFragment;
+    "maxValue()": FunctionFragment;
     "mint(address,uint256)": FunctionFragment;
     "mintTotalUnderlyingAsset(uint256)": FunctionFragment;
     "redeemToken(uint256)": FunctionFragment;
@@ -50,6 +51,7 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "idleToken", values?: undefined): string;
   encodeFunctionData(functionFragment: "initialize", values: [string]): string;
+  encodeFunctionData(functionFragment: "maxValue", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "mint",
     values: [string, BigNumberish]
@@ -106,6 +108,7 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "idleToken", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "maxValue", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "mintTotalUnderlyingAsset",
@@ -236,6 +239,10 @@ export class IdleYieldSourceHarness extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    maxValue(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    "maxValue()"(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     mint(
       account: string,
       amount: BigNumberish,
@@ -359,6 +366,10 @@ export class IdleYieldSourceHarness extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  maxValue(overrides?: CallOverrides): Promise<BigNumber>;
+
+  "maxValue()"(overrides?: CallOverrides): Promise<BigNumber>;
+
   mint(
     account: string,
     amount: BigNumberish,
@@ -478,6 +489,10 @@ export class IdleYieldSourceHarness extends Contract {
       _idleToken: string,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    maxValue(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "maxValue()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     mint(
       account: string,
@@ -643,6 +658,10 @@ export class IdleYieldSourceHarness extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    maxValue(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "maxValue()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     mint(
       account: string,
       amount: BigNumberish,
@@ -772,6 +791,10 @@ export class IdleYieldSourceHarness extends Contract {
       _idleToken: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    maxValue(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "maxValue()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     mint(
       account: string,

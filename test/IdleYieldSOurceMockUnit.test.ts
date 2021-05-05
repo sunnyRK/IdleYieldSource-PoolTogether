@@ -56,7 +56,6 @@ describe('GenericProxyFactory', () => {
 	let yieldSourceOwner: SignerWithAddress;
 	let wallet2: SignerWithAddress;
 	let provider: JsonRpcProvider;
-
 	let idleYieldSource: any;
 	let erc20Token: ERC20;
 	let underlyingToken: any;
@@ -96,16 +95,14 @@ describe('GenericProxyFactory', () => {
 				hardhatIdleYieldSourceHarness.address, 
 				hardhatGenericProxyFactory.address
 			) as unknown) as IdleYieldSourceProxyFactoryHarness;
-	  
+
 		const initializeTx = await hardhatIdleYieldSourceProxyFactory.createNewProxy(
 			idletoken.address
 		);
 		const receipt = await provider.getTransactionReceipt(initializeTx.hash);
-
 		const proxyCreatedEvent = hardhatGenericProxyFactory.interface.parseLog(
 			receipt.logs[0],
 		);
-
 		expect(proxyCreatedEvent.name).to.equal('ProxyCreated');
 
 		idleYieldSource = (await ethers.getContractAt(
@@ -113,7 +110,12 @@ describe('GenericProxyFactory', () => {
 			proxyCreatedEvent.args[0],
 			contractsOwner,
 		) as unknown) as IdleYieldSourceHarness;
-		
+	  	
+		await underlyingToken.mock.allowance
+			.withArgs(idleYieldSource.address, idletoken.address)
+			.returns(toWei('0'));
+		await underlyingToken.mock.approve.withArgs(idletoken.address, maxValue).returns(true);
+		await idleYieldSource.initialize(idletoken.address)
 	})
 
 	describe('create()', () => {

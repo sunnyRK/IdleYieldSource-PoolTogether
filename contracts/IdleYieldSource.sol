@@ -1,26 +1,25 @@
 // SPDX-License-Identifier: GPL-3.0
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.4;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol"; 
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "./interfaces/pooltogether/IProtocolYieldSource.sol";
 import "./interfaces/idle/IIdleToken.sol";
 import "./interfaces/idle/IIdleTokenHelper.sol";
-import "hardhat/console.sol";
 
 /// @title An pooltogether yield source for Idle token
 /// @author Sunny Radadiya
 contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuardUpgradeable  {
-    using SafeMathUpgradeable for uint256;
+    // using SafeMathUpgradeable for uint256;
     using SafeERC20Upgradeable for IERC20Upgradeable;
     mapping(address => uint256) public balances;
 
     address public idleToken;
     address public underlyingAsset;
     uint256 public totalUnderlyingAssets;
+    uint256 public maxValue = 2**256 - 1;
 
     /// @notice Emitted when the yield source is initialized
     event IdleYieldSourceInitialized(address indexed idleToken);
@@ -54,11 +53,6 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
         IERC20Upgradeable indexed token
     );
 
-    constructor(address _idleToken) {
-        initialize(_idleToken);
-    }
-
-
     /// @notice Initializes the yield source with Idle Token
     /// @param _idleToken Idle Token address
     function initialize(
@@ -68,6 +62,7 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
         idleToken = _idleToken;
         underlyingAsset = IIdleToken(idleToken).token();
 
+        IERC20Upgradeable(underlyingAsset).safeApprove(idleToken, 2**256 - 1);
         emit IdleYieldSourceInitialized(idleToken);
     }
 
@@ -90,12 +85,6 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
         return IIdleToken(idleToken).balanceOf(address(this));
     }
 
-    /// @notice Get The Total underlying assets in yield source
-    /// @return Total underlying assets
-    function _totalUnderlyingAssets() internal view returns (uint256) {
-        return (totalUnderlyingAssets);
-    }
-
     /// @notice Calculates the number of shares that should be mint or burned when a user deposit or withdraw
     /// @param tokens Amount of tokens
     /// @return Number of shares
@@ -104,7 +93,7 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
         if(_totalShare() == 0) {
             shares = tokens;
         } else {
-            shares = tokens.mul(_totalShare()).div(_totalUnderlyingAssets());
+            shares = (tokens * _totalShare())  / totalUnderlyingAssets;
         }
         return shares;
     }
@@ -117,7 +106,7 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
         if(_totalShare() == 0) {
             tokens = shares;
         } else {
-            tokens = shares.mul(_totalUnderlyingAssets()).div(_totalShare());
+            tokens = (shares * totalUnderlyingAssets) / _totalShare();
         }
         return tokens;
     }
@@ -137,8 +126,8 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     /// @param to The user whose balance will receive the tokens
     function supplyTokenTo(uint256 mintAmount, address to) public nonReentrant override {
         uint256 mintedTokens = _depositToIdle(mintAmount);
-        balances[to] = balances[to].add(mintedTokens);
-        totalUnderlyingAssets = totalUnderlyingAssets.add(mintAmount);
+        balances[to] = balances[to] + mintedTokens;
+        totalUnderlyingAssets = totalUnderlyingAssets + mintAmount;
         emit SuppliedTokenTo(msg.sender, mintedTokens, mintAmount, to);
     }
 
@@ -149,8 +138,8 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
         uint256 _idleShare = _tokenToShares(redeemAmount);
         require(balances[msg.sender] >= _idleShare, "RedeemToken: Not Enough Deposited");
         uint256 redeemedUnderlyingAsset = IIdleToken(idleToken).redeemIdleToken(_idleShare);
-        balances[msg.sender] = balances[msg.sender].sub(_idleShare);
-        totalUnderlyingAssets = totalUnderlyingAssets.sub(redeemAmount);
+        balances[msg.sender] = balances[msg.sender] - _idleShare;
+        totalUnderlyingAssets = totalUnderlyingAssets - redeemAmount;
         IERC20Upgradeable(underlyingAsset).safeTransfer(msg.sender, redeemedUnderlyingAsset);
         emit RedeemedToken(msg.sender, _idleShare, redeemAmount);
         return redeemedUnderlyingAsset;

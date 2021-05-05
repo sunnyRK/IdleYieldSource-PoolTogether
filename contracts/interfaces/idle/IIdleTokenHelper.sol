@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.4;
 
 interface IIdleTokenHelper {
     function getRedeemPrice(address idleYieldToken, address user) external view returns (uint256);

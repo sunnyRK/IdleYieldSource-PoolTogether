@@ -17,8 +17,9 @@ contract IdleYieldSourceProxyFactory {
     function createNewProxy(address _idleToken) 
         public returns (address instanceCreated, bytes memory result) {
             (instanceCreated, result)= iGenericProxyFactory.create(
-                address(idleYieldSourceInstance),
-                abi.encodeWithSignature('initialize(address)', _idleToken)
+                address(idleYieldSourceInstance), 
+                ''
+                // abi.encodeWithSignature('initialize(address)', _idleToken)
             );
     }
 }

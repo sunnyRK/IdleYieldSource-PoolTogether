@@ -26,6 +26,7 @@ interface IdleYieldSourceInterface extends ethers.utils.Interface {
     "depositToken()": FunctionFragment;
     "idleToken()": FunctionFragment;
     "initialize(address)": FunctionFragment;
+    "maxValue()": FunctionFragment;
     "redeemToken(uint256)": FunctionFragment;
     "sponsor(uint256)": FunctionFragment;
     "supplyTokenTo(uint256,address)": FunctionFragment;
@@ -44,6 +45,7 @@ interface IdleYieldSourceInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "idleToken", values?: undefined): string;
   encodeFunctionData(functionFragment: "initialize", values: [string]): string;
+  encodeFunctionData(functionFragment: "maxValue", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "redeemToken",
     values: [BigNumberish]
@@ -76,6 +78,7 @@ interface IdleYieldSourceInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "idleToken", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "maxValue", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "redeemToken",
     data: BytesLike
@@ -188,6 +191,10 @@ export class IdleYieldSource extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    maxValue(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    "maxValue()"(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     redeemToken(
       redeemAmount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -261,6 +268,10 @@ export class IdleYieldSource extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  maxValue(overrides?: CallOverrides): Promise<BigNumber>;
+
+  "maxValue()"(overrides?: CallOverrides): Promise<BigNumber>;
+
   redeemToken(
     redeemAmount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -330,6 +341,10 @@ export class IdleYieldSource extends Contract {
       _idleToken: string,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    maxValue(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "maxValue()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     redeemToken(
       redeemAmount: BigNumberish,
@@ -445,6 +460,10 @@ export class IdleYieldSource extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    maxValue(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "maxValue()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     redeemToken(
       redeemAmount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -524,6 +543,10 @@ export class IdleYieldSource extends Contract {
       _idleToken: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    maxValue(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "maxValue()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     redeemToken(
       redeemAmount: BigNumberish,

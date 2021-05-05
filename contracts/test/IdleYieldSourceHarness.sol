@@ -1,27 +1,27 @@
 // SPDX-License-Identifier: GPL-3.0
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.4;
 
 import "../IdleYieldSource.sol";
 
 /* solium-disable security/no-block-members */
 contract IdleYieldSourceHarness is IdleYieldSource {
 
-  using SafeMathUpgradeable for uint256;
+  // using SafeMathUpgradeable for uint256;
 
-  constructor(address _idleToken) IdleYieldSource(_idleToken) {
+  constructor(address _idleToken) IdleYieldSource() {
     idleToken = _idleToken;
     underlyingAsset = IIdleToken(idleToken).token();
   }
 
   function mint(address account, uint256 amount) public returns (bool) {
-    balances[account] = balances[account].add(amount);
+    balances[account] = balances[account] + amount;
     // supplyTokenTo(amount, account);
     return true;
   }
 
   function mintTotalUnderlyingAsset(uint256 amount) public returns (bool) {
-    totalUnderlyingAssets = totalUnderlyingAssets.add(amount);
+    totalUnderlyingAssets = totalUnderlyingAssets + amount;
     // supplyTokenTo(amount, account);
     return true;
   }
@@ -39,6 +39,6 @@ contract IdleYieldSourceHarness is IdleYieldSource {
   }
 
   function totalUnderlyingAsset() external view returns (uint256) {
-    return _totalUnderlyingAssets();
+    return totalUnderlyingAssets;
   }
 }
