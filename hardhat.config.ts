@@ -4,7 +4,7 @@ import '@typechain/hardhat';
 import 'hardhat-abi-exporter';
 import 'hardhat-deploy';
 import 'hardhat-deploy-ethers';
-// import 'hardhat-gas-reporter';
+import 'hardhat-gas-reporter';
 require("solidity-coverage");
 
 require('dotenv').config()
@@ -27,8 +27,6 @@ const config: HardhatUserConfig = {
         blockNumber: 12248197,
       }
     },
-
-    // Mainnet
     mainnet: {
       url: `https://mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`,
       chainId: 1,
@@ -44,7 +42,7 @@ const config: HardhatUserConfig = {
       timeout: 30000000
     },
     kovan: {
-      url: `https://kovan.infura.io/v3/${process.env.INFURA_API_KEY}`,
+      url: `https://kovan.infura.io/v3/37bd907f93a146679960d54e729cd51a`,
       chainId: 42,
       accounts: {
         mnemonic: process.env.MNEMONIC,
@@ -59,23 +57,7 @@ const config: HardhatUserConfig = {
     },
   },
   solidity: {
-    compilers: [
-      {
-        version: "0.5.16"
-      },
-      {
-        version: "0.6.12"
-      },
-      {
-        version: "0.7.0"
-      },
-      {
-        version: "0.8.0"
-      },
-      {
-        version: "0.8.4"
-      }
-    ],
+    version: '0.8.4',
     settings: {
       optimizer: {
         enabled: true,
