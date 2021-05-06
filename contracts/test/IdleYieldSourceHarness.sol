@@ -7,8 +7,6 @@ import "../IdleYieldSource.sol";
 /* solium-disable security/no-block-members */
 contract IdleYieldSourceHarness is IdleYieldSource {
 
-  // using SafeMathUpgradeable for uint256;
-
   constructor(address _idleToken) IdleYieldSource() {
     idleToken = _idleToken;
     underlyingAsset = IIdleToken(idleToken).token();
@@ -16,13 +14,11 @@ contract IdleYieldSourceHarness is IdleYieldSource {
 
   function mint(address account, uint256 amount) public returns (bool) {
     balances[account] = balances[account] + amount;
-    // supplyTokenTo(amount, account);
     return true;
   }
 
   function mintTotalUnderlyingAsset(uint256 amount) public returns (bool) {
     totalUnderlyingAssets = totalUnderlyingAssets + amount;
-    // supplyTokenTo(amount, account);
     return true;
   }
 

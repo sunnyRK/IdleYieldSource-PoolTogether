@@ -3,11 +3,6 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_instance",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
         "name": "_iGenericProxyFactory",
         "type": "address"
       }
@@ -16,13 +11,7 @@
     "type": "constructor"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_idleToken",
-        "type": "address"
-      }
-    ],
+    "inputs": [],
     "name": "createNewProxy",
     "outputs": [
       {
@@ -54,7 +43,7 @@
   },
   {
     "inputs": [],
-    "name": "idleYieldSourceInstance",
+    "name": "instance",
     "outputs": [
       {
         "internalType": "contract IdleYieldSource",

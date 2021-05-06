@@ -116,7 +116,6 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     /// @return 0 if successful 
     function _depositToIdle(uint256 mintAmount) internal returns (uint256) {
         IERC20Upgradeable(underlyingAsset).safeTransferFrom(msg.sender, address(this), mintAmount);
-        IERC20Upgradeable(underlyingAsset).safeApprove(idleToken, mintAmount);
         uint256 mintedTokens = IIdleToken(idleToken).mintIdleToken(mintAmount, false, address(0));
         return mintedTokens;
     }

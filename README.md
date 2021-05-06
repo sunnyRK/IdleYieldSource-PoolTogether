@@ -32,3 +32,22 @@
 5). Check test coverage
 
     npx hardhat coverage
+
+4). Deploy New Idle Yield Source through Pooltogether-proxy-contract
+
+    npx hardhat run .\deploy\deploy.ts --network kovan
+
+    Output:
+     
+    PoolTogether Idle Yield Source - Deploy Script
+
+    network: Kovan (remote)
+    deployer: 0x2031d045f56e679925bFdCDa3416448Cc9B1b688
+    deployer: 0x2031d045f56e679925bFdCDa3416448Cc9B1b688
+
+    Deploying IdleYieldSourceProxyFactory...
+    Deploying Proxy Yield Source...
+    Deployed Yield Source...
+    Initializing Yield Source
+    Initialized!!
+    Deployed New IdleYieldSource Address 0xecD4b75E7ccf571CF99B0F51955866657469bB49

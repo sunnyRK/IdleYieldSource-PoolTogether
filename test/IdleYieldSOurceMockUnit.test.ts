@@ -62,6 +62,12 @@ describe('GenericProxyFactory', () => {
 	let idletoken: any;
 	let maxValue: any
 
+	// before(async() => {
+	
+	// 	console.log("Hiiiiiiiiiiiiiiiiii")
+
+	// });
+
 	beforeEach(async() => {
 		[contractsOwner, yieldSourceOwner, wallet2] = await ethers.getSigners();
 		maxValue = "115792089237316195423570985008687907853269984665640564039457584007913129639935"
@@ -80,10 +86,10 @@ describe('GenericProxyFactory', () => {
 		idletoken = ((await deployMockContract(contractsOwner, IIdleTokenABI.abi)) as unknown) as IIdleToken;
 		await idletoken.mock.token.returns(underlyingToken.address);
 
-		const IdleYieldSource = await ethers.getContractFactory(
-			'IdleYieldSourceHarness',
-		);
-		const hardhatIdleYieldSourceHarness = await IdleYieldSource.deploy(idletoken.address)
+		// const IdleYieldSource = await ethers.getContractFactory(
+		// 	'IdleYieldSourceHarness',
+		// );
+		// const hardhatIdleYieldSourceHarness = await IdleYieldSource.deploy(idletoken.address)
 
 		const genericProxyFactoryContract = await ethers.getContractFactory('GenericProxyFactory');
 		const hardhatGenericProxyFactory = await genericProxyFactoryContract.deploy()
@@ -92,13 +98,14 @@ describe('GenericProxyFactory', () => {
 			'IdleYieldSourceProxyFactoryHarness'
 		);
 		const hardhatIdleYieldSourceProxyFactory = (await idleYieldSourceProxyFactory.deploy(
-				hardhatIdleYieldSourceHarness.address, 
+				// hardhatIdleYieldSourceHarness.address, 
+				idletoken.address,
 				hardhatGenericProxyFactory.address
 			) as unknown) as IdleYieldSourceProxyFactoryHarness;
 
-		const initializeTx = await hardhatIdleYieldSourceProxyFactory.createNewProxy(
-			idletoken.address
-		);
+		// const instanceAddr = await hardhatIdleYieldSourceProxyFactory.instance()
+
+		const initializeTx = await hardhatIdleYieldSourceProxyFactory.createNewProxy();
 		const receipt = await provider.getTransactionReceipt(initializeTx.hash);
 		const proxyCreatedEvent = hardhatGenericProxyFactory.interface.parseLog(
 			receipt.logs[0],

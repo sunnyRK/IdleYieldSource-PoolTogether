@@ -41,25 +41,28 @@ async function main() {
   info('Deploying IdleYieldSource...');
   
   let IdleYieldSource = await ethers.getContractFactory('IdleYieldSource', signer);
-  let IdleYieldSource_Instance = await IdleYieldSource.deploy(idleToken);
+  let IdleYieldSource_Instance = await IdleYieldSource.deploy();
 
   let genericProxyFactoryContract = await ethers.getContractFactory('GenericProxyFactory');
   let hardhatGenericProxyFactory = await genericProxyFactoryContract.deploy()
+  
+  let hardhatIdleYieldSourceProxyFactory = await ethers.getContractFactory('IdleYieldSourceProxyFactory', signer);
+  let hardhatIdleYieldSourceProxyFactory_Instance = await hardhatIdleYieldSourceProxyFactory.deploy(hardhatGenericProxyFactory.address);
 
-  let IdleYieldSourceInterface = new ethers.utils.Interface(IdleYieldSourceAbi)   
-  let bytesOfInterface = IdleYieldSourceInterface.encodeFunctionData(
-                          IdleYieldSourceInterface.getFunction("initialize(address)"), 
-                          [idleToken]
-                      )
-  let newInstanceOfYieldSource = await hardhatGenericProxyFactory.create(IdleYieldSource_Instance.address, bytesOfInterface)
-  const receipt = await ethers.provider.getTransactionReceipt(newInstanceOfYieldSource.hash);
-  const createdEvent = hardhatGenericProxyFactory.interface.parseLog(receipt.logs[0]);
+  let createProxyTx = await hardhatIdleYieldSourceProxyFactory_Instance.createNewProxy()
+  const receipt = await provider.getTransactionReceipt(createProxyTx.hash);
+
+  const proxyCreatedEvent = hardhatGenericProxyFactory.interface.parseLog(
+    receipt.logs[0],
+  );
 
   const proxyIdleYieldSource = await getContractAt(
     IdleYieldSourceAbi,
-    createdEvent.args[0],
+    proxyCreatedEvent.args[0],
     contractsOwner,
   );
+
+  await proxyIdleYieldSource.initialize(idleToken)
 
   info('Deploying IdleYieldSourcePrizePool...');
 
@@ -70,7 +73,7 @@ async function main() {
   );
 
   const idleYieldSourcePrizePoolConfig = {
-    yieldSource: createdEvent.args[0],
+    yieldSource: proxyCreatedEvent.args[0],
     maxExitFeeMantissa: ethers.utils.parseUnits('0.5', 18),
     maxTimelockDuration: 1000,
   };

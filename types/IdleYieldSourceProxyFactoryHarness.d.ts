@@ -22,23 +22,20 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 interface IdleYieldSourceProxyFactoryHarnessInterface
   extends ethers.utils.Interface {
   functions: {
-    "createNewProxy(address)": FunctionFragment;
+    "createNewProxy()": FunctionFragment;
     "iGenericProxyFactory()": FunctionFragment;
-    "idleYieldSourceInstance()": FunctionFragment;
+    "instance()": FunctionFragment;
   };
 
   encodeFunctionData(
     functionFragment: "createNewProxy",
-    values: [string]
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "iGenericProxyFactory",
     values?: undefined
   ): string;
-  encodeFunctionData(
-    functionFragment: "idleYieldSourceInstance",
-    values?: undefined
-  ): string;
+  encodeFunctionData(functionFragment: "instance", values?: undefined): string;
 
   decodeFunctionResult(
     functionFragment: "createNewProxy",
@@ -48,10 +45,7 @@ interface IdleYieldSourceProxyFactoryHarnessInterface
     functionFragment: "iGenericProxyFactory",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "idleYieldSourceInstance",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "instance", data: BytesLike): Result;
 
   events: {};
 }
@@ -101,12 +95,10 @@ export class IdleYieldSourceProxyFactoryHarness extends Contract {
 
   functions: {
     createNewProxy(
-      _idleToken: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    "createNewProxy(address)"(
-      _idleToken: string,
+    "createNewProxy()"(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -114,18 +106,16 @@ export class IdleYieldSourceProxyFactoryHarness extends Contract {
 
     "iGenericProxyFactory()"(overrides?: CallOverrides): Promise<[string]>;
 
-    idleYieldSourceInstance(overrides?: CallOverrides): Promise<[string]>;
+    instance(overrides?: CallOverrides): Promise<[string]>;
 
-    "idleYieldSourceInstance()"(overrides?: CallOverrides): Promise<[string]>;
+    "instance()"(overrides?: CallOverrides): Promise<[string]>;
   };
 
   createNewProxy(
-    _idleToken: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  "createNewProxy(address)"(
-    _idleToken: string,
+  "createNewProxy()"(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -133,18 +123,16 @@ export class IdleYieldSourceProxyFactoryHarness extends Contract {
 
   "iGenericProxyFactory()"(overrides?: CallOverrides): Promise<string>;
 
-  idleYieldSourceInstance(overrides?: CallOverrides): Promise<string>;
+  instance(overrides?: CallOverrides): Promise<string>;
 
-  "idleYieldSourceInstance()"(overrides?: CallOverrides): Promise<string>;
+  "instance()"(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
     createNewProxy(
-      _idleToken: string,
       overrides?: CallOverrides
     ): Promise<[string, string] & { instanceCreated: string; result: string }>;
 
-    "createNewProxy(address)"(
-      _idleToken: string,
+    "createNewProxy()"(
       overrides?: CallOverrides
     ): Promise<[string, string] & { instanceCreated: string; result: string }>;
 
@@ -152,21 +140,19 @@ export class IdleYieldSourceProxyFactoryHarness extends Contract {
 
     "iGenericProxyFactory()"(overrides?: CallOverrides): Promise<string>;
 
-    idleYieldSourceInstance(overrides?: CallOverrides): Promise<string>;
+    instance(overrides?: CallOverrides): Promise<string>;
 
-    "idleYieldSourceInstance()"(overrides?: CallOverrides): Promise<string>;
+    "instance()"(overrides?: CallOverrides): Promise<string>;
   };
 
   filters: {};
 
   estimateGas: {
     createNewProxy(
-      _idleToken: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "createNewProxy(address)"(
-      _idleToken: string,
+    "createNewProxy()"(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -174,19 +160,17 @@ export class IdleYieldSourceProxyFactoryHarness extends Contract {
 
     "iGenericProxyFactory()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-    idleYieldSourceInstance(overrides?: CallOverrides): Promise<BigNumber>;
+    instance(overrides?: CallOverrides): Promise<BigNumber>;
 
-    "idleYieldSourceInstance()"(overrides?: CallOverrides): Promise<BigNumber>;
+    "instance()"(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
     createNewProxy(
-      _idleToken: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    "createNewProxy(address)"(
-      _idleToken: string,
+    "createNewProxy()"(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -198,12 +182,8 @@ export class IdleYieldSourceProxyFactoryHarness extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    idleYieldSourceInstance(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    instance(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    "idleYieldSourceInstance()"(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    "instance()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }

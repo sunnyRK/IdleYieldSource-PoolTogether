@@ -3,7 +3,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_instance",
+        "name": "_idleToken",
         "type": "address"
       },
       {
@@ -16,13 +16,7 @@
     "type": "constructor"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_idleToken",
-        "type": "address"
-      }
-    ],
+    "inputs": [],
     "name": "createNewProxy",
     "outputs": [
       {
@@ -54,7 +48,7 @@
   },
   {
     "inputs": [],
-    "name": "idleYieldSourceInstance",
+    "name": "instance",
     "outputs": [
       {
         "internalType": "contract IdleYieldSourceHarness",
