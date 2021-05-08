@@ -3,6 +3,7 @@
 /* eslint-disable */
 export type { OwnableUpgradeable } from "./OwnableUpgradeable";
 export type { ERC20Upgradeable } from "./ERC20Upgradeable";
+export type { IERC20MetadataUpgradeable } from "./IERC20MetadataUpgradeable";
 export type { IERC20Upgradeable } from "./IERC20Upgradeable";
 export type { AssetManager } from "./AssetManager";
 export type { IdleYieldSource } from "./IdleYieldSource";
@@ -20,6 +21,7 @@ export type { SafeERC20WrapperUpgradeable } from "./SafeERC20WrapperUpgradeable"
 
 export { OwnableUpgradeable__factory } from "./factories/OwnableUpgradeable__factory";
 export { ERC20Upgradeable__factory } from "./factories/ERC20Upgradeable__factory";
+export { IERC20MetadataUpgradeable__factory } from "./factories/IERC20MetadataUpgradeable__factory";
 export { IERC20Upgradeable__factory } from "./factories/IERC20Upgradeable__factory";
 export { AssetManager__factory } from "./factories/AssetManager__factory";
 export { IdleYieldSource__factory } from "./factories/IdleYieldSource__factory";
