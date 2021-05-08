@@ -134,7 +134,6 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     /// @return The actual amount of tokens that were redeemed.
     function redeemToken(uint256 redeemAmount) public override nonReentrant returns (uint256) {
         uint256 _idleShare = _tokenToShares(redeemAmount);
-        require(balances[msg.sender] >= _idleShare, "RedeemToken: Not Enough Deposited");
         uint256 redeemedUnderlyingAsset = IIdleToken(idleToken).redeemIdleToken(_idleShare);
         balances[msg.sender] = balances[msg.sender] - _idleShare;
         totalUnderlyingAssets = totalUnderlyingAssets - redeemAmount;
