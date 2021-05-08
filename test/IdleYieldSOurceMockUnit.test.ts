@@ -296,7 +296,11 @@ describe('GenericProxyFactory', () => {
 			await idleYieldSource.mintTotalUnderlyingAsset(yieldSourceOwnerBalance);
 			await idletoken.mock.balanceOf.withArgs(idleYieldSource.address).returns(yieldSourceOwnerBalance);
 			await idletoken.mock.redeemIdleToken.withArgs(redeemAmount).returns(redeemAmount);
-			await underlyingToken.mock.transfer.withArgs(yieldSourceOwner.address, await idleYieldSource.tokenToShares(redeemAmount)).returns(true);
+			await underlyingToken.mock.transfer
+				.withArgs(
+					yieldSourceOwner.address, 
+					await idleYieldSource.tokenToShares(redeemAmount))
+				.returns(true);
 			await idleYieldSource.connect(yieldSourceOwner).redeemToken(redeemAmount);
 			expect(await idleYieldSource.balances(yieldSourceOwner.address)).to.equal(
 				yieldSourceOwnerBalance.sub(redeemAmount),
@@ -312,8 +316,8 @@ describe('GenericProxyFactory', () => {
 				.withArgs(yieldSourceOwner.address, await idleYieldSource.tokenToShares(toWei('0'))).returns(true);
 			await expect(
 				idleYieldSource.connect(yieldSourceOwner).redeemToken(redeemAmount),
-			).to.be.revertedWith('RedeemToken: Not Enough Deposited');
-		});
+			).to.be.reverted;
+			});
 
 		it('should fail to redeem if amount superior to balance', async() => {
 			const yieldSourceOwnerLowBalance = toWei('10');
@@ -329,7 +333,7 @@ describe('GenericProxyFactory', () => {
 
 			await expect(
 				idleYieldSource.connect(yieldSourceOwner).redeemToken(redeemAmount),
-			).to.be.revertedWith('RedeemToken: Not Enough Deposited');
+			).to.be.reverted;
 		});
 	});
 
@@ -360,7 +364,7 @@ describe('GenericProxyFactory', () => {
 			await idletoken.mock.balanceOf
 				.withArgs(idleYieldSource.address)
 				.returns(amount.add(wallet2Amount));
-				
+
 			expect(await idleYieldSource.balanceOfToken(wallet2.address)).to.equal(
 				toWei('80'),
 			);

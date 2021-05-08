@@ -133,10 +133,10 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     /// @param redeemAmount The amount of `token()` to withdraw.  Denominated in `token()` as above.
     /// @return The actual amount of tokens that were redeemed.
     function redeemToken(uint256 redeemAmount) public override nonReentrant returns (uint256) {
-        uint256 _idleShare = _tokenToShares(redeemAmount);
-        uint256 redeemedUnderlyingAsset = IIdleToken(idleToken).redeemIdleToken(_idleShare);
+        uint256 _idleShare = _tokenToShares(redeemAmount);        
         balances[msg.sender] = balances[msg.sender] - _idleShare;
         totalUnderlyingAssets = totalUnderlyingAssets - redeemAmount;
+        uint256 redeemedUnderlyingAsset = IIdleToken(idleToken).redeemIdleToken(_idleShare);
         IERC20Upgradeable(underlyingAsset).safeTransfer(msg.sender, redeemedUnderlyingAsset);
         emit RedeemedToken(msg.sender, _idleShare, redeemAmount);
         return redeemedUnderlyingAsset;
