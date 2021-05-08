@@ -18,38 +18,38 @@ PoolTogether Yield Source that uses [Idle](https://idle.finance/) to generate yi
 
 1). Make `.env` file on root folder and add below variable with your config,  
 
-    i). MNEMONIC=""  
-    ii). INFURA_API_KEY=""  
-    iii). ALCHEMY_API_KEY=""  
+    i). MNEMONIC='' 
+    ii). INFURA_API_KEY=  
+    iii). ALCHEMY_API_KEY=
+    iv). FORK_ENABLED="false"  
 
 2). Install Dependency by 
     
     yarn 
  
-3). Test TestCases in commanline For Mainnet fork
+3). To run unit tests:
         
-    npx hardhat test
+    yarn test
 
-4). Test script for prizepool For Mainnet fork
+4). Check test coverage
 
-    npx hardhat run .\scripts\idleYiledSourceScript.ts
+    yarn coverage
 
-5). Check test coverage
+5). Test script for prizepool For Mainnet fork
 
-    npx hardhat coverage
+    yarn fork
 
-4). Deploy New Idle Yield Source through Pooltogether-proxy-contract
+6). Deploy New Idle Yield Source through Pooltogether-proxy-contract on kovan or mainnet
 
-    npx hardhat run .\deploy\deploy.ts --network kovan
+    yarn deploy-kovan
+    or
+    yarn deploy-mainnet
 
-    Output:
+    Output For Kovan:-
 
     PoolTogether Idle Yield Source - Deploy Script
-
     network: Kovan (remote)
     deployer: 0x2031d045f56e679925bFdCDa3416448Cc9B1b688
-    deployer: 0x2031d045f56e679925bFdCDa3416448Cc9B1b688
-
     Deploying IdleYieldSourceProxyFactory...
     Deploying Proxy Yield Source...
     Deployed Yield Source...
