@@ -62,12 +62,6 @@ describe('GenericProxyFactory', () => {
 	let idletoken: any;
 	let maxValue: any
 
-	// before(async() => {
-	
-	// 	console.log("Hiiiiiiiiiiiiiiiiii")
-
-	// });
-
 	beforeEach(async() => {
 		[contractsOwner, yieldSourceOwner, wallet2] = await ethers.getSigners();
 		maxValue = "115792089237316195423570985008687907853269984665640564039457584007913129639935"
@@ -366,11 +360,7 @@ describe('GenericProxyFactory', () => {
 			await idletoken.mock.balanceOf
 				.withArgs(idleYieldSource.address)
 				.returns(amount.add(wallet2Amount));
-
-			// const bal = await idletoken.balanceOf(idleYieldSource.address)
-			// const bal2 = await idleYieldSource.balanceOfToken(wallet2.address)
-			// console.log('bal: ', bal.toString(), bal2.toString(), amount.add(wallet2Amount).toString())
-
+				
 			expect(await idleYieldSource.balanceOfToken(wallet2.address)).to.equal(
 				toWei('80'),
 			);

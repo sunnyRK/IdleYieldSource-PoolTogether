@@ -22,7 +22,6 @@ contract IdleYieldSourceProxyFactoryHarness {
             (instanceCreated, result)= iGenericProxyFactory.create(
                 address(instance),
                 ''
-                // abi.encodeWithSignature('initialize(address)', _idleToken)
             );
     }
 }

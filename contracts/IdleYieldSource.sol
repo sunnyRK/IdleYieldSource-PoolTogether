@@ -12,7 +12,6 @@ import "./interfaces/idle/IIdleTokenHelper.sol";
 /// @title An pooltogether yield source for Idle token
 /// @author Sunny Radadiya
 contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuardUpgradeable  {
-    // using SafeMathUpgradeable for uint256;
     using SafeERC20Upgradeable for IERC20Upgradeable;
     mapping(address => uint256) public balances;
 
