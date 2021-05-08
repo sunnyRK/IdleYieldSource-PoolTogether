@@ -43,17 +43,17 @@ const config: HardhatUserConfig = {
     // },
     kovan: {
       url: "https://kovan.infura.io/v3/37bd907f93a146679960d54e729cd51a",
-      chainId: 42,
+      // chainId: 42,
       accounts: {
         mnemonic: process.env.MNEMONIC,
-        path: 'm/44\'/60\'/0\'/0',
-        initialIndex: 1,
-        count: 10,
+        // path: 'm/44\'/60\'/0\'/0',
+        // initialIndex: 1,
+        // count: 10,
       },
-      gas: 'auto',
-      gasPrice: 73000000000, // 1 gwei
-      gasMultiplier: 1.5,
-      timeout: 30000000
+      // gas: 'auto',
+      // gasPrice: 73000000000, // 1 gwei
+      // gasMultiplier: 1.5,
+      // timeout: 30000000
     },
   },
   solidity: {
