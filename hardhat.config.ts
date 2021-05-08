@@ -23,12 +23,12 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       forking: {
-        url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`,
+        url: `https://eth-mainnet.alchemyapi.io/v2/EuD-FVgI2gMBGf0aypDghsPHYWHB9nhn`,
         blockNumber: 12248197,
       }
     },
     mainnet: {
-      url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`,
+      url: `https://mainnet.infura.io/v3/37bd907f93a146679960d54e729cd51a`,
       chainId: 1,
       accounts: {
         mnemonic: process.env.MNEMONIC,
@@ -42,7 +42,7 @@ const config: HardhatUserConfig = {
       timeout: 30000000
     },
     kovan: {
-      url: `https://kovan.infura.io/v3/${process.env.INFURA_API_KEY}`,
+      url: `https://kovan.infura.io/v3/37bd907f93a146679960d54e729cd51a`,
       chainId: 42,
       accounts: {
         mnemonic: process.env.MNEMONIC,
