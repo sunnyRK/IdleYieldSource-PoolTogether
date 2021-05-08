@@ -8,8 +8,18 @@ demo.ts
 test/idleYieldSourceOld.test.ts
 test/IdleYielSourceUnitTest.test.ts
 deploy
+types
+deployments/localhost/
 
 /.yarn/*
 !/.yarn/releases
 !/.yarn/plugins
 !/.yarn/sdks
+
+
+# Solidity Coverage
+coverage
+coverage.json
+
+# VS Code
+.history

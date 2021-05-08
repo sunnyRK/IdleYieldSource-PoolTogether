@@ -14,7 +14,7 @@ jobs:
       - name: yarn, compile, coverage
         run: |
           yarn
-          npx hardhat compile --show-stack-traces
+          npx hardhat compile
           npx hardhat coverage
       - name: Coveralls
         uses: coverallsapp/github-action@master

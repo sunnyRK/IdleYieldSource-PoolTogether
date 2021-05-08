@@ -6,8 +6,10 @@ import 'hardhat-deploy';
 import 'hardhat-deploy-ethers';
 import 'hardhat-gas-reporter';
 require("solidity-coverage");
+import networks from './hardhat.network';
 
-require('dotenv').config()
+import * as dotenv from "dotenv";
+dotenv.config();
 
 import { HardhatUserConfig } from 'hardhat/config';
 
@@ -20,42 +22,7 @@ const config: HardhatUserConfig = {
       default: 0,
     },
   },
-  networks: {
-    hardhat: {
-      forking: {
-        url: "https://eth-mainnet.alchemyapi.io/v2/EuD-FVgI2gMBGf0aypDghsPHYWHB9nhn",
-        blockNumber: 12248197,
-      }
-    },
-    mainnet: {
-      url: "https://mainnet.infura.io/v3/37bd907f93a146679960d54e729cd51a",
-      chainId: 1,
-      accounts: {
-        mnemonic: process.env.MNEMONIC,
-        path: 'm/44\'/60\'/0\'/0',
-        initialIndex: 1,
-        count: 10,
-      },
-      gas: 'auto',
-      gasPrice: 73000000000, // 1 gwei
-      gasMultiplier: 1.5,
-      timeout: 30000000
-    },
-    kovan: {
-      url: "https://kovan.infura.io/v3/37bd907f93a146679960d54e729cd51a",
-      chainId: 42,
-      accounts: {
-        mnemonic: process.env.MNEMONIC,
-        path: 'm/44\'/60\'/0\'/0',
-        initialIndex: 1,
-        count: 10,
-      },
-      gas: 'auto',
-      gasPrice: 73000000000, // 1 gwei
-      gasMultiplier: 1.5,
-      timeout: 30000000
-    },
-  },
+  networks,
   solidity: {
     version: '0.8.4',
     settings: {

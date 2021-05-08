@@ -3,6 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "test": "FORK_ENABLED=false; npx hardhat test",
+    "coverage": "FORK_ENABLED=false; npx hardhat coverage",
+    "fork": "FORK_ENABLED=true; npx hardhat run ./scripts/idleYiledSourceScript.ts",
+    "deploy-kovan": "npx hardhat run ./deploy/deploy.ts --network kovan",
+    "deploy-mainnet": "npx hardhat run ./deploy/deploy.ts --network mainnet"
+  },
   "dependencies": {
     "@openzeppelin/contracts": "^4.0.0",
     "@openzeppelin/contracts-upgradeable": "^4.0.0",
@@ -10,7 +17,6 @@
     "@pooltogether/yield-source-interface": "1.0.1",
     "@typechain/truffle-v5": "^4.0.1",
     "@typechain/web3-v1": "^2.2.0",
-    "dotenv": "^8.2.0",
     "hardhat-typechain": "^0.3.5"
   },
   "devDependencies": {
@@ -32,6 +38,7 @@
     "chai": "4.3.4",
     "chalk": "4.1.0",
     "debug": "^4.3.1",
+    "dotenv": "^9.0.0",
     "ethereum-waffle": "3.3.0",
     "ethers": "5.0.32",
     "hardhat": "^2.2.1",
