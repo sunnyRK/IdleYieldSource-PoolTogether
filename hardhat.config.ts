@@ -42,7 +42,7 @@ const config: HardhatUserConfig = {
       timeout: 30000000
     },
     kovan: {
-      url: `https://kovan.infura.io/v3/37bd907f93a146679960d54e729cd51a`,
+      url: `https://kovan.infura.io/v3/${process.env.INFURA_API_KEY}`,
       chainId: 42,
       accounts: {
         mnemonic: process.env.MNEMONIC,
