@@ -20,28 +20,28 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">0% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>5/5</span>
+        <span class='fraction'>0/5</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>2/2</span>
+        <span class='fraction'>0/2</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>3/3</span>
+        <span class='fraction'>0/3</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">0% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>6/6</span>
+        <span class='fraction'>0/6</span>
       </div>
     </div>
   </div>
-  <div class='status-line high'></div>
+  <div class='status-line low'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet">1
 2
@@ -137,15 +137,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4×</span>
-<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -155,14 +155,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">  
 // SPDX-License-Identifier: GPL-3.0
 &nbsp;
-pragma solidity ^0.8.0;
+pragma solidity 0.8.4;
 &nbsp;
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
@@ -194,15 +194,15 @@ abstract contract AssetManager is ContextUpgradeable, OwnableUpgradeable {
      * @dev Returns the address of the current asset manager.
      * @return The address of the current _assetManager
      */
-    function assetManager() public view virtual returns (address) {
-        return _assetManager;
+<span class="fstat-no" title="function not covered" >    function assetManager() public view virtual returns (address) {</span>
+<span class="cstat-no" title="statement not covered" >        return _assetManager;</span>
     }
 &nbsp;
     /**
      * @dev Throws if called by any account other than the owner or asset manager.
      */
-    modifier onlyOwnerOrAssetManager() {
-        require(assetManager() == _msgSender() || owner() == _msgSender(), "onlyOwnerOrAssetManager: caller is not owner or asset manager");
+<span class="fstat-no" title="function not covered" >    modifier onlyOwnerOrAssetManager() {</span>
+<span class="cstat-no" title="statement not covered" >        require(assetManager() == _msgSender() || owner() == _msgSender(), "onlyOwnerOrAssetManager: caller is not owner or asset manager")</span>;
         _;
     }
 &nbsp;
@@ -212,10 +212,10 @@ abstract contract AssetManager is ContextUpgradeable, OwnableUpgradeable {
      * @param newAssetManager The address of the desired new _assetManager
      * @return Boolean to indicate if the operation was successful or not
      */
-    function setAssetManager(address newAssetManager) public virtual onlyOwner returns (bool) {
-        _assetManager = newAssetManager;
-        emit AssetManagerTransferred(address(0), newAssetManager);
-        return true;
+<span class="fstat-no" title="function not covered" >    function setAssetManager(address newAssetManager) public virtual onlyOwner returns (bool) {</span>
+<span class="cstat-no" title="statement not covered" >        _assetManager = newAssetManager</span>;
+<span class="cstat-no" title="statement not covered" >        emit AssetManagerTransferred(address(0), newAssetManager);</span>
+<span class="cstat-no" title="statement not covered" >        return true;</span>
     }
 }</pre></td></tr>
 </table></pre>
@@ -223,7 +223,7 @@ abstract contract AssetManager is ContextUpgradeable, OwnableUpgradeable {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Apr 26 2021 18:35:14 GMT+0530 (India Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri May 07 2021 01:54:57 GMT+0530 (India Standard Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

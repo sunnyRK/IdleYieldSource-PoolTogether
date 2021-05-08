@@ -4,7 +4,7 @@ import '@typechain/hardhat';
 import 'hardhat-abi-exporter';
 import 'hardhat-deploy';
 import 'hardhat-deploy-ethers';
-// import 'hardhat-gas-reporter';
+import 'hardhat-gas-reporter';
 require("solidity-coverage");
 
 require('dotenv').config()
