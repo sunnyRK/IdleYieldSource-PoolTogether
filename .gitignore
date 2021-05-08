@@ -8,3 +8,8 @@ demo.ts
 test/idleYieldSourceOld.test.ts
 test/IdleYielSourceUnitTest.test.ts
 deploy
+
+/.yarn/*
+!/.yarn/releases
+!/.yarn/plugins
+!/.yarn/sdks
