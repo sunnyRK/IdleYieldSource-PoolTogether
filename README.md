@@ -8,7 +8,7 @@
 
 # IdleYieldSource for PoolTOgethere Prize Pool
 
-![Tests](https://github.com/pooltogether/aave-yield-source/actions/workflows/main.yml/badge.svg)
+![Tests](https://github.com/sunnyRK/IdleYieldSource-PoolTogether/actions/workflows/main.yml/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/sunnyRK/IdleYieldSource-PoolTogether/badge.svg?branch=master)](https://coveralls.io/github/sunnyRK/IdleYieldSource-PoolTogether?branch=master)
 [![built-with openzeppelin](https://img.shields.io/badge/built%20with-OpenZeppelin-3677FF)](https://docs.openzeppelin.com/)  
 
