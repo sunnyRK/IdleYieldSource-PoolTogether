@@ -63,6 +63,8 @@ async function main() {
   );
 
   await proxyIdleYieldSource.initialize(idleToken)
+  // const owner2 = await proxyIdleYieldSource.owner();
+  // await proxyIdleYieldSource.setAssetManager(accounts[1].address);
 
   info('Deploying IdleYieldSourcePrizePool...');
 

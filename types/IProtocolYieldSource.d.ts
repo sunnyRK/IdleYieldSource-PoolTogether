@@ -26,6 +26,7 @@ interface IProtocolYieldSourceInterface extends ethers.utils.Interface {
     "redeemToken(uint256)": FunctionFragment;
     "sponsor(uint256)": FunctionFragment;
     "supplyTokenTo(uint256,address)": FunctionFragment;
+    "transferERC20(address,address,uint256)": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -48,6 +49,10 @@ interface IProtocolYieldSourceInterface extends ethers.utils.Interface {
     functionFragment: "supplyTokenTo",
     values: [BigNumberish, string]
   ): string;
+  encodeFunctionData(
+    functionFragment: "transferERC20",
+    values: [string, string, BigNumberish]
+  ): string;
 
   decodeFunctionResult(
     functionFragment: "balanceOfToken",
@@ -64,6 +69,10 @@ interface IProtocolYieldSourceInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "sponsor", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "supplyTokenTo",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferERC20",
     data: BytesLike
   ): Result;
 
@@ -159,6 +168,20 @@ export class IProtocolYieldSource extends Contract {
       to: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    transferERC20(
+      token: string,
+      to: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "transferERC20(address,address,uint256)"(
+      token: string,
+      to: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
   };
 
   balanceOfToken(
@@ -207,6 +230,20 @@ export class IProtocolYieldSource extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  transferERC20(
+    token: string,
+    to: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "transferERC20(address,address,uint256)"(
+    token: string,
+    to: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   callStatic: {
     balanceOfToken(addr: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -245,6 +282,20 @@ export class IProtocolYieldSource extends Contract {
     "supplyTokenTo(uint256,address)"(
       amount: BigNumberish,
       to: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    transferERC20(
+      token: string,
+      to: string,
+      amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "transferERC20(address,address,uint256)"(
+      token: string,
+      to: string,
+      amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
   };
@@ -297,6 +348,20 @@ export class IProtocolYieldSource extends Contract {
       to: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    transferERC20(
+      token: string,
+      to: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "transferERC20(address,address,uint256)"(
+      token: string,
+      to: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -343,6 +408,20 @@ export class IProtocolYieldSource extends Contract {
     "supplyTokenTo(uint256,address)"(
       amount: BigNumberish,
       to: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    transferERC20(
+      token: string,
+      to: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "transferERC20(address,address,uint256)"(
+      token: string,
+      to: string,
+      amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

@@ -389,4 +389,47 @@ describe('GenericProxyFactory', () => {
 		});
 	});
 
+  describe('transferERC20()', () => {
+    it('should transferERC20 if yieldSourceOwner', async () => {
+      const transferAmount = toWei('10');
+
+      await erc20Token.mock.transfer.withArgs(wallet2.address, transferAmount).returns(true);
+
+      await idleYieldSource
+        .connect(contractsOwner)
+        .transferERC20(erc20Token.address, wallet2.address, transferAmount);
+    });
+
+    it('should transferERC20 if assetManager', async () => {
+      const transferAmount = toWei('10');
+
+      await erc20Token.mock.transfer
+        .withArgs(yieldSourceOwner.address, transferAmount)
+        .returns(true);
+
+      await idleYieldSource.connect(contractsOwner).setAssetManager(wallet2.address);
+
+      await idleYieldSource
+        .connect(wallet2)
+        .transferERC20(erc20Token.address, yieldSourceOwner.address, transferAmount);
+    });
+
+    it('should not allow to transfer idleToken', async () => {
+      await expect(
+        idleYieldSource
+          .connect(contractsOwner)
+          .transferERC20(idletoken.address, wallet2.address, toWei('10')),
+      ).to.be.revertedWith('IdleYieldSource/idleDai-transfer-not-allowed');
+    });
+
+    it('should fail to transferERC20 if not contractsOwner or assetManager', async () => {
+      await expect(
+        idleYieldSource
+          .connect(wallet2)
+          .transferERC20(erc20Token.address, yieldSourceOwner.address, toWei('10')),
+      ).to.be.revertedWith('OwnerOrAssetManager: caller is not owner or asset manager');
+    });
+  });
+
+
 });
