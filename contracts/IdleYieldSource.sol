@@ -110,7 +110,7 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
         return tokens;
     }
 
-    /// @notice Deposit asset tokens to Aave
+    /// @notice Deposit asset tokens to Idle
     /// @param mintAmount The amount of asset tokens to be deposited
     /// @return 0 if successful 
     function _depositToIdle(uint256 mintAmount) internal returns (uint256) {
