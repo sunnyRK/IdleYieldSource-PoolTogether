@@ -33,8 +33,6 @@ async function main() {
 
   let daiContract = await getContractAt(dai.abi, dai.address, signer);
   await daiContract.transfer(accounts[0].address, daiContract.balanceOf(accountToImpersonate))
-  // await daiContract.transfer(accounts[0].address, '300000000000000000000000')
-  // await daiContract.transfer(accounts[1].address, '300000000000000000000000')
   signer = await ethers.provider.getSigner(accounts[0].address)
   daiContract = new ethers.Contract(dai.address, dai.abi, signer)
 
@@ -132,7 +130,6 @@ async function main() {
 
   const daiAmount = ethers.utils.parseUnits('100000', 18);
   await daiContract.approve(prizePool.address, daiAmount);
-  // await daiContract.connect(accounts[1].address).approve(prizePool.address, daiAmount);
 
   info(`Depositing ${ethers.utils.formatUnits(daiAmount, 18)} DAI...`);
 
@@ -150,9 +147,6 @@ async function main() {
   // simulating returns in the vault during the prizePeriod
   const daiProfits = ethers.utils.parseUnits('100000', 18);
   info(`yVault generated ${ethers.utils.formatUnits(daiProfits, 18)} DAI`);
-  // await daiContract.transfer(idleToken, daiProfits);
-  // await daiContract.transfer(createdEvent.args[0], daiProfits);
-  // await daiContract.transfer(IdleYieldSource_Instance.address, daiProfits);
 
   await send('evm_increaseTime', [10000]);
   await send('evm_mine', []);

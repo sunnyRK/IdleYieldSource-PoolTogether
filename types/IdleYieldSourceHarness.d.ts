@@ -21,16 +21,21 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
   functions: {
+    "allowance(address,address)": FunctionFragment;
+    "approve(address,uint256)": FunctionFragment;
     "assetManager()": FunctionFragment;
+    "balanceOf(address)": FunctionFragment;
     "balanceOfToken(address)": FunctionFragment;
-    "balances(address)": FunctionFragment;
     "c_0x721a63dc(bytes32)": FunctionFragment;
+    "decimals()": FunctionFragment;
+    "decreaseAllowance(address,uint256)": FunctionFragment;
     "depositToken()": FunctionFragment;
     "idleToken()": FunctionFragment;
+    "increaseAllowance(address,uint256)": FunctionFragment;
     "initialize(address)": FunctionFragment;
-    "maxValue()": FunctionFragment;
     "mint(address,uint256)": FunctionFragment;
     "mintTotalUnderlyingAsset(uint256)": FunctionFragment;
+    "name()": FunctionFragment;
     "owner()": FunctionFragment;
     "redeemToken(uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
@@ -38,35 +43,55 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
     "sharesToToken(uint256)": FunctionFragment;
     "sponsor(uint256)": FunctionFragment;
     "supplyTokenTo(uint256,address)": FunctionFragment;
+    "symbol()": FunctionFragment;
     "tokenToShares(uint256)": FunctionFragment;
     "totalShare()": FunctionFragment;
+    "totalSupply()": FunctionFragment;
     "totalUnderlyingAsset()": FunctionFragment;
     "totalUnderlyingAssets()": FunctionFragment;
+    "transfer(address,uint256)": FunctionFragment;
     "transferERC20(address,address,uint256)": FunctionFragment;
+    "transferFrom(address,address,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "underlyingAsset()": FunctionFragment;
   };
 
   encodeFunctionData(
+    functionFragment: "allowance",
+    values: [string, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "approve",
+    values: [string, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "assetManager",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
   encodeFunctionData(
     functionFragment: "balanceOfToken",
     values: [string]
   ): string;
-  encodeFunctionData(functionFragment: "balances", values: [string]): string;
   encodeFunctionData(
     functionFragment: "c_0x721a63dc",
     values: [BytesLike]
+  ): string;
+  encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "decreaseAllowance",
+    values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "depositToken",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "idleToken", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "increaseAllowance",
+    values: [string, BigNumberish]
+  ): string;
   encodeFunctionData(functionFragment: "initialize", values: [string]): string;
-  encodeFunctionData(functionFragment: "maxValue", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "mint",
     values: [string, BigNumberish]
@@ -75,6 +100,7 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
     functionFragment: "mintTotalUnderlyingAsset",
     values: [BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "redeemToken",
@@ -100,12 +126,17 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
     functionFragment: "supplyTokenTo",
     values: [BigNumberish, string]
   ): string;
+  encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "tokenToShares",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "totalShare",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "totalSupply",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -117,7 +148,15 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "transfer",
+    values: [string, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "transferERC20",
+    values: [string, string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferFrom",
     values: [string, string, BigNumberish]
   ): string;
   encodeFunctionData(
@@ -129,17 +168,24 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
 
+  decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "assetManager",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "balanceOfToken",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "balances", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "c_0x721a63dc",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "decreaseAllowance",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -147,13 +193,17 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "idleToken", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "increaseAllowance",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "maxValue", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "mintTotalUnderlyingAsset",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "redeemToken",
@@ -176,11 +226,16 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
     functionFragment: "supplyTokenTo",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "tokenToShares",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "totalShare", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "totalSupply",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "totalUnderlyingAsset",
     data: BytesLike
@@ -189,8 +244,13 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
     functionFragment: "totalUnderlyingAssets",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "transfer", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "transferERC20",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferFrom",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -203,21 +263,25 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
   ): Result;
 
   events: {
+    "Approval(address,address,uint256)": EventFragment;
     "AssetManagerTransferred(address,address)": EventFragment;
     "IdleYieldSourceInitialized(address)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "RedeemedToken(address,uint256,uint256)": EventFragment;
     "Sponsored(address,uint256)": EventFragment;
     "SuppliedTokenTo(address,uint256,uint256,address)": EventFragment;
+    "Transfer(address,address,uint256)": EventFragment;
     "TransferredERC20(address,address,uint256,address)": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "AssetManagerTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "IdleYieldSourceInitialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RedeemedToken"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Sponsored"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SuppliedTokenTo"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "TransferredERC20"): EventFragment;
 }
 
@@ -265,9 +329,40 @@ export class IdleYieldSourceHarness extends Contract {
   interface: IdleYieldSourceHarnessInterface;
 
   functions: {
+    allowance(
+      owner: string,
+      spender: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    "allowance(address,address)"(
+      owner: string,
+      spender: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    approve(
+      spender: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "approve(address,uint256)"(
+      spender: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     assetManager(overrides?: CallOverrides): Promise<[string]>;
 
     "assetManager()"(overrides?: CallOverrides): Promise<[string]>;
+
+    balanceOf(account: string, overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    "balanceOf(address)"(
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     balanceOfToken(
       addr: string,
@@ -276,13 +371,6 @@ export class IdleYieldSourceHarness extends Contract {
 
     "balanceOfToken(address)"(
       addr: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
-    balances(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    "balances(address)"(
-      arg0: string,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
@@ -296,6 +384,22 @@ export class IdleYieldSourceHarness extends Contract {
       overrides?: CallOverrides
     ): Promise<[void]>;
 
+    decimals(overrides?: CallOverrides): Promise<[number]>;
+
+    "decimals()"(overrides?: CallOverrides): Promise<[number]>;
+
+    decreaseAllowance(
+      spender: string,
+      subtractedValue: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "decreaseAllowance(address,uint256)"(
+      spender: string,
+      subtractedValue: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     depositToken(overrides?: CallOverrides): Promise<[string]>;
 
     "depositToken()"(overrides?: CallOverrides): Promise<[string]>;
@@ -303,6 +407,18 @@ export class IdleYieldSourceHarness extends Contract {
     idleToken(overrides?: CallOverrides): Promise<[string]>;
 
     "idleToken()"(overrides?: CallOverrides): Promise<[string]>;
+
+    increaseAllowance(
+      spender: string,
+      addedValue: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "increaseAllowance(address,uint256)"(
+      spender: string,
+      addedValue: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     initialize(
       _idleToken: string,
@@ -313,10 +429,6 @@ export class IdleYieldSourceHarness extends Contract {
       _idleToken: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-
-    maxValue(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    "maxValue()"(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     mint(
       account: string,
@@ -339,6 +451,10 @@ export class IdleYieldSourceHarness extends Contract {
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    name(overrides?: CallOverrides): Promise<[string]>;
+
+    "name()"(overrides?: CallOverrides): Promise<[string]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
@@ -404,6 +520,10 @@ export class IdleYieldSourceHarness extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    symbol(overrides?: CallOverrides): Promise<[string]>;
+
+    "symbol()"(overrides?: CallOverrides): Promise<[string]>;
+
     tokenToShares(
       tokens: BigNumberish,
       overrides?: CallOverrides
@@ -418,6 +538,10 @@ export class IdleYieldSourceHarness extends Contract {
 
     "totalShare()"(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    totalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    "totalSupply()"(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     totalUnderlyingAsset(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     "totalUnderlyingAsset()"(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -425,6 +549,18 @@ export class IdleYieldSourceHarness extends Contract {
     totalUnderlyingAssets(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     "totalUnderlyingAssets()"(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    transfer(
+      recipient: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "transfer(address,uint256)"(
+      recipient: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     transferERC20(
       erc20Token: string,
@@ -436,6 +572,20 @@ export class IdleYieldSourceHarness extends Contract {
     "transferERC20(address,address,uint256)"(
       erc20Token: string,
       to: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    transferFrom(
+      sender: string,
+      recipient: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "transferFrom(address,address,uint256)"(
+      sender: string,
+      recipient: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -455,21 +605,45 @@ export class IdleYieldSourceHarness extends Contract {
     "underlyingAsset()"(overrides?: CallOverrides): Promise<[string]>;
   };
 
+  allowance(
+    owner: string,
+    spender: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  "allowance(address,address)"(
+    owner: string,
+    spender: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  approve(
+    spender: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "approve(address,uint256)"(
+    spender: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   assetManager(overrides?: CallOverrides): Promise<string>;
 
   "assetManager()"(overrides?: CallOverrides): Promise<string>;
+
+  balanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+  "balanceOf(address)"(
+    account: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   balanceOfToken(addr: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   "balanceOfToken(address)"(
     addr: string,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  balances(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-  "balances(address)"(
-    arg0: string,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -483,6 +657,22 @@ export class IdleYieldSourceHarness extends Contract {
     overrides?: CallOverrides
   ): Promise<void>;
 
+  decimals(overrides?: CallOverrides): Promise<number>;
+
+  "decimals()"(overrides?: CallOverrides): Promise<number>;
+
+  decreaseAllowance(
+    spender: string,
+    subtractedValue: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "decreaseAllowance(address,uint256)"(
+    spender: string,
+    subtractedValue: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   depositToken(overrides?: CallOverrides): Promise<string>;
 
   "depositToken()"(overrides?: CallOverrides): Promise<string>;
@@ -490,6 +680,18 @@ export class IdleYieldSourceHarness extends Contract {
   idleToken(overrides?: CallOverrides): Promise<string>;
 
   "idleToken()"(overrides?: CallOverrides): Promise<string>;
+
+  increaseAllowance(
+    spender: string,
+    addedValue: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "increaseAllowance(address,uint256)"(
+    spender: string,
+    addedValue: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   initialize(
     _idleToken: string,
@@ -500,10 +702,6 @@ export class IdleYieldSourceHarness extends Contract {
     _idleToken: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
-
-  maxValue(overrides?: CallOverrides): Promise<BigNumber>;
-
-  "maxValue()"(overrides?: CallOverrides): Promise<BigNumber>;
 
   mint(
     account: string,
@@ -526,6 +724,10 @@ export class IdleYieldSourceHarness extends Contract {
     amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  name(overrides?: CallOverrides): Promise<string>;
+
+  "name()"(overrides?: CallOverrides): Promise<string>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
@@ -591,6 +793,10 @@ export class IdleYieldSourceHarness extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  symbol(overrides?: CallOverrides): Promise<string>;
+
+  "symbol()"(overrides?: CallOverrides): Promise<string>;
+
   tokenToShares(
     tokens: BigNumberish,
     overrides?: CallOverrides
@@ -605,6 +811,10 @@ export class IdleYieldSourceHarness extends Contract {
 
   "totalShare()"(overrides?: CallOverrides): Promise<BigNumber>;
 
+  totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
+
+  "totalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
+
   totalUnderlyingAsset(overrides?: CallOverrides): Promise<BigNumber>;
 
   "totalUnderlyingAsset()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -612,6 +822,18 @@ export class IdleYieldSourceHarness extends Contract {
   totalUnderlyingAssets(overrides?: CallOverrides): Promise<BigNumber>;
 
   "totalUnderlyingAssets()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+  transfer(
+    recipient: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "transfer(address,uint256)"(
+    recipient: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   transferERC20(
     erc20Token: string,
@@ -623,6 +845,20 @@ export class IdleYieldSourceHarness extends Contract {
   "transferERC20(address,address,uint256)"(
     erc20Token: string,
     to: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  transferFrom(
+    sender: string,
+    recipient: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "transferFrom(address,address,uint256)"(
+    sender: string,
+    recipient: string,
     amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -642,21 +878,45 @@ export class IdleYieldSourceHarness extends Contract {
   "underlyingAsset()"(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
+    allowance(
+      owner: string,
+      spender: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "allowance(address,address)"(
+      owner: string,
+      spender: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    approve(
+      spender: string,
+      amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    "approve(address,uint256)"(
+      spender: string,
+      amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
     assetManager(overrides?: CallOverrides): Promise<string>;
 
     "assetManager()"(overrides?: CallOverrides): Promise<string>;
+
+    balanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    "balanceOf(address)"(
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     balanceOfToken(addr: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     "balanceOfToken(address)"(
       addr: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    balances(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-    "balances(address)"(
-      arg0: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -670,6 +930,22 @@ export class IdleYieldSourceHarness extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    decimals(overrides?: CallOverrides): Promise<number>;
+
+    "decimals()"(overrides?: CallOverrides): Promise<number>;
+
+    decreaseAllowance(
+      spender: string,
+      subtractedValue: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    "decreaseAllowance(address,uint256)"(
+      spender: string,
+      subtractedValue: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
     depositToken(overrides?: CallOverrides): Promise<string>;
 
     "depositToken()"(overrides?: CallOverrides): Promise<string>;
@@ -678,16 +954,24 @@ export class IdleYieldSourceHarness extends Contract {
 
     "idleToken()"(overrides?: CallOverrides): Promise<string>;
 
+    increaseAllowance(
+      spender: string,
+      addedValue: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    "increaseAllowance(address,uint256)"(
+      spender: string,
+      addedValue: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
     initialize(_idleToken: string, overrides?: CallOverrides): Promise<void>;
 
     "initialize(address)"(
       _idleToken: string,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    maxValue(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "maxValue()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     mint(
       account: string,
@@ -710,6 +994,10 @@ export class IdleYieldSourceHarness extends Contract {
       amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    name(overrides?: CallOverrides): Promise<string>;
+
+    "name()"(overrides?: CallOverrides): Promise<string>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -768,6 +1056,10 @@ export class IdleYieldSourceHarness extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    symbol(overrides?: CallOverrides): Promise<string>;
+
+    "symbol()"(overrides?: CallOverrides): Promise<string>;
+
     tokenToShares(
       tokens: BigNumberish,
       overrides?: CallOverrides
@@ -782,6 +1074,10 @@ export class IdleYieldSourceHarness extends Contract {
 
     "totalShare()"(overrides?: CallOverrides): Promise<BigNumber>;
 
+    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "totalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     totalUnderlyingAsset(overrides?: CallOverrides): Promise<BigNumber>;
 
     "totalUnderlyingAsset()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -789,6 +1085,18 @@ export class IdleYieldSourceHarness extends Contract {
     totalUnderlyingAssets(overrides?: CallOverrides): Promise<BigNumber>;
 
     "totalUnderlyingAssets()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    transfer(
+      recipient: string,
+      amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    "transfer(address,uint256)"(
+      recipient: string,
+      amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
     transferERC20(
       erc20Token: string,
@@ -803,6 +1111,20 @@ export class IdleYieldSourceHarness extends Contract {
       amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    transferFrom(
+      sender: string,
+      recipient: string,
+      amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    "transferFrom(address,address,uint256)"(
+      sender: string,
+      recipient: string,
+      amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
     transferOwnership(
       newOwner: string,
@@ -820,6 +1142,15 @@ export class IdleYieldSourceHarness extends Contract {
   };
 
   filters: {
+    Approval(
+      owner: string | null,
+      spender: string | null,
+      value: null
+    ): TypedEventFilter<
+      [string, string, BigNumber],
+      { owner: string; spender: string; value: BigNumber }
+    >;
+
     AssetManagerTransferred(
       previousAssetManager: string | null,
       newAssetManager: string | null
@@ -867,6 +1198,15 @@ export class IdleYieldSourceHarness extends Contract {
       { from: string; shares: BigNumber; amount: BigNumber; to: string }
     >;
 
+    Transfer(
+      from: string | null,
+      to: string | null,
+      value: null
+    ): TypedEventFilter<
+      [string, string, BigNumber],
+      { from: string; to: string; value: BigNumber }
+    >;
+
     TransferredERC20(
       from: string | null,
       to: string | null,
@@ -879,21 +1219,45 @@ export class IdleYieldSourceHarness extends Contract {
   };
 
   estimateGas: {
+    allowance(
+      owner: string,
+      spender: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "allowance(address,address)"(
+      owner: string,
+      spender: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    approve(
+      spender: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "approve(address,uint256)"(
+      spender: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     assetManager(overrides?: CallOverrides): Promise<BigNumber>;
 
     "assetManager()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    balanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    "balanceOf(address)"(
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     balanceOfToken(addr: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     "balanceOfToken(address)"(
       addr: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    balances(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-    "balances(address)"(
-      arg0: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -907,6 +1271,22 @@ export class IdleYieldSourceHarness extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    decimals(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "decimals()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    decreaseAllowance(
+      spender: string,
+      subtractedValue: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "decreaseAllowance(address,uint256)"(
+      spender: string,
+      subtractedValue: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     depositToken(overrides?: CallOverrides): Promise<BigNumber>;
 
     "depositToken()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -914,6 +1294,18 @@ export class IdleYieldSourceHarness extends Contract {
     idleToken(overrides?: CallOverrides): Promise<BigNumber>;
 
     "idleToken()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    increaseAllowance(
+      spender: string,
+      addedValue: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "increaseAllowance(address,uint256)"(
+      spender: string,
+      addedValue: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     initialize(
       _idleToken: string,
@@ -924,10 +1316,6 @@ export class IdleYieldSourceHarness extends Contract {
       _idleToken: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
-
-    maxValue(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "maxValue()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     mint(
       account: string,
@@ -950,6 +1338,10 @@ export class IdleYieldSourceHarness extends Contract {
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    name(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "name()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1015,6 +1407,10 @@ export class IdleYieldSourceHarness extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    symbol(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "symbol()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     tokenToShares(
       tokens: BigNumberish,
       overrides?: CallOverrides
@@ -1029,6 +1425,10 @@ export class IdleYieldSourceHarness extends Contract {
 
     "totalShare()"(overrides?: CallOverrides): Promise<BigNumber>;
 
+    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "totalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     totalUnderlyingAsset(overrides?: CallOverrides): Promise<BigNumber>;
 
     "totalUnderlyingAsset()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1036,6 +1436,18 @@ export class IdleYieldSourceHarness extends Contract {
     totalUnderlyingAssets(overrides?: CallOverrides): Promise<BigNumber>;
 
     "totalUnderlyingAssets()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    transfer(
+      recipient: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "transfer(address,uint256)"(
+      recipient: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     transferERC20(
       erc20Token: string,
@@ -1047,6 +1459,20 @@ export class IdleYieldSourceHarness extends Contract {
     "transferERC20(address,address,uint256)"(
       erc20Token: string,
       to: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    transferFrom(
+      sender: string,
+      recipient: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "transferFrom(address,address,uint256)"(
+      sender: string,
+      recipient: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -1067,9 +1493,43 @@ export class IdleYieldSourceHarness extends Contract {
   };
 
   populateTransaction: {
+    allowance(
+      owner: string,
+      spender: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "allowance(address,address)"(
+      owner: string,
+      spender: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    approve(
+      spender: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "approve(address,uint256)"(
+      spender: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     assetManager(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "assetManager()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    balanceOf(
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "balanceOf(address)"(
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     balanceOfToken(
       addr: string,
@@ -1078,16 +1538,6 @@ export class IdleYieldSourceHarness extends Contract {
 
     "balanceOfToken(address)"(
       addr: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    balances(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "balances(address)"(
-      arg0: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1101,6 +1551,22 @@ export class IdleYieldSourceHarness extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    decimals(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "decimals()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    decreaseAllowance(
+      spender: string,
+      subtractedValue: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "decreaseAllowance(address,uint256)"(
+      spender: string,
+      subtractedValue: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     depositToken(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "depositToken()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -1108,6 +1574,18 @@ export class IdleYieldSourceHarness extends Contract {
     idleToken(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "idleToken()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    increaseAllowance(
+      spender: string,
+      addedValue: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "increaseAllowance(address,uint256)"(
+      spender: string,
+      addedValue: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     initialize(
       _idleToken: string,
@@ -1118,10 +1596,6 @@ export class IdleYieldSourceHarness extends Contract {
       _idleToken: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
-
-    maxValue(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    "maxValue()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     mint(
       account: string,
@@ -1144,6 +1618,10 @@ export class IdleYieldSourceHarness extends Contract {
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "name()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1209,6 +1687,10 @@ export class IdleYieldSourceHarness extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "symbol()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     tokenToShares(
       tokens: BigNumberish,
       overrides?: CallOverrides
@@ -1222,6 +1704,10 @@ export class IdleYieldSourceHarness extends Contract {
     totalShare(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "totalShare()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "totalSupply()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     totalUnderlyingAsset(
       overrides?: CallOverrides
@@ -1239,6 +1725,18 @@ export class IdleYieldSourceHarness extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    transfer(
+      recipient: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "transfer(address,uint256)"(
+      recipient: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     transferERC20(
       erc20Token: string,
       to: string,
@@ -1249,6 +1747,20 @@ export class IdleYieldSourceHarness extends Contract {
     "transferERC20(address,address,uint256)"(
       erc20Token: string,
       to: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    transferFrom(
+      sender: string,
+      recipient: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "transferFrom(address,address,uint256)"(
+      sender: string,
+      recipient: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;

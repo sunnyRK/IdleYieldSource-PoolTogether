@@ -13,7 +13,7 @@ contract IdleYieldSourceHarness is IdleYieldSource {
   }
 
   function mint(address account, uint256 amount) public returns (bool) {
-    balances[account] = balances[account] + amount;
+    _mint(account, amount);
     return true;
   }
 

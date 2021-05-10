@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "compile": "npx hardhat compile",
     "test": "FORK_ENABLED=false; npx hardhat test",
     "coverage": "FORK_ENABLED=false; npx hardhat coverage",
     "fork": "FORK_ENABLED=true; npx hardhat run ./scripts/idleYiledSourceScript.ts",

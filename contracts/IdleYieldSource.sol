@@ -3,6 +3,7 @@
 pragma solidity 0.8.4;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol"; 
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "./interfaces/pooltogether/IProtocolYieldSource.sol";
@@ -12,14 +13,12 @@ import "./access/AssetManager.sol";
 
 /// @title An pooltogether yield source for Idle token
 /// @author Sunny Radadiya
-contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuardUpgradeable, AssetManager  {
+contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuardUpgradeable, ERC20Upgradeable, AssetManager  {
     using SafeERC20Upgradeable for IERC20Upgradeable;
-    mapping(address => uint256) public balances;
 
     address public idleToken;
     address public underlyingAsset;
     uint256 public totalUnderlyingAssets;
-    uint256 public maxValue = 2**256 - 1;
 
     /// @notice Emitted when the yield source is initialized
     event IdleYieldSourceInitialized(address indexed idleToken);
@@ -45,7 +44,7 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
         uint256 amount
     );
 
-    /// @notice Emitted when ERC20 tokens other than yield source's aToken are withdrawn from the yield source
+    /// @notice Emitted when ERC20 tokens other than yield source's idleToken are withdrawn from the yield source
     event TransferredERC20(
         address indexed from,
         address indexed to,
@@ -64,7 +63,7 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
         idleToken = _idleToken;
         underlyingAsset = IIdleToken(idleToken).token();
 
-        IERC20Upgradeable(underlyingAsset).safeApprove(idleToken, 2**256 - 1);
+        IERC20Upgradeable(underlyingAsset).safeApprove(idleToken, type(uint256).max);
         emit IdleYieldSourceInitialized(idleToken);
     }
 
@@ -77,8 +76,7 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     /// @notice Returns the total balance (in asset tokens).  This includes the deposits and interest.
     /// @return The underlying balance of asset tokens
     function balanceOfToken(address addr) external view override returns (uint256) {
-        if (balances[addr] == 0) return 0;
-        return _sharesToToken(balances[addr]);
+        return _sharesToToken(balanceOf(addr));
     }
 
     /// @notice Calculates the balance of Total idle Tokens Contract hasv
@@ -89,28 +87,24 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
 
     /// @notice Calculates the number of shares that should be mint or burned when a user deposit or withdraw
     /// @param tokens Amount of tokens
-    /// @return Number of shares
-    function _tokenToShares(uint256 tokens) internal view returns (uint256) {
-        uint256 shares = 0;
+    /// return Number of shares
+    function _tokenToShares(uint256 tokens) internal view returns (uint256 shares) {
         if(_totalShare() == 0) {
             shares = tokens;
         } else {
             shares = (tokens * _totalShare())  / totalUnderlyingAssets;
         }
-        return shares;
     }
 
     /// @notice Calculates the number of tokens a user has in the yield source
     /// @param shares Amount of shares
-    /// @return Number of tokens
-    function _sharesToToken(uint256 shares) internal view returns (uint256) { 
-        uint256 tokens = 0;
+    /// return Number of tokens
+    function _sharesToToken(uint256 shares) internal view returns (uint256 tokens) { 
         if(_totalShare() == 0) {
             tokens = shares;
         } else {
             tokens = (shares * totalUnderlyingAssets) / _totalShare();
         }
-        return tokens;
     }
 
     /// @notice Deposit asset tokens to Idle
@@ -126,18 +120,18 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     /// @param mintAmount The amount of `token()` to be supplied
     /// @param to The user whose balance will receive the tokens
     function supplyTokenTo(uint256 mintAmount, address to) public nonReentrant override {
-        uint256 mintedTokens = _depositToIdle(mintAmount);
-        balances[to] = balances[to] + mintedTokens;
+        uint256 mintedTokenShares = _depositToIdle(mintAmount);
+        _mint(to, mintedTokenShares);
         totalUnderlyingAssets = totalUnderlyingAssets + mintAmount;
-        emit SuppliedTokenTo(msg.sender, mintedTokens, mintAmount, to);
+        emit SuppliedTokenTo(msg.sender, mintedTokenShares, mintAmount, to);
     }
 
     /// @notice Redeems tokens from the yield source from the msg.sender, it burn yield bearing tokens and return token to the sender.
     /// @param redeemAmount The amount of `token()` to withdraw.  Denominated in `token()` as above.
     /// @return The actual amount of tokens that were redeemed.
     function redeemToken(uint256 redeemAmount) public override nonReentrant returns (uint256) {
-        uint256 _idleShare = _tokenToShares(redeemAmount);        
-        balances[msg.sender] = balances[msg.sender] - _idleShare;
+        uint256 _idleShare = _tokenToShares(redeemAmount);
+        _burn(msg.sender, _idleShare);
         totalUnderlyingAssets = totalUnderlyingAssets - redeemAmount;
         uint256 redeemedUnderlyingAsset = IIdleToken(idleToken).redeemIdleToken(_idleShare);
         IERC20Upgradeable(underlyingAsset).safeTransfer(msg.sender, redeemedUnderlyingAsset);

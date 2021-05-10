@@ -3,7 +3,6 @@
 pragma solidity 0.8.4;
 
 import "./IYieldSource.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 
 /// @title The interface used for all Yield Sources for the PoolTogether protocol
 /// @dev There are two privileged roles: the owner and the asset manager.  The owner can configure the asset managers.

@@ -80,11 +80,6 @@ describe('GenericProxyFactory', () => {
 		idletoken = ((await deployMockContract(contractsOwner, IIdleTokenABI.abi)) as unknown) as IIdleToken;
 		await idletoken.mock.token.returns(underlyingToken.address);
 
-		// const IdleYieldSource = await ethers.getContractFactory(
-		// 	'IdleYieldSourceHarness',
-		// );
-		// const hardhatIdleYieldSourceHarness = await IdleYieldSource.deploy(idletoken.address)
-
 		const genericProxyFactoryContract = await ethers.getContractFactory('GenericProxyFactory');
 		const hardhatGenericProxyFactory = await genericProxyFactoryContract.deploy()
 
@@ -92,12 +87,9 @@ describe('GenericProxyFactory', () => {
 			'IdleYieldSourceProxyFactoryHarness'
 		);
 		const hardhatIdleYieldSourceProxyFactory = (await idleYieldSourceProxyFactory.deploy(
-				// hardhatIdleYieldSourceHarness.address, 
 				idletoken.address,
 				hardhatGenericProxyFactory.address
 			) as unknown) as IdleYieldSourceProxyFactoryHarness;
-
-		// const instanceAddr = await hardhatIdleYieldSourceProxyFactory.instance()
 
 		const initializeTx = await hardhatIdleYieldSourceProxyFactory.createNewProxy();
 		const receipt = await provider.getTransactionReceipt(initializeTx.hash);
@@ -139,7 +131,6 @@ describe('GenericProxyFactory', () => {
 
 	describe('balanceOfToken()', () => {
 		it('should return user balance', async() => {
-			// await underlyingToken.mock.approve.withArgs(idleYieldSource.address, maxValue)
 			await idleYieldSource.mint(yieldSourceOwner.address, toWei('100'))
 			await idleYieldSource.mint(wallet2.address, toWei('100'))
 			await idleYieldSource.mintTotalUnderlyingAsset(toWei('200'))
@@ -302,7 +293,7 @@ describe('GenericProxyFactory', () => {
 					await idleYieldSource.tokenToShares(redeemAmount))
 				.returns(true);
 			await idleYieldSource.connect(yieldSourceOwner).redeemToken(redeemAmount);
-			expect(await idleYieldSource.balances(yieldSourceOwner.address)).to.equal(
+			expect(await idleYieldSource.balanceOf(yieldSourceOwner.address)).to.equal(
 				yieldSourceOwnerBalance.sub(redeemAmount),
 			);
 		});

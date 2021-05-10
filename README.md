@@ -26,6 +26,10 @@ PoolTogether Yield Source that uses [Idle](https://idle.finance/) to generate yi
 2). Install Dependency by 
     
     yarn 
+
+3). To compile Smart contract code:
+        
+    yarn compile
  
 3). To run unit tests:
         
