@@ -7,7 +7,6 @@ artifacts
 demo.ts
 test/idleYieldSourceOld.test.ts
 test/IdleYielSourceUnitTest.test.ts
-deploy
 types
 deployments/localhost/
 
