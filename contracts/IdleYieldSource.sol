@@ -4,7 +4,7 @@ pragma solidity 0.8.4;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol"; 
+import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "./interfaces/pooltogether/IProtocolYieldSource.sol";
 import "./interfaces/idle/IIdleToken.sol";
@@ -19,6 +19,7 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     address public idleToken;
     address public underlyingAsset;
     uint256 public totalUnderlyingAssets;
+    uint256 public constant ONE_IDLE_TOKEN = 10**18;
 
     /// @notice Emitted when the yield source is initialized
     event IdleYieldSourceInitialized(address indexed idleToken);
@@ -57,7 +58,6 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     function initialize(
         address _idleToken
     ) public initializer {
-
         __Ownable_init();
 
         idleToken = _idleToken;
@@ -70,7 +70,7 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     /// @notice Returns the ERC20 asset token used for deposits.
     /// @return The ERC20 asset token
     function depositToken() external view override returns (address) {
-        return (underlyingAsset);
+        return underlyingAsset;
     }
 
     /// @notice Returns the total balance (in asset tokens).  This includes the deposits and interest.
@@ -79,64 +79,48 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
         return _sharesToToken(balanceOf(addr));
     }
 
-    /// @notice Calculates the balance of Total idle Tokens Contract hasv
-    /// @return balance of Idle Tokens
-    function _totalShare() internal view returns(uint256) {
-        return IIdleToken(idleToken).balanceOf(address(this));
-    }
-
-    /// @notice Calculates the number of shares that should be mint or burned when a user deposit or withdraw
-    /// @param tokens Amount of tokens
-    /// return Number of shares
-    function _tokenToShares(uint256 tokens) internal view returns (uint256 shares) {
-        if(_totalShare() == 0) {
-            shares = tokens;
-        } else {
-            shares = (tokens * _totalShare())  / totalUnderlyingAssets;
-        }
-    }
-
-    /// @notice Calculates the number of tokens a user has in the yield source
-    /// @param shares Amount of shares
-    /// return Number of tokens
-    function _sharesToToken(uint256 shares) internal view returns (uint256 tokens) { 
-        if(_totalShare() == 0) {
-            tokens = shares;
-        } else {
-            tokens = (shares * totalUnderlyingAssets) / _totalShare();
-        }
+    function balanceOfToken(address addr) external view override returns (uint256) {
+      uint256 total = idleToken.balanceOf(address(this));
+      uint256 totalUnderlying = total * _price();
+      if (total == 0) {
+        return 0;
+      }
+      return balances[addr].mul(totalUnderlying).div(total);
     }
 
     /// @notice Deposit asset tokens to Idle
     /// @param mintAmount The amount of asset tokens to be deposited
-    /// @return 0 if successful 
+    /// @return number of minted tokens
     function _depositToIdle(uint256 mintAmount) internal returns (uint256) {
         IERC20Upgradeable(underlyingAsset).safeTransferFrom(msg.sender, address(this), mintAmount);
-        uint256 mintedTokens = IIdleToken(idleToken).mintIdleToken(mintAmount, false, address(0));
-        return mintedTokens;
+        return IIdleToken(idleToken).mintIdleToken(mintAmount, false, address(0));
     }
 
     /// @notice Allows assets to be supplied on other user's behalf using the `to` param.
     /// @param mintAmount The amount of `token()` to be supplied
     /// @param to The user whose balance will receive the tokens
     function supplyTokenTo(uint256 mintAmount, address to) public nonReentrant override {
-        uint256 mintedTokenShares = _depositToIdle(mintAmount);
-        _mint(to, mintedTokenShares);
-        totalUnderlyingAssets = totalUnderlyingAssets + mintAmount;
-        emit SuppliedTokenTo(msg.sender, mintedTokenShares, mintAmount, to);
+        uint256 mintedShares = mintAmount * ONE_IDLE_TOKEN / _price();
+        _depositToIdle(mintAmount);
+        _mint(to, mintedShares);
+        emit SuppliedTokenTo(msg.sender, mintedShares, mintAmount, to);
     }
 
     /// @notice Redeems tokens from the yield source from the msg.sender, it burn yield bearing tokens and return token to the sender.
     /// @param redeemAmount The amount of `token()` to withdraw.  Denominated in `token()` as above.
     /// @return The actual amount of tokens that were redeemed.
-    function redeemToken(uint256 redeemAmount) public override nonReentrant returns (uint256) {
-        uint256 _idleShare = _tokenToShares(redeemAmount);
-        _burn(msg.sender, _idleShare);
-        totalUnderlyingAssets = totalUnderlyingAssets - redeemAmount;
-        uint256 redeemedUnderlyingAsset = IIdleToken(idleToken).redeemIdleToken(_idleShare);
+    function redeemToken(uint256 redeemAmount) public override nonReentrant returns (uint256 redeemedUnderlyingAsset) {
+        uint256 redeemedShare = redeemAmount * ONE_IDLE_TOKEN / _price();
+        _burn(msg.sender, redeemedShare);
+        redeemedUnderlyingAsset = IIdleToken(idleToken).redeemIdleToken(redeemedShare);
         IERC20Upgradeable(underlyingAsset).safeTransfer(msg.sender, redeemedUnderlyingAsset);
-        emit RedeemedToken(msg.sender, _idleShare, redeemAmount);
-        return redeemedUnderlyingAsset;
+        emit RedeemedToken(msg.sender, redeemedShare, redeemAmount);
+    }
+
+    /// @notice Calculates the current price per share
+    /// @return avg idleToken price for this contract
+    function _price() internal view returns (uint256) {
+      return idleToken.tokenPriceWithFee(address(this));
     }
 
     /// @notice Transfer ERC20 tokens other than the idleTokens held by this contract to the recipient address
@@ -145,7 +129,7 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     /// @param to The recipient of the tokens
     /// @param amount The amount of tokens to transfer
     function transferERC20(address erc20Token, address to, uint256 amount) external override onlyOwnerOrAssetManager {
-        require(address(erc20Token) != address(idleToken), "IdleYieldSource/idleDai-transfer-not-allowed");
+        require(erc20Token != idleToken, "IdleYieldSource/idleDai-transfer-not-allowed");
         IERC20Upgradeable(erc20Token).safeTransfer(to, amount);
         emit TransferredERC20(msg.sender, to, amount, erc20Token);
     }
