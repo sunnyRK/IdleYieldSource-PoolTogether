@@ -21,7 +21,6 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface IdleYieldSourceInterface extends ethers.utils.Interface {
   functions: {
-    "ONE_IDLE_TOKEN()": FunctionFragment;
     "allowance(address,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "assetManager()": FunctionFragment;
@@ -49,10 +48,6 @@ interface IdleYieldSourceInterface extends ethers.utils.Interface {
     "underlyingAsset()": FunctionFragment;
   };
 
-  encodeFunctionData(
-    functionFragment: "ONE_IDLE_TOKEN",
-    values?: undefined
-  ): string;
   encodeFunctionData(
     functionFragment: "allowance",
     values: [string, string]
@@ -133,10 +128,6 @@ interface IdleYieldSourceInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
 
-  decodeFunctionResult(
-    functionFragment: "ONE_IDLE_TOKEN",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(
@@ -272,10 +263,6 @@ export class IdleYieldSource extends Contract {
   interface: IdleYieldSourceInterface;
 
   functions: {
-    ONE_IDLE_TOKEN(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    "ONE_IDLE_TOKEN()"(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     allowance(
       owner: string,
       spender: string,
@@ -488,10 +475,6 @@ export class IdleYieldSource extends Contract {
     "underlyingAsset()"(overrides?: CallOverrides): Promise<[string]>;
   };
 
-  ONE_IDLE_TOKEN(overrides?: CallOverrides): Promise<BigNumber>;
-
-  "ONE_IDLE_TOKEN()"(overrides?: CallOverrides): Promise<BigNumber>;
-
   allowance(
     owner: string,
     spender: string,
@@ -701,10 +684,6 @@ export class IdleYieldSource extends Contract {
   "underlyingAsset()"(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
-    ONE_IDLE_TOKEN(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "ONE_IDLE_TOKEN()"(overrides?: CallOverrides): Promise<BigNumber>;
-
     allowance(
       owner: string,
       spender: string,
@@ -982,10 +961,6 @@ export class IdleYieldSource extends Contract {
   };
 
   estimateGas: {
-    ONE_IDLE_TOKEN(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "ONE_IDLE_TOKEN()"(overrides?: CallOverrides): Promise<BigNumber>;
-
     allowance(
       owner: string,
       spender: string,
@@ -1196,12 +1171,6 @@ export class IdleYieldSource extends Contract {
   };
 
   populateTransaction: {
-    ONE_IDLE_TOKEN(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    "ONE_IDLE_TOKEN()"(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     allowance(
       owner: string,
       spender: string,

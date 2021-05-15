@@ -313,13 +313,13 @@ export class IIdleToken extends Contract {
 
     userAvgPrices(
       arg0: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { avgPrice: BigNumber }>;
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     "userAvgPrices(address)"(
       arg0: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { avgPrice: BigNumber }>;
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
   };
 
   balanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
@@ -451,12 +451,15 @@ export class IIdleToken extends Contract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  userAvgPrices(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+  userAvgPrices(
+    arg0: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   "userAvgPrices(address)"(
     arg0: string,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   callStatic: {
     balanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
@@ -705,11 +708,14 @@ export class IIdleToken extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    userAvgPrices(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+    userAvgPrices(
+      arg0: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     "userAvgPrices(address)"(
       arg0: string,
-      overrides?: CallOverrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
 
@@ -840,12 +846,12 @@ export class IIdleToken extends Contract {
 
     userAvgPrices(
       arg0: string,
-      overrides?: CallOverrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     "userAvgPrices(address)"(
       arg0: string,
-      overrides?: CallOverrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };
 }

@@ -2,7 +2,6 @@
 
 pragma solidity 0.8.4;
 
-import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
@@ -16,11 +15,9 @@ import "./access/AssetManager.sol";
 /// @author Sunny Radadiya
 contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuardUpgradeable, ERC20Upgradeable, AssetManager  {
     using SafeERC20Upgradeable for IERC20Upgradeable;
-    using SafeMathUpgradeable for uint;
 
     address public idleToken;
     address public underlyingAsset;
-    uint256 public constant ONE_IDLE_TOKEN = 10**18;
 
     /// @notice Emitted when the yield source is initialized
     event IdleYieldSourceInitialized(address indexed idleToken);
@@ -91,14 +88,14 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     /// @param tokens Amount of tokens
     /// return Number of shares
     function _tokenToShares(uint256 tokens) internal view returns (uint256 shares) {
-        shares = (tokens * ONE_IDLE_TOKEN) / _price();
+        shares = (tokens * (10 ** IIdleToken(idleToken).decimals())) / _price();
     }
 
     /// @notice Calculates the number of tokens a user has in the yield source
     /// @param shares Amount of shares
     /// return Number of tokens
     function _sharesToToken(uint256 shares) internal view returns (uint256 tokens) { 
-        tokens = (shares * _price()) / ONE_IDLE_TOKEN;
+        tokens = (shares * _price()) / (10 ** IIdleToken(idleToken).decimals());
     }
 
     /// @notice Calculates the current price per share
