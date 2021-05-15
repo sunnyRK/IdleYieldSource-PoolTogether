@@ -21,12 +21,12 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface IdleYieldSourceInterface extends ethers.utils.Interface {
   functions: {
+    "ONE_IDLE_TOKEN()": FunctionFragment;
     "allowance(address,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "assetManager()": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "balanceOfToken(address)": FunctionFragment;
-    "c_0x721a63dc(bytes32)": FunctionFragment;
     "decimals()": FunctionFragment;
     "decreaseAllowance(address,uint256)": FunctionFragment;
     "depositToken()": FunctionFragment;
@@ -42,7 +42,6 @@ interface IdleYieldSourceInterface extends ethers.utils.Interface {
     "supplyTokenTo(uint256,address)": FunctionFragment;
     "symbol()": FunctionFragment;
     "totalSupply()": FunctionFragment;
-    "totalUnderlyingAssets()": FunctionFragment;
     "transfer(address,uint256)": FunctionFragment;
     "transferERC20(address,address,uint256)": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
@@ -50,6 +49,10 @@ interface IdleYieldSourceInterface extends ethers.utils.Interface {
     "underlyingAsset()": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "ONE_IDLE_TOKEN",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "allowance",
     values: [string, string]
@@ -66,10 +69,6 @@ interface IdleYieldSourceInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "balanceOfToken",
     values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "c_0x721a63dc",
-    values: [BytesLike]
   ): string;
   encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
   encodeFunctionData(
@@ -114,10 +113,6 @@ interface IdleYieldSourceInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "totalUnderlyingAssets",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "transfer",
     values: [string, BigNumberish]
   ): string;
@@ -138,6 +133,10 @@ interface IdleYieldSourceInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "ONE_IDLE_TOKEN",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(
@@ -147,10 +146,6 @@ interface IdleYieldSourceInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "balanceOfToken",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "c_0x721a63dc",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
@@ -190,10 +185,6 @@ interface IdleYieldSourceInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "totalSupply",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "totalUnderlyingAssets",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "transfer", data: BytesLike): Result;
@@ -281,6 +272,10 @@ export class IdleYieldSource extends Contract {
   interface: IdleYieldSourceInterface;
 
   functions: {
+    ONE_IDLE_TOKEN(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    "ONE_IDLE_TOKEN()"(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     allowance(
       owner: string,
       spender: string,
@@ -325,16 +320,6 @@ export class IdleYieldSource extends Contract {
       addr: string,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
-
-    c_0x721a63dc(
-      c__0x721a63dc: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[void]>;
-
-    "c_0x721a63dc(bytes32)"(
-      c__0x721a63dc: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[void]>;
 
     decimals(overrides?: CallOverrides): Promise<[number]>;
 
@@ -448,10 +433,6 @@ export class IdleYieldSource extends Contract {
 
     "totalSupply()"(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    totalUnderlyingAssets(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    "totalUnderlyingAssets()"(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     transfer(
       recipient: string,
       amount: BigNumberish,
@@ -507,6 +488,10 @@ export class IdleYieldSource extends Contract {
     "underlyingAsset()"(overrides?: CallOverrides): Promise<[string]>;
   };
 
+  ONE_IDLE_TOKEN(overrides?: CallOverrides): Promise<BigNumber>;
+
+  "ONE_IDLE_TOKEN()"(overrides?: CallOverrides): Promise<BigNumber>;
+
   allowance(
     owner: string,
     spender: string,
@@ -548,16 +533,6 @@ export class IdleYieldSource extends Contract {
     addr: string,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
-
-  c_0x721a63dc(
-    c__0x721a63dc: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<void>;
-
-  "c_0x721a63dc(bytes32)"(
-    c__0x721a63dc: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<void>;
 
   decimals(overrides?: CallOverrides): Promise<number>;
 
@@ -671,10 +646,6 @@ export class IdleYieldSource extends Contract {
 
   "totalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-  totalUnderlyingAssets(overrides?: CallOverrides): Promise<BigNumber>;
-
-  "totalUnderlyingAssets()"(overrides?: CallOverrides): Promise<BigNumber>;
-
   transfer(
     recipient: string,
     amount: BigNumberish,
@@ -730,6 +701,10 @@ export class IdleYieldSource extends Contract {
   "underlyingAsset()"(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
+    ONE_IDLE_TOKEN(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "ONE_IDLE_TOKEN()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     allowance(
       owner: string,
       spender: string,
@@ -771,16 +746,6 @@ export class IdleYieldSource extends Contract {
       addr: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
-
-    c_0x721a63dc(
-      c__0x721a63dc: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    "c_0x721a63dc(bytes32)"(
-      c__0x721a63dc: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<void>;
 
     decimals(overrides?: CallOverrides): Promise<number>;
 
@@ -883,10 +848,6 @@ export class IdleYieldSource extends Contract {
     totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     "totalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    totalUnderlyingAssets(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "totalUnderlyingAssets()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     transfer(
       recipient: string,
@@ -1021,6 +982,10 @@ export class IdleYieldSource extends Contract {
   };
 
   estimateGas: {
+    ONE_IDLE_TOKEN(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "ONE_IDLE_TOKEN()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     allowance(
       owner: string,
       spender: string,
@@ -1060,16 +1025,6 @@ export class IdleYieldSource extends Contract {
 
     "balanceOfToken(address)"(
       addr: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    c_0x721a63dc(
-      c__0x721a63dc: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "c_0x721a63dc(bytes32)"(
-      c__0x721a63dc: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1185,10 +1140,6 @@ export class IdleYieldSource extends Contract {
 
     "totalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-    totalUnderlyingAssets(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "totalUnderlyingAssets()"(overrides?: CallOverrides): Promise<BigNumber>;
-
     transfer(
       recipient: string,
       amount: BigNumberish,
@@ -1245,6 +1196,12 @@ export class IdleYieldSource extends Contract {
   };
 
   populateTransaction: {
+    ONE_IDLE_TOKEN(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "ONE_IDLE_TOKEN()"(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     allowance(
       owner: string,
       spender: string,
@@ -1290,16 +1247,6 @@ export class IdleYieldSource extends Contract {
 
     "balanceOfToken(address)"(
       addr: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    c_0x721a63dc(
-      c__0x721a63dc: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "c_0x721a63dc(bytes32)"(
-      c__0x721a63dc: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1414,14 +1361,6 @@ export class IdleYieldSource extends Contract {
     totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "totalSupply()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    totalUnderlyingAssets(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "totalUnderlyingAssets()"(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
 
     transfer(
       recipient: string,

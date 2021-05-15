@@ -35,6 +35,7 @@ interface IIdleTokenInterface extends ethers.utils.Interface {
     "redeemInterestBearingTokens(uint256)": FunctionFragment;
     "token()": FunctionFragment;
     "tokenPrice()": FunctionFragment;
+    "tokenPriceWithFee(address)": FunctionFragment;
     "userAvgPrices(address)": FunctionFragment;
   };
 
@@ -77,6 +78,10 @@ interface IIdleTokenInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "tokenPriceWithFee",
+    values: [string]
+  ): string;
+  encodeFunctionData(
     functionFragment: "userAvgPrices",
     values: [string]
   ): string;
@@ -113,6 +118,10 @@ interface IIdleTokenInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "token", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "tokenPrice", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "tokenPriceWithFee",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "userAvgPrices",
     data: BytesLike
@@ -292,15 +301,25 @@ export class IIdleToken extends Contract {
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { price: BigNumber }>;
 
+    tokenPriceWithFee(
+      user: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    "tokenPriceWithFee(address)"(
+      user: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     userAvgPrices(
       arg0: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { avgPrice: BigNumber }>;
 
     "userAvgPrices(address)"(
       arg0: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { avgPrice: BigNumber }>;
   };
 
   balanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
@@ -422,15 +441,22 @@ export class IIdleToken extends Contract {
 
   "tokenPrice()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-  userAvgPrices(
-    arg0: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+  tokenPriceWithFee(
+    user: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  "tokenPriceWithFee(address)"(
+    user: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  userAvgPrices(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   "userAvgPrices(address)"(
     arg0: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   callStatic: {
     balanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
@@ -536,6 +562,16 @@ export class IIdleToken extends Contract {
     tokenPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
     "tokenPrice()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    tokenPriceWithFee(
+      user: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "tokenPriceWithFee(address)"(
+      user: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     userAvgPrices(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -659,14 +695,21 @@ export class IIdleToken extends Contract {
 
     "tokenPrice()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-    userAvgPrices(
-      arg0: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+    tokenPriceWithFee(
+      user: string,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    "tokenPriceWithFee(address)"(
+      user: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    userAvgPrices(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     "userAvgPrices(address)"(
       arg0: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
 
@@ -785,14 +828,24 @@ export class IIdleToken extends Contract {
 
     "tokenPrice()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    tokenPriceWithFee(
+      user: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "tokenPriceWithFee(address)"(
+      user: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     userAvgPrices(
       arg0: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     "userAvgPrices(address)"(
       arg0: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };
 }

@@ -25,7 +25,7 @@ if (process.env.FORK_ENABLED == "true") {
     chainId: 1,
     forking: {
       url: `https://eth-mainnet.alchemyapi.io/v2/${alchemyKey}`,
-      blockNumber: 12226812
+      // blockNumber: 12226812
     },
     accounts: {
       mnemonic,
@@ -45,7 +45,6 @@ if (infuraApiKey && mnemonic) {
     },
   };
   
-
   networks.ropsten = {
     url: `https://ropsten.infura.io/v3/${infuraApiKey}`,
     accounts: {

@@ -15,7 +15,6 @@ deployments/localhost/
 !/.yarn/plugins
 !/.yarn/sdks
 
-
 # Solidity Coverage
 coverage
 coverage.json

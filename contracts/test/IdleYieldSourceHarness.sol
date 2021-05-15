@@ -16,12 +16,7 @@ contract IdleYieldSourceHarness is IdleYieldSource {
     _mint(account, amount);
     return true;
   }
-
-  function mintTotalUnderlyingAsset(uint256 amount) public returns (bool) {
-    totalUnderlyingAssets = totalUnderlyingAssets + amount;
-    return true;
-  }
-
+  
   function totalShare() external view returns (uint256) {
       return _totalShare();
   }
@@ -32,9 +27,5 @@ contract IdleYieldSourceHarness is IdleYieldSource {
 
   function sharesToToken(uint256 shares) external view returns (uint256) {
     return _sharesToToken(shares);
-  }
-
-  function totalUnderlyingAsset() external view returns (uint256) {
-    return totalUnderlyingAssets;
   }
 }

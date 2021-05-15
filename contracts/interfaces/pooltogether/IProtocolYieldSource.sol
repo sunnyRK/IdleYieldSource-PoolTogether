@@ -19,5 +19,4 @@ interface IProtocolYieldSource is IYieldSource {
   /// @param to The recipient of the tokens
   /// @param amount The amount of tokens to transfer
   function transferERC20(address token, address to, uint256 amount) external;
-
 }

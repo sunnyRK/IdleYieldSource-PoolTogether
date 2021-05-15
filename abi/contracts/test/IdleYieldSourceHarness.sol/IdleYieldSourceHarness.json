@@ -218,6 +218,19 @@
     "type": "event"
   },
   {
+    "inputs": [],
+    "name": "ONE_IDLE_TOKEN",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -314,19 +327,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "c__0x721a63dc",
-        "type": "bytes32"
-      }
-    ],
-    "name": "c_0x721a63dc",
-    "outputs": [],
-    "stateMutability": "pure",
     "type": "function"
   },
   {
@@ -454,25 +454,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "mintTotalUnderlyingAsset",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "name",
     "outputs": [
@@ -510,7 +491,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "redeemedUnderlyingAsset",
         "type": "uint256"
       }
     ],
@@ -641,32 +622,6 @@
   {
     "inputs": [],
     "name": "totalSupply",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "totalUnderlyingAsset",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "totalUnderlyingAssets",
     "outputs": [
       {
         "internalType": "uint256",

@@ -21,12 +21,12 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
   functions: {
+    "ONE_IDLE_TOKEN()": FunctionFragment;
     "allowance(address,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "assetManager()": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "balanceOfToken(address)": FunctionFragment;
-    "c_0x721a63dc(bytes32)": FunctionFragment;
     "decimals()": FunctionFragment;
     "decreaseAllowance(address,uint256)": FunctionFragment;
     "depositToken()": FunctionFragment;
@@ -34,7 +34,6 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
     "increaseAllowance(address,uint256)": FunctionFragment;
     "initialize(address)": FunctionFragment;
     "mint(address,uint256)": FunctionFragment;
-    "mintTotalUnderlyingAsset(uint256)": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
     "redeemToken(uint256)": FunctionFragment;
@@ -47,8 +46,6 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
     "tokenToShares(uint256)": FunctionFragment;
     "totalShare()": FunctionFragment;
     "totalSupply()": FunctionFragment;
-    "totalUnderlyingAsset()": FunctionFragment;
-    "totalUnderlyingAssets()": FunctionFragment;
     "transfer(address,uint256)": FunctionFragment;
     "transferERC20(address,address,uint256)": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
@@ -56,6 +53,10 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
     "underlyingAsset()": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "ONE_IDLE_TOKEN",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "allowance",
     values: [string, string]
@@ -72,10 +73,6 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "balanceOfToken",
     values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "c_0x721a63dc",
-    values: [BytesLike]
   ): string;
   encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
   encodeFunctionData(
@@ -95,10 +92,6 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "mint",
     values: [string, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "mintTotalUnderlyingAsset",
-    values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
@@ -140,14 +133,6 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "totalUnderlyingAsset",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "totalUnderlyingAssets",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "transfer",
     values: [string, BigNumberish]
   ): string;
@@ -168,6 +153,10 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "ONE_IDLE_TOKEN",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(
@@ -177,10 +166,6 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "balanceOfToken",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "c_0x721a63dc",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
@@ -199,10 +184,6 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "mintTotalUnderlyingAsset",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
@@ -234,14 +215,6 @@ interface IdleYieldSourceHarnessInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "totalShare", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "totalSupply",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "totalUnderlyingAsset",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "totalUnderlyingAssets",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "transfer", data: BytesLike): Result;
@@ -329,6 +302,10 @@ export class IdleYieldSourceHarness extends Contract {
   interface: IdleYieldSourceHarnessInterface;
 
   functions: {
+    ONE_IDLE_TOKEN(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    "ONE_IDLE_TOKEN()"(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     allowance(
       owner: string,
       spender: string,
@@ -373,16 +350,6 @@ export class IdleYieldSourceHarness extends Contract {
       addr: string,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
-
-    c_0x721a63dc(
-      c__0x721a63dc: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[void]>;
-
-    "c_0x721a63dc(bytes32)"(
-      c__0x721a63dc: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[void]>;
 
     decimals(overrides?: CallOverrides): Promise<[number]>;
 
@@ -438,16 +405,6 @@ export class IdleYieldSourceHarness extends Contract {
 
     "mint(address,uint256)"(
       account: string,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    mintTotalUnderlyingAsset(
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    "mintTotalUnderlyingAsset(uint256)"(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -542,14 +499,6 @@ export class IdleYieldSourceHarness extends Contract {
 
     "totalSupply()"(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    totalUnderlyingAsset(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    "totalUnderlyingAsset()"(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    totalUnderlyingAssets(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    "totalUnderlyingAssets()"(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     transfer(
       recipient: string,
       amount: BigNumberish,
@@ -605,6 +554,10 @@ export class IdleYieldSourceHarness extends Contract {
     "underlyingAsset()"(overrides?: CallOverrides): Promise<[string]>;
   };
 
+  ONE_IDLE_TOKEN(overrides?: CallOverrides): Promise<BigNumber>;
+
+  "ONE_IDLE_TOKEN()"(overrides?: CallOverrides): Promise<BigNumber>;
+
   allowance(
     owner: string,
     spender: string,
@@ -646,16 +599,6 @@ export class IdleYieldSourceHarness extends Contract {
     addr: string,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
-
-  c_0x721a63dc(
-    c__0x721a63dc: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<void>;
-
-  "c_0x721a63dc(bytes32)"(
-    c__0x721a63dc: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<void>;
 
   decimals(overrides?: CallOverrides): Promise<number>;
 
@@ -711,16 +654,6 @@ export class IdleYieldSourceHarness extends Contract {
 
   "mint(address,uint256)"(
     account: string,
-    amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  mintTotalUnderlyingAsset(
-    amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  "mintTotalUnderlyingAsset(uint256)"(
     amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -815,14 +748,6 @@ export class IdleYieldSourceHarness extends Contract {
 
   "totalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-  totalUnderlyingAsset(overrides?: CallOverrides): Promise<BigNumber>;
-
-  "totalUnderlyingAsset()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-  totalUnderlyingAssets(overrides?: CallOverrides): Promise<BigNumber>;
-
-  "totalUnderlyingAssets()"(overrides?: CallOverrides): Promise<BigNumber>;
-
   transfer(
     recipient: string,
     amount: BigNumberish,
@@ -878,6 +803,10 @@ export class IdleYieldSourceHarness extends Contract {
   "underlyingAsset()"(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
+    ONE_IDLE_TOKEN(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "ONE_IDLE_TOKEN()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     allowance(
       owner: string,
       spender: string,
@@ -919,16 +848,6 @@ export class IdleYieldSourceHarness extends Contract {
       addr: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
-
-    c_0x721a63dc(
-      c__0x721a63dc: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    "c_0x721a63dc(bytes32)"(
-      c__0x721a63dc: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<void>;
 
     decimals(overrides?: CallOverrides): Promise<number>;
 
@@ -981,16 +900,6 @@ export class IdleYieldSourceHarness extends Contract {
 
     "mint(address,uint256)"(
       account: string,
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    mintTotalUnderlyingAsset(
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    "mintTotalUnderlyingAsset(uint256)"(
       amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<boolean>;
@@ -1077,14 +986,6 @@ export class IdleYieldSourceHarness extends Contract {
     totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     "totalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    totalUnderlyingAsset(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "totalUnderlyingAsset()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    totalUnderlyingAssets(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "totalUnderlyingAssets()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     transfer(
       recipient: string,
@@ -1219,6 +1120,10 @@ export class IdleYieldSourceHarness extends Contract {
   };
 
   estimateGas: {
+    ONE_IDLE_TOKEN(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "ONE_IDLE_TOKEN()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     allowance(
       owner: string,
       spender: string,
@@ -1258,16 +1163,6 @@ export class IdleYieldSourceHarness extends Contract {
 
     "balanceOfToken(address)"(
       addr: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    c_0x721a63dc(
-      c__0x721a63dc: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "c_0x721a63dc(bytes32)"(
-      c__0x721a63dc: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1325,16 +1220,6 @@ export class IdleYieldSourceHarness extends Contract {
 
     "mint(address,uint256)"(
       account: string,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    mintTotalUnderlyingAsset(
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    "mintTotalUnderlyingAsset(uint256)"(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -1429,14 +1314,6 @@ export class IdleYieldSourceHarness extends Contract {
 
     "totalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-    totalUnderlyingAsset(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "totalUnderlyingAsset()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    totalUnderlyingAssets(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "totalUnderlyingAssets()"(overrides?: CallOverrides): Promise<BigNumber>;
-
     transfer(
       recipient: string,
       amount: BigNumberish,
@@ -1493,6 +1370,12 @@ export class IdleYieldSourceHarness extends Contract {
   };
 
   populateTransaction: {
+    ONE_IDLE_TOKEN(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "ONE_IDLE_TOKEN()"(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     allowance(
       owner: string,
       spender: string,
@@ -1538,16 +1421,6 @@ export class IdleYieldSourceHarness extends Contract {
 
     "balanceOfToken(address)"(
       addr: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    c_0x721a63dc(
-      c__0x721a63dc: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "c_0x721a63dc(bytes32)"(
-      c__0x721a63dc: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1605,16 +1478,6 @@ export class IdleYieldSourceHarness extends Contract {
 
     "mint(address,uint256)"(
       account: string,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    mintTotalUnderlyingAsset(
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    "mintTotalUnderlyingAsset(uint256)"(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
@@ -1708,22 +1571,6 @@ export class IdleYieldSourceHarness extends Contract {
     totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "totalSupply()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    totalUnderlyingAsset(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "totalUnderlyingAsset()"(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    totalUnderlyingAssets(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "totalUnderlyingAssets()"(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
 
     transfer(
       recipient: string,
