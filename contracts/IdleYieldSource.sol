@@ -18,6 +18,7 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
 
     address public idleToken;
     address public underlyingAsset;
+    uint256 public constant ONE_IDLE_TOKEN = 10**18;
 
     /// @notice Emitted when the yield source is initialized
     event IdleYieldSourceInitialized(address indexed idleToken);
@@ -88,14 +89,14 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     /// @param tokens Amount of tokens
     /// return Number of shares
     function _tokenToShares(uint256 tokens) internal view returns (uint256 shares) {
-        shares = (tokens * (10 ** IIdleToken(idleToken).decimals())) / _price();
+        shares = (tokens * ONE_IDLE_TOKEN) / _price();
     }
 
     /// @notice Calculates the number of tokens a user has in the yield source
     /// @param shares Amount of shares
     /// return Number of tokens
     function _sharesToToken(uint256 shares) internal view returns (uint256 tokens) { 
-        tokens = (shares * _price()) / (10 ** IIdleToken(idleToken).decimals());
+        tokens = (shares * _price()) / ONE_IDLE_TOKEN;
     }
 
     /// @notice Calculates the current price per share

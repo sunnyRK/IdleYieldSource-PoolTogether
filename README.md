@@ -3,10 +3,9 @@
     <img src="https://github.com/pooltogether/pooltogether--brand-assets/blob/977e03604c49c63314450b5d432fe57d34747c66/logo/pooltogether-logo--purple-gradient.png?raw=true" alt="PoolTogether Brand" style="max-width:100%;" width="200">
   </a>
 </p>
-
 <br />
 
-# IdleYieldSource for PoolTOgethere Prize Pool
+# IdleYieldSource for PoolTogether Prize Pool
 
 ![Tests](https://github.com/sunnyRK/IdleYieldSource-PoolTogether/actions/workflows/main.yml/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/sunnyRK/IdleYieldSource-PoolTogether/badge.svg?branch=master)](https://coveralls.io/github/sunnyRK/IdleYieldSource-PoolTogether?branch=master)

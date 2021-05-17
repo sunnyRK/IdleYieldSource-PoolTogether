@@ -207,6 +207,19 @@
     "type": "event"
   },
   {
+    "inputs": [],
+    "name": "ONE_IDLE_TOKEN",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
