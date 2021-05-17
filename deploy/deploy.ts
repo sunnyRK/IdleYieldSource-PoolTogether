@@ -1,9 +1,7 @@
 import chalk from 'chalk';
 
-import { HardhatRuntimeEnvironment } from 'hardhat/types';
-import { DeployFunction, DeployResult } from 'hardhat-deploy/types';
+import { DeployResult } from 'hardhat-deploy/types';
 import hre from "hardhat";
-import IdleYieldSourceProxyFactoryABI from "../artifacts/contracts/IdleYieldSourceProxyFactory.sol/IdleYieldSourceProxyFactory.json";
 
 const displayLogs = !process.env.HIDE_DEPLOY_LOG;
 

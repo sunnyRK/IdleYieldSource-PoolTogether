@@ -1,5 +1,4 @@
 import hre from "hardhat";
-import { task } from 'hardhat/config';
 
 import PoolWithMultipleWinnersBuilder from '@pooltogether/pooltogether-contracts/deployments/mainnet/PoolWithMultipleWinnersBuilder.json';
 import RNGBlockhash from '@pooltogether/pooltogether-rng-contracts/deployments/mainnet/RNGBlockhash.json';
@@ -7,7 +6,7 @@ import ControlledToken from '@pooltogether/pooltogether-contracts/abis/Controlle
 import MultipleWinners from '@pooltogether/pooltogether-contracts/abis/MultipleWinners.json';
 import YieldSourcePrizePool from '@pooltogether/pooltogether-contracts/abis/YieldSourcePrizePool.json';
 
-import { dai, usdc } from '@studydefi/money-legos/erc20';
+import { dai } from '@studydefi/money-legos/erc20';
 import { info, success } from './helpers';
 import IdleYieldSourceAbi from '../abis/IYieldSource.json';
 import daiAbi from '../abis/daiAbi.json';
@@ -18,7 +17,6 @@ async function main() {
   let accounts = await ethers.getSigners();
   const accountToImpersonate = '0xF977814e90dA44bFA03b6295A0616a897441aceC' // dai rich
   const idleToken = '0x3fE7940616e5Bc47b0775a0dccf6237893353bB4' //idleDai
-  // const iIdleTokenHelper = '0x04Ce60ed10F6D2CfF3AA015fc7b950D13c113be5'
 
   await hre.network.provider.request({
     method: "hardhat_impersonateAccount",
@@ -61,8 +59,6 @@ async function main() {
   );
 
   await proxyIdleYieldSource.initialize(idleToken)
-  // const owner2 = await proxyIdleYieldSource.owner();
-  // await proxyIdleYieldSource.setAssetManager(accounts[1].address);
 
   info('Deploying IdleYieldSourcePrizePool...');
 
@@ -141,7 +137,7 @@ async function main() {
   );
 
   success('Deposited DAI!');
-  
+
   info(`Prize strategy owner: ${await prizeStrategy.owner()}`);
 
   // simulating returns in the vault during the prizePeriod
@@ -193,7 +189,7 @@ async function main() {
 
   const withdrawTx = await prizePool.withdrawInstantlyFrom(
     contractsOwner.address,
-    '10000000000000000000000',
+    withdrawalAmount,
     ticket.address,
     earlyExitFee.exitFee,
   );
@@ -210,12 +206,6 @@ async function main() {
   const withdrawn = withdrawLogs.find((event) => event && event.name === 'InstantWithdrawal');
   success(`Withdrawn ${ethers.utils.formatUnits(withdrawn?.args?.redeemed, 18)} DAI!`);
   success(`Exit fee was ${ethers.utils.formatUnits(withdrawn?.args?.exitFee, 18)} DAI`);
-
-  const prizePoolBalance = await proxyIdleYieldSource.balanceOfToken(prizePool.address)
-  console.log('prizePoolBalance After Withdraw', prizePoolBalance.toString())
-
-  const ticketBal1 = await ticketContract.balanceOf(accounts[0].address)
-  console.log('Ticket Balance After Withdraw', ticketBal1.toString())
 
   await prizePool.captureAwardBalance();
   const awardBalance = await prizePool.callStatic.awardBalance();

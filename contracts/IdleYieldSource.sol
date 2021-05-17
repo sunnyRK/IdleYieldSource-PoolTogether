@@ -8,7 +8,6 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeab
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "./interfaces/pooltogether/IProtocolYieldSource.sol";
 import "./interfaces/idle/IIdleToken.sol";
-import "./interfaces/idle/IIdleTokenHelper.sol";
 import "./access/AssetManager.sol";
 
 /// @title An pooltogether yield source for Idle token
