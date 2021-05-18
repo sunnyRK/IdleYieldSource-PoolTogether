@@ -67,20 +67,23 @@ contract SafeERC20WrapperUpgradeable is Initializable, ContextUpgradeable {
         _token = token;
     }
 
-    function balanceOf(address account) public view returns (uint256) {
-        _token.balanceOf(account);
+    function balanceOf(address account) public view returns (uint256 balance) {
+        balance = _token.balanceOf(account);
     }
 
     function transfer(address recipient, uint256 amount) public returns (bool) {
         _token.safeTransfer(recipient, amount);
+        return true;
     }
 
     function transferFrom(address sender, address recipient, uint256 amount) public returns (bool) {
         _token.safeTransferFrom(sender, recipient, amount);
+        return true;
     }
 
     function approve(address spender, uint256 amount) public returns (bool) {
         _token.safeApprove(spender, amount);
+        return true;
     }
 
     function increaseAllowance(uint256 amount) public {

@@ -22,22 +22,22 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>33/33</span>
+        <span class='fraction'>27/27</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>6/6</span>
+        <span class='fraction'>2/2</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>11/11</span>
+        <span class='fraction'>12/12</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>33/33</span>
+        <span class='fraction'>27/27</span>
       </div>
     </div>
   </div>
@@ -197,14 +197,7 @@
 152
 153
 154
-155
-156
-157
-158
-159
-160
-161</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+155</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -287,18 +280,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">33×</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">11×</span>
-<span class="cline-any cline-yes">3×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -306,19 +295,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">21×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4×</span>
-<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">4×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -337,8 +327,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3×</span>
 <span class="cline-any cline-yes">3×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
@@ -369,11 +357,10 @@ pragma solidity 0.8.4;
 &nbsp;
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol"; 
+import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "./interfaces/pooltogether/IProtocolYieldSource.sol";
 import "./interfaces/idle/IIdleToken.sol";
-import "./interfaces/idle/IIdleTokenHelper.sol";
 import "./access/AssetManager.sol";
 &nbsp;
 /// @title An pooltogether yield source for Idle token
@@ -383,7 +370,7 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
 &nbsp;
     address public idleToken;
     address public underlyingAsset;
-    uint256 public totalUnderlyingAssets;
+    uint256 public constant ONE_IDLE_TOKEN = 10**18;
 &nbsp;
     /// @notice Emitted when the yield source is initialized
     event IdleYieldSourceInitialized(address indexed idleToken);
@@ -435,7 +422,7 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     /// @notice Returns the ERC20 asset token used for deposits.
     /// @return The ERC20 asset token
     function depositToken() external view override returns (address) {
-        return (underlyingAsset);
+        return underlyingAsset;
     }
 &nbsp;
     /// @notice Returns the total balance (in asset tokens).  This includes the deposits and interest.
@@ -454,54 +441,49 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     /// @param tokens Amount of tokens
     /// return Number of shares
     function _tokenToShares(uint256 tokens) internal view returns (uint256 shares) {
-        if(_totalShare() == 0) {
-            shares = tokens;
-        } else {
-            shares = (tokens * _totalShare())  / totalUnderlyingAssets;
-        }
+        shares = (tokens * ONE_IDLE_TOKEN) / _price();
     }
 &nbsp;
     /// @notice Calculates the number of tokens a user has in the yield source
     /// @param shares Amount of shares
     /// return Number of tokens
     function _sharesToToken(uint256 shares) internal view returns (uint256 tokens) { 
-        if(_totalShare() == 0) {
-            tokens = shares;
-        } else {
-            tokens = (shares * totalUnderlyingAssets) / _totalShare();
-        }
+        tokens = (shares * _price()) / ONE_IDLE_TOKEN;
+    }
+&nbsp;
+    /// @notice Calculates the current price per share
+    /// @return avg idleToken price for this contract
+    function _price() internal view returns (uint256) {
+      return IIdleToken(idleToken).tokenPriceWithFee(address(this));
     }
 &nbsp;
     /// @notice Deposit asset tokens to Idle
     /// @param mintAmount The amount of asset tokens to be deposited
-    /// @return 0 if successful 
+    /// @return number of minted tokens
     function _depositToIdle(uint256 mintAmount) internal returns (uint256) {
         IERC20Upgradeable(underlyingAsset).safeTransferFrom(msg.sender, address(this), mintAmount);
-        uint256 mintedTokens = IIdleToken(idleToken).mintIdleToken(mintAmount, false, address(0));
-        return mintedTokens;
+        return IIdleToken(idleToken).mintIdleToken(mintAmount, false, address(0));
     }
 &nbsp;
     /// @notice Allows assets to be supplied on other user's behalf using the `to` param.
     /// @param mintAmount The amount of `token()` to be supplied
     /// @param to The user whose balance will receive the tokens
-    function supplyTokenTo(uint256 mintAmount, address to) public nonReentrant override {
-        uint256 mintedTokenShares = _depositToIdle(mintAmount);
+    function supplyTokenTo(uint256 mintAmount, address to) external nonReentrant override {
+        uint256 mintedTokenShares = _tokenToShares(mintAmount);
+        _depositToIdle(mintAmount);
         _mint(to, mintedTokenShares);
-        totalUnderlyingAssets = totalUnderlyingAssets + mintAmount;
         emit SuppliedTokenTo(msg.sender, mintedTokenShares, mintAmount, to);
     }
 &nbsp;
     /// @notice Redeems tokens from the yield source from the msg.sender, it burn yield bearing tokens and return token to the sender.
     /// @param redeemAmount The amount of `token()` to withdraw.  Denominated in `token()` as above.
-    /// @return The actual amount of tokens that were redeemed.
-    function redeemToken(uint256 redeemAmount) public override nonReentrant returns (uint256) {
-        uint256 _idleShare = _tokenToShares(redeemAmount);
-        _burn(msg.sender, _idleShare);
-        totalUnderlyingAssets = totalUnderlyingAssets - redeemAmount;
-        uint256 redeemedUnderlyingAsset = IIdleToken(idleToken).redeemIdleToken(_idleShare);
+    /// @return redeemedUnderlyingAsset The actual amount of tokens that were redeemed.
+    function redeemToken(uint256 redeemAmount) external override nonReentrant returns (uint256 redeemedUnderlyingAsset) {
+        uint256 redeemedShare = _tokenToShares(redeemAmount);
+        _burn(msg.sender, redeemedShare);
+        redeemedUnderlyingAsset = IIdleToken(idleToken).redeemIdleToken(redeemedShare);        
         IERC20Upgradeable(underlyingAsset).safeTransfer(msg.sender, redeemedUnderlyingAsset);
-        emit RedeemedToken(msg.sender, _idleShare, redeemAmount);
-        return redeemedUnderlyingAsset;
+        emit RedeemedToken(msg.sender, redeemedShare, redeemAmount);
     }
 &nbsp;
     /// @notice Transfer ERC20 tokens other than the idleTokens held by this contract to the recipient address
@@ -510,7 +492,7 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     /// @param to The recipient of the tokens
     /// @param amount The amount of tokens to transfer
     function transferERC20(address erc20Token, address to, uint256 amount) external override onlyOwnerOrAssetManager {
-        require(address(erc20Token) != address(idleToken), "IdleYieldSource/idleDai-transfer-not-allowed");
+        require(erc20Token != idleToken, "IdleYieldSource/idleDai-transfer-not-allowed");
         IERC20Upgradeable(erc20Token).safeTransfer(to, amount);
         emit TransferredERC20(msg.sender, to, amount, erc20Token);
     }
@@ -529,7 +511,7 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon May 10 2021 23:52:59 GMT+0530 (India Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue May 18 2021 00:23:03 GMT+0530 (India Standard Time)
 </div>
 </div>
 <script src="../prettify.js"></script>
