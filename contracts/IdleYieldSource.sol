@@ -58,6 +58,8 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     ) public initializer {
 
         __Ownable_init();
+        __ERC20_init('IdleMintShare', 'IMT');
+        __ReentrancyGuard_init();
 
         idleToken = _idleToken;
         underlyingAsset = IIdleToken(idleToken).token();

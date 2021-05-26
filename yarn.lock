@@ -1216,9 +1216,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nomiclabs/hardhat-etherscan@npm:2.1.1":
-  version: 2.1.1
-  resolution: "@nomiclabs/hardhat-etherscan@npm:2.1.1"
+"@nomiclabs/hardhat-etherscan@npm:^2.1.2":
+  version: 2.1.2
+  resolution: "@nomiclabs/hardhat-etherscan@npm:2.1.2"
   dependencies:
     "@ethersproject/abi": ^5.0.2
     "@ethersproject/address": ^5.0.2
@@ -1229,7 +1229,7 @@ __metadata:
     semver: ^6.3.0
   peerDependencies:
     hardhat: ^2.0.4
-  checksum: fae98f164e13727d56aa053986a7bb732d064bfbde309b582b1f00bd8f04ccff1513f3380c3c96a09e2e7922c34b35a326266c388ec69236c54dab6ca1e5f97e
+  checksum: 2eda1ef95793e0273b36736434ea43677ef93524ead0fb3cf3386dba9bf2149ffd04de924f302fea9f289f6dcba7dbca00621d3fc2667d3918ea1612a56ec3c9
   languageName: node
   linkType: hard
 
@@ -7552,7 +7552,7 @@ fsevents@~2.3.1:
   resolution: "idle-pooltogether-2@workspace:."
   dependencies:
     "@nomiclabs/hardhat-ethers": 2.0.2
-    "@nomiclabs/hardhat-etherscan": 2.1.1
+    "@nomiclabs/hardhat-etherscan": ^2.1.2
     "@nomiclabs/hardhat-waffle": 2.0.1
     "@nomiclabs/hardhat-web3": ^2.0.0
     "@openzeppelin/contracts": ^4.0.0

@@ -5,6 +5,7 @@ import 'hardhat-abi-exporter';
 import 'hardhat-deploy';
 import 'hardhat-deploy-ethers';
 import 'hardhat-gas-reporter';
+import "@nomiclabs/hardhat-etherscan";
 require("solidity-coverage");
 import networks from './hardhat.network';
 
@@ -23,6 +24,11 @@ const config: HardhatUserConfig = {
     },
   },
   networks,
+  etherscan: {
+    // Your API key for Etherscan
+    // Obtain one at https://etherscan.io/
+    apiKey: process.env.ETHERSCAN_API_KEY
+  },
   solidity: {
     version: '0.8.4',
     settings: {
