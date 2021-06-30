@@ -59,12 +59,12 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     function initialize(
         IIdleToken _idleToken
     ) public initializer {
+        require(address(_idleToken) != address(0), "IdleYieldSource/idleToken-not-zero-address");
+        idleToken = _idleToken;
 
         __Ownable_init();
         __ERC20_init('IdleMintShare', 'IMT');
         __ReentrancyGuard_init();
-
-        idleToken = _idleToken;
 
         IERC20Upgradeable _underlyingAsset = IERC20Upgradeable(_idleToken.token());
         _underlyingAsset.safeApprove(address(_idleToken), type(uint256).max);
