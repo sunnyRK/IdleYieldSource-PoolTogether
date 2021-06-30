@@ -84,7 +84,7 @@ describe('GenericProxyFactory', () => {
 			proxyCreatedEvent.args[0],
 			contractsOwner,
 		) as unknown) as IdleYieldSourceHarness;
-	  	
+
 		await underlyingToken.mock.allowance
 			.withArgs(idleYieldSource.address, idletoken.address)
 			.returns(toWei('0'));
@@ -94,12 +94,8 @@ describe('GenericProxyFactory', () => {
 
 	describe('create()', () => {
 		it('should create IdleYieldSource', async() => {
-			const _idleToken = await idleYieldSource.idleToken();
-			const _underlyingAsset = await idleYieldSource.underlyingAsset();
-			const _depositToken = await idleYieldSource.depositToken();
-			expect(_idleToken).to.equal(idletoken.address);
-			expect(_underlyingAsset).to.equal(underlyingToken.address);
-			expect(_depositToken).to.equal(underlyingToken.address);
+			expect(await idleYieldSource.idleToken()).to.equal(idletoken.address);
+			expect(await idleYieldSource.owner()).to.equal(contractsOwner.address);
 		});
 	});
 
@@ -228,7 +224,7 @@ describe('GenericProxyFactory', () => {
 
 		it('should revert on error', async() => {
 			await underlyingToken.mock.approve.withArgs(idletoken.address, amount).returns(true);
-			
+
 
 			await idletoken.mock.mintIdleToken
 				.withArgs(amount, false, '0x0000000000000000000000000000000000000000')
@@ -253,12 +249,17 @@ describe('GenericProxyFactory', () => {
 			await idleYieldSource.mint(yieldSourceOwner.address, yieldSourceOwnerBalance);
 			await idletoken.mock.tokenPriceWithFee.withArgs(idleYieldSource.address).returns(toWei('1'));
 			await idletoken.mock.redeemIdleToken.withArgs(redeemAmount).returns(redeemAmount);
+
+			await underlyingToken.mock.balanceOf
+        .withArgs(idleYieldSource.address)
+        .returns(yieldSourceOwnerBalance);
+
 			await underlyingToken.mock.transfer
-				.withArgs(
-					yieldSourceOwner.address, 
-					await idleYieldSource.tokenToShares(redeemAmount))
+				.withArgs(yieldSourceOwner.address, redeemAmount)
 				.returns(true);
+
 			await idleYieldSource.connect(yieldSourceOwner).redeemToken(redeemAmount);
+
 			expect(await idleYieldSource.balanceOf(yieldSourceOwner.address)).to.equal(
 				yieldSourceOwnerBalance.sub(redeemAmount),
 			);
@@ -358,7 +359,7 @@ describe('GenericProxyFactory', () => {
         idleYieldSource
           .connect(contractsOwner)
           .transferERC20(idletoken.address, wallet2.address, toWei('10')),
-      ).to.be.revertedWith('IdleYieldSource/idleDai-transfer-not-allowed');
+      ).to.be.revertedWith('IdleYieldSource/idleToken-transfer-not-allowed');
     });
 
     it('should fail to transferERC20 if not contractsOwner or assetManager', async () => {

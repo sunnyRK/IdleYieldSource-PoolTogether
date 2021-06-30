@@ -35,13 +35,13 @@ async function main() {
   daiContract = new ethers.Contract(dai.address, dai.abi, signer)
 
   info('Deploying IdleYieldSource...');
-  
+
   let IdleYieldSource = await ethers.getContractFactory('IdleYieldSource', signer);
   let IdleYieldSource_Instance = await IdleYieldSource.deploy();
 
   let genericProxyFactoryContract = await ethers.getContractFactory('GenericProxyFactory');
   let hardhatGenericProxyFactory = await genericProxyFactoryContract.deploy()
-  
+
   let hardhatIdleYieldSourceProxyFactory = await ethers.getContractFactory('IdleYieldSourceProxyFactory', signer);
   let hardhatIdleYieldSourceProxyFactory_Instance = await hardhatIdleYieldSourceProxyFactory.deploy(hardhatGenericProxyFactory.address);
 
@@ -156,15 +156,15 @@ async function main() {
   info('Completing award...');
   const awardTx = await prizeStrategy.completeAward();
   const awardReceipt = await getTransactionReceipt(awardTx.hash);
-  const awardLogs = awardReceipt.logs.map(log => { 
-    try 
-      { return prizePool.interface.parseLog(log) } 
-    catch (e) 
+  const awardLogs = awardReceipt.logs.map(log => {
+    try
+      { return prizePool.interface.parseLog(log) }
+    catch (e)
     { return null }
   })
   const awarded = awardLogs.find(event => event && event.name === 'Awarded')
   if (awarded) {
-    console.log(`Awarded ${ethers.utils.formatUnits(awarded.args.amount, 18)} token`)      
+    console.log(`Awarded ${ethers.utils.formatUnits(awarded.args.amount, 18)} token`)
   } else {
     console.log(`No prizes`)
   }
@@ -189,7 +189,7 @@ async function main() {
 
   const withdrawTx = await prizePool.withdrawInstantlyFrom(
     contractsOwner.address,
-    withdrawalAmount,
+    withdrawAmt,
     ticket.address,
     earlyExitFee.exitFee,
   );

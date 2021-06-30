@@ -3,7 +3,7 @@
 pragma solidity 0.8.4;
 
 interface IIdleToken {
-  function token() external returns (address underlying);
+  function token() external view returns (address underlying);
   function govTokens(uint256) external returns (address govToken);
   function userAvgPrices(address) external returns (uint256 avgPrice);
   function mintIdleToken(uint256 _amount, bool _skipWholeRebalance, address _referral) external returns (uint256 mintedTokens);
