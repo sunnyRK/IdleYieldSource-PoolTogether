@@ -66,10 +66,10 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
 
         idleToken = _idleToken;
 
-        IERC20Upgradeable _underlyingAsset = IERC20Upgradeable(idleToken.token());
-        _underlyingAsset.safeApprove(address(idleToken), type(uint256).max);
+        IERC20Upgradeable _underlyingAsset = IERC20Upgradeable(_idleToken.token());
+        _underlyingAsset.safeApprove(address(_idleToken), type(uint256).max);
 
-        emit IdleYieldSourceInitialized(address(idleToken));
+        emit IdleYieldSourceInitialized(address(_idleToken));
     }
 
     /// @notice Returns the ERC20 asset token used for deposits.
