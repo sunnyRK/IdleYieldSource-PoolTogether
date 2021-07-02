@@ -15,10 +15,7 @@
     "@openzeppelin/contracts": "^4.0.0",
     "@openzeppelin/contracts-upgradeable": "^4.0.0",
     "@pooltogether/fixed-point": "1.0.0",
-    "@pooltogether/yield-source-interface": "1.0.1",
-    "@typechain/truffle-v5": "^4.0.1",
-    "@typechain/web3-v1": "^2.2.0",
-    "hardhat-typechain": "^0.3.5"
+    "@pooltogether/yield-source-interface": "1.0.1"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "2.0.2",
@@ -46,6 +43,7 @@
     "hardhat-deploy": "0.7.0-beta.47",
     "hardhat-deploy-ethers": "0.3.0-beta.7",
     "hardhat-gas-reporter": "1.0.4",
+    "hardhat-typechain": "0.3.5",
     "prettier": "2.2.1",
     "solhint": "3.3.3",
     "solidity-coverage": "0.7.16",
