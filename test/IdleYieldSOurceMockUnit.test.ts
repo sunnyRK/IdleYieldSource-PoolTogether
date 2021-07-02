@@ -31,8 +31,7 @@ import {
 } from '../types';
 const toWei = ethers.utils.parseEther;
 
-describe('GenericProxyFactory', () => {
-
+describe('Idle Yield Source', () => {
 	let contractsOwner: SignerWithAddress;
 	let yieldSourceOwner: SignerWithAddress;
 	let wallet2: SignerWithAddress;
@@ -40,7 +39,7 @@ describe('GenericProxyFactory', () => {
 	let idleYieldSource: any;
 	let erc20Token: ERC20;
 	let underlyingToken: any;
-	let idletoken: any;
+	let idleToken: IIdleToken;
 	let maxValue: any
 
 	let isInitializeTest = false;
@@ -68,8 +67,8 @@ describe('GenericProxyFactory', () => {
 			SafeERC20WrapperUpgradeable.abi,
 		)) as unknown) as ERC20;
 
-		idletoken = ((await deployMockContract(contractsOwner, IIdleTokenABI.abi)) as unknown) as IIdleToken;
-		await idletoken.mock.token.returns(underlyingToken.address);
+		idleToken = ((await deployMockContract(contractsOwner, IIdleTokenABI.abi)) as unknown) as IIdleToken;
+		await idleToken.mock.token.returns(underlyingToken.address);
 
 		const genericProxyFactoryContract = await ethers.getContractFactory('GenericProxyFactory');
 		const hardhatGenericProxyFactory = await genericProxyFactoryContract.deploy();
@@ -78,7 +77,7 @@ describe('GenericProxyFactory', () => {
 			'IdleYieldSourceProxyFactoryHarness'
 		);
 		const hardhatIdleYieldSourceProxyFactory = (await idleYieldSourceProxyFactory.deploy(
-				idletoken.address,
+				idleToken.address,
 				hardhatGenericProxyFactory.address
 			) as unknown) as IdleYieldSourceProxyFactoryHarness;
 
@@ -95,13 +94,15 @@ describe('GenericProxyFactory', () => {
 			contractsOwner,
 		) as unknown) as IdleYieldSourceHarness;
 
+		await idleToken.mock.tokenPriceWithFee.withArgs(idleYieldSource.address).returns(toWei('1'));
+
 		await underlyingToken.mock.allowance
-			.withArgs(idleYieldSource.address, idletoken.address)
+			.withArgs(idleYieldSource.address, idleToken.address)
 			.returns(toWei('0'));
-		await underlyingToken.mock.approve.withArgs(idletoken.address, maxValue).returns(true);
+		await underlyingToken.mock.approve.withArgs(idleToken.address, maxValue).returns(true);
 
 		if (!isInitializeTest) {
-			await initializeIdleYieldSource(idletoken.address);
+			await initializeIdleYieldSource(idleToken.address);
 		}
 	});
 
@@ -116,9 +117,9 @@ describe('GenericProxyFactory', () => {
 
 
 		it('should initialize IdleYieldSource', async() => {
-			await initializeIdleYieldSource(idletoken.address);
+			await initializeIdleYieldSource(idleToken.address);
 
-			expect(await idleYieldSource.idleToken()).to.equal(idletoken.address);
+			expect(await idleYieldSource.idleToken()).to.equal(idleToken.address);
 			expect(await idleYieldSource.owner()).to.equal(contractsOwner.address);
 		});
 
@@ -130,133 +131,144 @@ describe('GenericProxyFactory', () => {
 	});
 
 	describe('depositToken()', () => {
-		it('should return the underlying token', async() => {
+		it('should return the underlying token', async () => {
 			expect(await idleYieldSource.depositToken()).to.equal(underlyingToken.address);
 		});
 	});
 
 	describe('balanceOfToken()', () => {
-		it('should return user balance', async() => {
+		it('should return user balance', async () => {
 			await idleYieldSource.mint(yieldSourceOwner.address, toWei('100'));
 			await idleYieldSource.mint(wallet2.address, toWei('100'));
-			await idletoken.mock.tokenPriceWithFee.withArgs(idleYieldSource.address).returns(toWei('1'));
-			expect(await idleYieldSource.balanceOfToken(wallet2.address)).to.equal(toWei('100'));
+			await idleToken.mock.balanceOf.withArgs(idleYieldSource.address).returns(toWei('1000'))
+
+			expect(await idleYieldSource.callStatic.balanceOfToken(wallet2.address)).to.equal(toWei('500'));
 		});
 	});
 
 	describe('_tokenToShares()', () => {
-		it('should return shares amount', async() => {
+		it('should return shares amount', async () => {
 			await idleYieldSource.mint(yieldSourceOwner.address, toWei('100'));
 			await idleYieldSource.mint(wallet2.address, toWei('100'));
-			await idletoken.mock.tokenPriceWithFee.withArgs(idleYieldSource.address).returns(toWei('1'));
-			const tokenToShares = await idleYieldSource.tokenToShares(toWei('20'));
-			expect(parseInt(formatEther(tokenToShares.toString())).toString()).to.equal('20');
+			await idleToken.mock.balanceOf.withArgs(idleYieldSource.address).returns(toWei('1000'));
+
+			expect(await idleYieldSource.tokenToShares(toWei('10'))).to.equal(toWei('2'));
 		});
 
-		it('should return 0 if tokens param is 0', async() => {
+		it('should return 0 if tokens param is 0', async () => {
 			await idleYieldSource.mint(yieldSourceOwner.address, toWei('100'));
 			await idleYieldSource.mint(wallet2.address, toWei('100'));
-			await idletoken.mock.tokenPriceWithFee.withArgs(idleYieldSource.address).returns(toWei('1'));
+			await idleToken.mock.balanceOf.withArgs(idleYieldSource.address).returns(toWei('1000'));
+
 			expect(await idleYieldSource.tokenToShares(toWei('0'))).to.equal(toWei('0'));
 		});
 
-		it('should return tokens if totalSupply is 0', async() => {
+		it('should return tokens if totalSupply is 0', async () => {
 			await idleYieldSource.mint(yieldSourceOwner.address, toWei('0'));
 			await idleYieldSource.mint(wallet2.address, toWei('0'));
-			await idletoken.mock.tokenPriceWithFee.withArgs(idleYieldSource.address).returns(toWei('1'));
+			await idleToken.mock.balanceOf.withArgs(idleYieldSource.address).returns(toWei('0'));
+
 			expect(await idleYieldSource.tokenToShares(toWei('100'))).to.equal(toWei('100'));
 		});
 
-		it('should return shares even if idleToken total supply has a lot of decimals', async() => {
-			await idleYieldSource.mint(yieldSourceOwner.address, toWei('0.000000000000000005'));
-			await idleYieldSource.mint(wallet2.address, toWei('0.000000000000000005'));
-			await idletoken.mock.tokenPriceWithFee.withArgs(idleYieldSource.address).returns(toWei('1'));
-			expect(await idleYieldSource.tokenToShares(toWei('0.000000000000000005'))).to.equal(toWei('0.000000000000000005'));
+		it('should return shares even if idleToken total supply has a lot of decimals', async () => {
+			await idleYieldSource.mint(yieldSourceOwner.address, toWei('1'));
+			await idleToken.mock.balanceOf
+        .withArgs(idleYieldSource.address)
+        .returns(toWei('0.000000000000000005'));
+
+			expect(await idleYieldSource.tokenToShares(toWei('0.000000000000000005'))).to.equal(toWei('1'));
 		});
 
-		it('should return shares even if idleToken total supply increases', async() => {
+		it('should return shares even if idleToken total supply increases', async () => {
 			await idleYieldSource.mint(yieldSourceOwner.address, toWei('100'));
-			await idletoken.mock.tokenPriceWithFee.withArgs(idleYieldSource.address).returns(toWei('1'));
-			expect(await idleYieldSource.tokenToShares(toWei('10'))).to.equal(toWei('10'));
-			await idleYieldSource.mint(yieldSourceOwner.address, toWei('100'));
-			await idletoken.mock.tokenPriceWithFee.withArgs(idleYieldSource.address).returns(toWei('1'));
-			expect(await idleYieldSource.tokenToShares(toWei('10'))).to.equal(toWei('10'));
+			await idleYieldSource.mint(wallet2.address, toWei('100'));
+      await idleToken.mock.balanceOf.withArgs(idleYieldSource.address).returns(toWei('100'));
+
+      expect(await idleYieldSource.tokenToShares(toWei('1'))).to.equal(toWei('2'));
+
+			await idleToken.mock.balanceOf.withArgs(idleYieldSource.address).returns(ethers.utils.parseUnits('100', 36));
+      expect(await idleYieldSource.tokenToShares(toWei('1'))).to.equal(2);
 		});
 	});
 
 	describe('_sharesToToken()', () => {
-		it('should return tokens amount', async() => {
+		it('should return tokens amount', async () => {
 			await idleYieldSource.mint(yieldSourceOwner.address, toWei('100'));
 			await idleYieldSource.mint(wallet2.address, toWei('100'));
-			await idletoken.mock.tokenPriceWithFee.withArgs(idleYieldSource.address).returns(toWei('1'));
-			expect(await idleYieldSource.sharesToToken(toWei('20'))).to.equal(toWei('20'));
+			await idleToken.mock.balanceOf.withArgs(idleYieldSource.address).returns(toWei('1000'));
+
+      expect(await idleYieldSource.sharesToToken(toWei('2'))).to.equal(toWei('10'));
 		});
 
-		it('should return shares if totalSupply is 0', async() => {
-			await idleYieldSource.mint(yieldSourceOwner.address, toWei('0'));
-			await idleYieldSource.mint(wallet2.address, toWei('0'));
-			await idletoken.mock.tokenPriceWithFee.withArgs(idleYieldSource.address).returns(toWei('1'));
+		it('should return shares if totalSupply is 0', async () => {
 			expect(await idleYieldSource.sharesToToken(toWei('100'))).to.equal(toWei('100'));
 		});
 
-		it('should return tokens even if totalSupply has a lot of decimals', async() => {
+		it('should return tokens even if totalSupply has a lot of decimals', async () => {
 			await idleYieldSource.mint(yieldSourceOwner.address, toWei('0.000000000000000005'));
-			await idleYieldSource.mint(wallet2.address, toWei('0.000000000000000005'));
-			await idletoken.mock.tokenPriceWithFee.withArgs(idleYieldSource.address).returns(toWei('1'));
-			expect(await idleYieldSource.sharesToToken(toWei('0.000000000000000005'))).to.equal(toWei('0.000000000000000005'));
+      await idleToken.mock.balanceOf.withArgs(idleYieldSource.address).returns(toWei('100'));
+
+      expect(await idleYieldSource.sharesToToken(toWei('0.000000000000000005'))).to.equal(toWei('100'));
 		});
 
-		it('should return tokens even if idleToken total supply increases', async() => {
+		it('should return tokens even if idleToken total supply increases', async () => {
 			await idleYieldSource.mint(yieldSourceOwner.address, toWei('100'));
-			await idletoken.mock.tokenPriceWithFee.withArgs(idleYieldSource.address).returns(toWei('1'));
-			expect(await idleYieldSource.sharesToToken(toWei('10'))).to.equal(toWei('10'));
-			await idleYieldSource.mint(yieldSourceOwner.address, toWei('100'));
-			await idletoken.mock.tokenPriceWithFee.withArgs(idleYieldSource.address).returns(toWei('1'));
-			expect(await idleYieldSource.sharesToToken(toWei('10'))).to.equal(toWei('10'));
+      await idleYieldSource.mint(wallet2.address, toWei('100'));
+      await idleToken.mock.balanceOf.withArgs(idleYieldSource.address).returns(toWei('100'));
+
+      expect(await idleYieldSource.sharesToToken(toWei('2'))).to.equal(toWei('1'));
+
+      await idleToken.mock.balanceOf.withArgs(idleYieldSource.address).returns(ethers.utils.parseUnits('100', 36));
+      expect(await idleYieldSource.sharesToToken(2)).to.equal(toWei('1'));
 		});
 	});
 
-	const supplyTokenTo = async(user: SignerWithAddress, userAmount: BigNumber) => {
+	const supplyTokenTo = async (user: SignerWithAddress, userAmount: BigNumber) => {
 		const userAddress = user.address;
+
 		await underlyingToken.mock.balanceOf.withArgs(yieldSourceOwner.address).returns(toWei('200'));
-		await idletoken.mock.balanceOf.withArgs(idleYieldSource.address).returns(toWei('300'));
-		await idletoken.mock.tokenPriceWithFee.withArgs(idleYieldSource.address).returns(toWei('1'));
+
+		await idleToken.mock.balanceOf.withArgs(idleYieldSource.address).returns(toWei('300'));
+		await idleToken.mock.tokenPriceWithFee.withArgs(idleYieldSource.address).returns(toWei('1'));
+
 		await underlyingToken.mock.transferFrom
 			.withArgs(userAddress, idleYieldSource.address, userAmount)
 			.returns(true);
+
 		await underlyingToken.mock.allowance
-			.withArgs(idleYieldSource.address, idletoken.address)
+			.withArgs(idleYieldSource.address, idleToken.address)
 			.returns(toWei('0'));
-		await underlyingToken.mock.approve.withArgs(idletoken.address, userAmount).returns(true);
-		await idletoken.mock.mintIdleToken
+
+		await underlyingToken.mock.approve.withArgs(idleToken.address, userAmount).returns(true);
+		await idleToken.mock.mintIdleToken
 			.withArgs(userAmount, false, '0x0000000000000000000000000000000000000000')
 			.returns(toWei('100'));
+
 		await idleYieldSource.connect(user).supplyTokenTo(userAmount, userAddress);
 	};
 
 	describe('supplyTokenTo()', () => {
 		let amount: BigNumber;
 
-		beforeEach(async() => {
+		beforeEach(async () => {
 			amount = toWei('100');
 		});
 
-		it('should supply assets if totalSupply is 0', async() => {
+		it('should supply assets if totalSupply is 0', async () => {
 			await supplyTokenTo(yieldSourceOwner, amount);
-			expect(await idleYieldSource.totalShare()).to.equal(toWei('300'));
+			expect(await idleYieldSource.totalSupply()).to.equal(amount);
 		});
 
-		it('should supply assets if totalSupply is not 0', async() => {
+		it('should supply assets if totalSupply is not 0', async () => {
 			await idleYieldSource.mint(yieldSourceOwner.address, toWei('100'));
 			await idleYieldSource.mint(wallet2.address, toWei('100'));
 			await supplyTokenTo(yieldSourceOwner, amount);
 		});
 
-		it('should revert on error', async() => {
-			await underlyingToken.mock.approve.withArgs(idletoken.address, amount).returns(true);
-
-
-			await idletoken.mock.mintIdleToken
+		it('should revert on error', async () => {
+			await underlyingToken.mock.approve.withArgs(idleToken.address, amount).returns(true);
+			await idleToken.mock.mintIdleToken
 				.withArgs(amount, false, '0x0000000000000000000000000000000000000000')
 				.returns(toWei('100'));
 
@@ -275,14 +287,14 @@ describe('GenericProxyFactory', () => {
 			redeemAmount = toWei('100');
 		});
 
-		it('should redeem assets', async() => {
+		it('should redeem assets', async () => {
 			await idleYieldSource.mint(yieldSourceOwner.address, yieldSourceOwnerBalance);
-			await idletoken.mock.tokenPriceWithFee.withArgs(idleYieldSource.address).returns(toWei('1'));
-			await idletoken.mock.redeemIdleToken.withArgs(redeemAmount).returns(redeemAmount);
 
-			await underlyingToken.mock.balanceOf
+			await idleToken.mock.balanceOf
         .withArgs(idleYieldSource.address)
         .returns(yieldSourceOwnerBalance);
+
+			await idleToken.mock.redeemIdleToken.withArgs(redeemAmount).returns(redeemAmount);
 
 			await underlyingToken.mock.transfer
 				.withArgs(
@@ -297,24 +309,34 @@ describe('GenericProxyFactory', () => {
 			);
 		});
 
-		it('should not be able to redeem assets if balance is 0', async() => {
-			await idleYieldSource.mint(yieldSourceOwner.address, toWei('0'));
-			await idletoken.mock.tokenPriceWithFee.withArgs(idleYieldSource.address).returns(toWei('1'));
-			await idletoken.mock.redeemIdleToken.withArgs(toWei('0')).returns(toWei('0'));
-			await underlyingToken.mock.transfer
-				.withArgs(yieldSourceOwner.address, await idleYieldSource.tokenToShares(toWei('0'))).returns(true);
+		it('should not be able to redeem assets if balance is 0', async () => {
+			const zeroBalance = toWei('0');
+
+			await idleYieldSource.mint(yieldSourceOwner.address, zeroBalance);
+
+			await idleToken.mock.balanceOf
+        .withArgs(idleYieldSource.address)
+        .returns(zeroBalance);
+
+			await idleToken.mock.redeemIdleToken.withArgs(zeroBalance).returns(zeroBalance);
+
 			await expect(
 				idleYieldSource.connect(yieldSourceOwner).redeemToken(redeemAmount),
-			).to.be.reverted;
+			).to.be.revertedWith('ERC20: burn amount exceeds balance');
 		});
 
-		it('should fail to redeem if amount superior to balance', async() => {
+		it('should fail to redeem if amount superior to balance', async () => {
 			const yieldSourceOwnerLowBalance = toWei('10');
 			await idleYieldSource.mint(yieldSourceOwner.address, yieldSourceOwnerLowBalance);
-			await idletoken.mock.tokenPriceWithFee.withArgs(idleYieldSource.address).returns(toWei('1'));
-			await idletoken.mock.redeemIdleToken
+
+			await idleToken.mock.balanceOf
+        .withArgs(idleYieldSource.address)
+        .returns(yieldSourceOwnerLowBalance);
+
+			await idleToken.mock.redeemIdleToken
 				.withArgs(redeemAmount)
 				.returns(redeemAmount);
+
 			await expect(
 				idleYieldSource.connect(yieldSourceOwner).redeemToken(redeemAmount),
 			).to.be.revertedWith('ERC20: burn amount exceeds balance');
@@ -324,42 +346,43 @@ describe('GenericProxyFactory', () => {
 	describe('sponsor()', () => {
 		let amount: BigNumber;
 
-		beforeEach(async() => {
+		beforeEach(async () => {
 			amount = toWei('300');
 		});
 
-		it('should sponsor Yield Source', async() => {
-			const wallet2Amount = toWei('200');
+		it('should sponsor Yield Source', async () => {
+			const wallet2Amount = toWei('100');
 			await idleYieldSource.mint(wallet2.address, wallet2Amount);
-			await idletoken.mock.tokenPriceWithFee.withArgs(idleYieldSource.address).returns(toWei('1'));
+
 			await underlyingToken.mock.transferFrom
 				.withArgs(yieldSourceOwner.address, idleYieldSource.address, amount)
 				.returns(true);
+
 			await underlyingToken.mock.allowance
-				.withArgs(idleYieldSource.address, idletoken.address)
+				.withArgs(idleYieldSource.address, idleToken.address)
 				.returns(toWei('0'));
-			await underlyingToken.mock.approve.withArgs(idletoken.address, amount).returns(true);
-			await idletoken.mock.mintIdleToken
+
+			await underlyingToken.mock.approve.withArgs(idleToken.address, amount).returns(true);
+			await idleToken.mock.mintIdleToken
 				.withArgs(amount, false, '0x0000000000000000000000000000000000000000')
 				.returns(toWei('0'));
+
 			await idleYieldSource.connect(yieldSourceOwner).sponsor(amount);
-			await idletoken.mock.balanceOf
+			await idleToken.mock.balanceOf
 				.withArgs(idleYieldSource.address)
 				.returns(amount.add(wallet2Amount));
-			expect(await idleYieldSource.balanceOfToken(wallet2.address)).to.equal(
-				toWei('200'),
-			);
+			expect(await idleYieldSource.balanceOfToken(wallet2.address)).to.equal(amount.add(wallet2Amount));
 		});
 
-		it('should revert on error', async() => {
+		it('should revert on error', async () => {
 			await underlyingToken.mock.transferFrom
 				.withArgs(yieldSourceOwner.address, idleYieldSource.address, amount)
 				.returns(true);
 			await underlyingToken.mock.allowance
-				.withArgs(idleYieldSource.address, idletoken.address)
+				.withArgs(idleYieldSource.address, idleToken.address)
 				.returns(toWei('0'));
-			await underlyingToken.mock.approve.withArgs(idletoken.address, amount).returns(true);
-			await idletoken.mock.mintIdleToken
+			await underlyingToken.mock.approve.withArgs(idleToken.address, amount).returns(true);
+			await idleToken.mock.mintIdleToken
 				.withArgs(amount, false, '0x0000000000000000000000000000000000000000')
 				.reverts();
 			await expect(idleYieldSource.connect(yieldSourceOwner).sponsor(amount)).to.be.revertedWith('');
@@ -390,7 +413,7 @@ describe('GenericProxyFactory', () => {
       await expect(
         idleYieldSource
           .connect(contractsOwner)
-          .transferERC20(idletoken.address, wallet2.address, toWei('10')),
+          .transferERC20(idleToken.address, wallet2.address, toWei('10')),
       ).to.be.revertedWith('IdleYieldSource/idleToken-transfer-not-allowed');
     });
 

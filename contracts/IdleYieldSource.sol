@@ -6,7 +6,10 @@ import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
+import "@pooltogether/fixed-point/contracts/FixedPoint.sol";
+
 import "./interfaces/pooltogether/IProtocolYieldSource.sol";
 import "./interfaces/idle/IIdleToken.sol";
 import "./access/AssetManager.sol";
@@ -52,6 +55,7 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     /// @notice Interface for the yield-bearing Idle Token (eg: IdleDAI, IdleUSDC, etc...)
     IIdleToken public idleToken;
 
+    /// @dev IdleToken has 18 decimals
     uint256 public constant ONE_IDLE_TOKEN = 10**18;
 
     /// @notice Initializes the yield source with Idle Token
@@ -90,30 +94,46 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
         return _sharesToToken(balanceOf(addr));
     }
 
-    /// @notice Calculates the balance of Total idle Tokens Contract hasv
-    /// @return balance of Idle Tokens
-    function _totalShare() internal view returns(uint256) {
-        return idleToken.balanceOf(address(this));
+    /// @notice Calculates the current price per share
+    /// @return Average idleToken price for this contract
+    function _price() internal view returns (uint256) {
+      return idleToken.tokenPriceWithFee(address(this));
     }
 
     /// @notice Calculates the number of shares that should be mint or burned when a user deposit or withdraw
     /// @param tokens Amount of tokens
-    /// return Number of shares
-    function _tokenToShares(uint256 tokens) internal view returns (uint256 shares) {
-        shares = (tokens * ONE_IDLE_TOKEN) / _price();
+    /// @return Number of shares
+    function _tokenToShares(uint256 tokens) internal view returns (uint256) {
+        uint256 shares = 0;
+        uint256 totalSupply = totalSupply();
+
+        if (totalSupply == 0) {
+            shares = tokens;
+        } else {
+            // rate = tokens / shares
+            // shares = tokens * (totalShares / yieldSourceTotalSupply)
+            uint256 exchangeMantissa = FixedPoint.calculateMantissa(totalSupply, idleToken.balanceOf(address(this)).mul(_price()).div(ONE_IDLE_TOKEN));
+            shares = FixedPoint.multiplyUintByMantissa(tokens, exchangeMantissa);
+        }
+
+        return shares;
     }
 
     /// @notice Calculates the number of tokens a user has in the yield source
     /// @param shares Amount of shares
-    /// return Number of tokens
-    function _sharesToToken(uint256 shares) internal view returns (uint256 tokens) {
-        tokens = (shares * _price()) / ONE_IDLE_TOKEN;
-    }
+    /// @return Number of tokens
+    function _sharesToToken(uint256 shares) internal view returns (uint256) {
+        uint256 tokens = 0;
 
-    /// @notice Calculates the current price per share
-    /// @return avg idleToken price for this contract
-    function _price() internal view returns (uint256) {
-      return idleToken.tokenPriceWithFee(address(this));
+        if (totalSupply() == 0) {
+            tokens = shares;
+        } else {
+            // tokens = shares * (yieldSourceTotalSupply / totalShares)
+            uint256 exchangeMantissa = FixedPoint.calculateMantissa(idleToken.balanceOf(address(this)).mul(_price()).div(ONE_IDLE_TOKEN), totalSupply());
+            tokens = FixedPoint.multiplyUintByMantissa(shares, exchangeMantissa);
+        }
+
+        return tokens;
     }
 
     /// @notice Deposit asset tokens to Idle
