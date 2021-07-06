@@ -9,29 +9,34 @@
 
 ![Tests](https://github.com/sunnyRK/IdleYieldSource-PoolTogether/actions/workflows/main.yml/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/sunnyRK/IdleYieldSource-PoolTogether/badge.svg?branch=master)](https://coveralls.io/github/sunnyRK/IdleYieldSource-PoolTogether?branch=master)
-[![built-with openzeppelin](https://img.shields.io/badge/built%20with-OpenZeppelin-3677FF)](https://docs.openzeppelin.com/)  
+[![built-with openzeppelin](https://img.shields.io/badge/built%20with-OpenZeppelin-3677FF)](https://docs.openzeppelin.com/)
 
 PoolTogether Yield Source that uses [Idle](https://idle.finance/) to generate yield by lending ERC20 token supported by Idle and deposited into the Idle Yield Source.
 
 ## Setup
 
-1). Make `.env` file on root folder and add below variable with your config,  
+1). We use [direnv](https://direnv.net) to manage environment variables. You'll likely need to install it.
 
-    i). MNEMONIC='' 
-    ii). INFURA_API_KEY=  
-    iii). ALCHEMY_API_KEY=
-    iv). FORK_ENABLED="false"  
+Copy `.envrc.example` and write down the env variables needed to run this project.
+```
+cp .envrc.example .envrc
+```
 
-2). Install Dependency by 
-    
-    yarn 
+Once your env variables are setup, load them with:
+```
+direnv allow
+```
+
+2). Install Dependency by running:
+
+    yarn
 
 3). To compile Smart contract code:
-        
+
     yarn compile
- 
+
 3). To run unit tests:
-        
+
     yarn test
 
 4). Check test coverage

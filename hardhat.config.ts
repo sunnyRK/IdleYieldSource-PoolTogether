@@ -9,9 +9,6 @@ import "@nomiclabs/hardhat-etherscan";
 require("solidity-coverage");
 import networks from './hardhat.network';
 
-import * as dotenv from "dotenv";
-dotenv.config();
-
 import { HardhatUserConfig } from 'hardhat/config';
 
 const config: HardhatUserConfig = {
@@ -25,8 +22,6 @@ const config: HardhatUserConfig = {
   },
   networks,
   etherscan: {
-    // Your API key for Etherscan
-    // Obtain one at https://etherscan.io/
     apiKey: process.env.ETHERSCAN_API_KEY
   },
   solidity: {

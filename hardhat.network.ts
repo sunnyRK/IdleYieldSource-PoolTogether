@@ -1,11 +1,8 @@
 import { HardhatUserConfig } from 'hardhat/config';
-import * as dotenv from "dotenv";
 
-dotenv.config();
-
-const alchemyKey = process.env.ALCHEMY_API_KEY;
+const alchemyUrl = process.env.ALCHEMY_URL;
 const infuraApiKey = process.env.INFURA_API_KEY;
-const mnemonic = process.env.MNEMONIC;
+const mnemonic = process.env.HDWALLET_MNEMONIC;
 
 const networks: HardhatUserConfig['networks'] = {
   coverage: {
@@ -20,11 +17,11 @@ const networks: HardhatUserConfig['networks'] = {
   },
 };
 
-if (process.env.FORK_ENABLED == "true") {
+if (alchemyUrl && process.env.FORK_ENABLED && mnemonic) {
   networks.hardhat = {
     chainId: 1,
     forking: {
-      url: `https://eth-mainnet.alchemyapi.io/v2/${alchemyKey}`,
+      url: alchemyUrl,
       // blockNumber: 12226812
     },
     accounts: {
@@ -36,7 +33,7 @@ if (process.env.FORK_ENABLED == "true") {
     allowUnlimitedContractSize: true,
   };
 }
-  
+
 if (infuraApiKey && mnemonic) {
   networks.kovan = {
     url: `https://kovan.infura.io/v3/${infuraApiKey}`,
@@ -44,7 +41,7 @@ if (infuraApiKey && mnemonic) {
       mnemonic,
     },
   };
-  
+
   networks.ropsten = {
     url: `https://ropsten.infura.io/v3/${infuraApiKey}`,
     accounts: {
@@ -60,7 +57,7 @@ if (infuraApiKey && mnemonic) {
   };
 
   networks.mainnet = {
-    url: `https://eth-mainnet.alchemyapi.io/v2/${alchemyKey}`,
+    url: alchemyUrl,
     accounts: {
       mnemonic,
     },

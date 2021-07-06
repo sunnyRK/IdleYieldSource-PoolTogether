@@ -5,19 +5,19 @@ import "./IdleYieldSourceHarness.sol";
 import "../interfaces/GenericProxyFactory/IGenericProxyFactory.sol";
 
 contract IdleYieldSourceProxyFactoryHarness {
-    
+
     IdleYieldSourceHarness public instance;
     IGenericProxyFactory public iGenericProxyFactory;
 
     constructor(
-        address _idleToken,
+        IIdleToken _idleToken,
         address _iGenericProxyFactory
     ) {
         instance = new IdleYieldSourceHarness(_idleToken);
         iGenericProxyFactory = IGenericProxyFactory(_iGenericProxyFactory);
     }
-    
-    function createNewProxy() 
+
+    function createNewProxy()
         public returns (address instanceCreated, bytes memory result) {
             (instanceCreated, result)= iGenericProxyFactory.create(
                 address(instance),

@@ -7,16 +7,19 @@ import "../IdleYieldSource.sol";
 /* solium-disable security/no-block-members */
 contract IdleYieldSourceHarness is IdleYieldSource {
 
-  constructor(address _idleToken) IdleYieldSource() {
+  constructor(IIdleToken _idleToken) IdleYieldSource() {
     idleToken = _idleToken;
-    underlyingAsset = IIdleToken(idleToken).token();
+  }
+
+  function tokenAddress() external view returns (address) {
+    return _tokenAddress();
   }
 
   function mint(address account, uint256 amount) public returns (bool) {
     _mint(account, amount);
     return true;
   }
-  
+
   function totalShare() external view returns (uint256) {
       return _totalShare();
   }

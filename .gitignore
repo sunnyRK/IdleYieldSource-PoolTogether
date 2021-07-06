@@ -1,9 +1,11 @@
 node_modules
 
 #Hardhat files
+abi
+abis
 cache
 artifacts
-.env
+.envrc
 demo.ts
 test/idleYieldSourceOld.test.ts
 test/IdleYielSourceUnitTest.test.ts
