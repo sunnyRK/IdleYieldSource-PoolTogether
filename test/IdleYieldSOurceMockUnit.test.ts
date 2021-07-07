@@ -43,6 +43,16 @@ describe('GenericProxyFactory', () => {
 	let idletoken: any;
 	let maxValue: any
 
+	let isInitializeTest = false;
+
+  const initializeIdleYieldSource = async (
+    idleTokenAddress: string,
+  ) => {
+    await idleYieldSource.initialize(
+      idleTokenAddress,
+    );
+  };
+
 	beforeEach(async() => {
 		[contractsOwner, yieldSourceOwner, wallet2] = await ethers.getSigners();
 		maxValue = "115792089237316195423570985008687907853269984665640564039457584007913129639935"
@@ -89,14 +99,34 @@ describe('GenericProxyFactory', () => {
 			.withArgs(idleYieldSource.address, idletoken.address)
 			.returns(toWei('0'));
 		await underlyingToken.mock.approve.withArgs(idletoken.address, maxValue).returns(true);
-		await idleYieldSource.initialize(idletoken.address);
+
+		if (!isInitializeTest) {
+			await initializeIdleYieldSource(idletoken.address);
+		}
 	});
 
-	describe('create()', () => {
-		it('should create IdleYieldSource', async() => {
+	describe('initialize()', () => {
+		before(() => {
+      isInitializeTest = true;
+    });
+
+    after(() => {
+      isInitializeTest = false;
+    });
+
+
+		it('should initialize IdleYieldSource', async() => {
+			await initializeIdleYieldSource(idletoken.address);
+
 			expect(await idleYieldSource.idleToken()).to.equal(idletoken.address);
 			expect(await idleYieldSource.owner()).to.equal(contractsOwner.address);
 		});
+
+    it('should fail if idleToken is address zero', async () => {
+      await expect(
+				initializeIdleYieldSource(ethers.constants.AddressZero)
+      ).to.be.revertedWith('IdleYieldSource/idleToken-not-zero-address');
+    });
 	});
 
 	describe('depositToken()', () => {
@@ -255,7 +285,9 @@ describe('GenericProxyFactory', () => {
         .returns(yieldSourceOwnerBalance);
 
 			await underlyingToken.mock.transfer
-				.withArgs(yieldSourceOwner.address, redeemAmount)
+				.withArgs(
+					yieldSourceOwner.address,
+					await idleYieldSource.tokenToShares(redeemAmount))
 				.returns(true);
 
 			await idleYieldSource.connect(yieldSourceOwner).redeemToken(redeemAmount);
