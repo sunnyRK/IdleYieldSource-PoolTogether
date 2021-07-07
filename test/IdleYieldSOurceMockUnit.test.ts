@@ -44,11 +44,15 @@ describe('Idle Yield Source', () => {
 
 	let isInitializeTest = false;
 
+	const randomWallet = ethers.Wallet.createRandom();
+
   const initializeIdleYieldSource = async (
     idleTokenAddress: string,
+		idleReferralAddress: string,
   ) => {
     await idleYieldSource.initialize(
       idleTokenAddress,
+			idleReferralAddress,
     );
   };
 
@@ -102,7 +106,7 @@ describe('Idle Yield Source', () => {
 		await underlyingToken.mock.approve.withArgs(idleToken.address, maxValue).returns(true);
 
 		if (!isInitializeTest) {
-			await initializeIdleYieldSource(idleToken.address);
+			await initializeIdleYieldSource(idleToken.address, randomWallet.address);
 		}
 	});
 
@@ -117,17 +121,44 @@ describe('Idle Yield Source', () => {
 
 
 		it('should initialize IdleYieldSource', async() => {
-			await initializeIdleYieldSource(idleToken.address);
+			await initializeIdleYieldSource(idleToken.address, randomWallet.address);
 
 			expect(await idleYieldSource.idleToken()).to.equal(idleToken.address);
+			expect(await idleYieldSource.referralAddress()).to.equal(randomWallet.address);
 			expect(await idleYieldSource.owner()).to.equal(contractsOwner.address);
 		});
 
     it('should fail if idleToken is address zero', async () => {
       await expect(
-				initializeIdleYieldSource(ethers.constants.AddressZero)
+				initializeIdleYieldSource(ethers.constants.AddressZero, randomWallet.address)
       ).to.be.revertedWith('IdleYieldSource/idleToken-not-zero-address');
     });
+
+    it('should fail if referral address is address zero', async () => {
+      await expect(
+				initializeIdleYieldSource(idleToken.address, ethers.constants.AddressZero)
+      ).to.be.revertedWith('IdleYieldSource/referralAddress-not-zero-address');
+    });
+	});
+
+	describe('setReferralAddress()', () => {
+		it('should set referral address', async () => {
+			await idleYieldSource.connect(contractsOwner).setReferralAddress(randomWallet.address);
+
+			expect(await idleYieldSource.referralAddress()).to.equal(randomWallet.address);
+		});
+
+		it('should fail if referral address is address zero', async () => {
+			await expect(
+				idleYieldSource.connect(contractsOwner).setReferralAddress(ethers.constants.AddressZero)
+			).to.be.revertedWith('IdleYieldSource/referralAddress-not-zero-address');
+		});
+
+		it('should fail if not owner', async () => {
+			await expect(
+				idleYieldSource.connect(wallet2).setReferralAddress(ethers.constants.AddressZero)
+			).to.be.revertedWith('Ownable: caller is not the owner');
+		});
 	});
 
 	describe('approveMaxAmount()', () => {
@@ -142,12 +173,12 @@ describe('Idle Yield Source', () => {
       expect(await underlyingToken.allowance(idleYieldSource.address, idleToken.address)).to.equal(maxValue);
     });
 
-		it('should approve Idle token to spend max uint256 amount if assetManager', async () => {
+		it('should succeed if assetManager', async () => {
       await idleYieldSource.connect(contractsOwner).setAssetManager(wallet2.address);
 			expect(await idleYieldSource.connect(wallet2).callStatic.approveMaxAmount()).to.equal(true);
     });
 
-		it('should fail to approve Idle token to spend max uint256 amount if not contractsOwner or assetManager', async () => {
+		it('should fail if not contractsOwner or assetManager', async () => {
 			await expect(idleYieldSource.connect(wallet2).callStatic.approveMaxAmount()).to.be.revertedWith('OwnerOrAssetManager: caller is not owner or asset manager');
     });
   });
@@ -264,7 +295,7 @@ describe('Idle Yield Source', () => {
 
 		await underlyingToken.mock.approve.withArgs(idleToken.address, userAmount).returns(true);
 		await idleToken.mock.mintIdleToken
-			.withArgs(userAmount, false, '0x0000000000000000000000000000000000000000')
+			.withArgs(userAmount, false, randomWallet.address)
 			.returns(toWei('100'));
 
 		await idleYieldSource.connect(user).supplyTokenTo(userAmount, userAddress);
@@ -291,7 +322,7 @@ describe('Idle Yield Source', () => {
 		it('should revert on error', async () => {
 			await underlyingToken.mock.approve.withArgs(idleToken.address, amount).returns(true);
 			await idleToken.mock.mintIdleToken
-				.withArgs(amount, false, '0x0000000000000000000000000000000000000000')
+				.withArgs(amount, false, randomWallet.address)
 				.returns(toWei('100'));
 
 			await expect(
@@ -386,7 +417,7 @@ describe('Idle Yield Source', () => {
 
 			await underlyingToken.mock.approve.withArgs(idleToken.address, amount).returns(true);
 			await idleToken.mock.mintIdleToken
-				.withArgs(amount, false, '0x0000000000000000000000000000000000000000')
+				.withArgs(amount, false, randomWallet.address)
 				.returns(toWei('0'));
 
 			await idleYieldSource.connect(yieldSourceOwner).sponsor(amount);
@@ -405,7 +436,7 @@ describe('Idle Yield Source', () => {
 				.returns(toWei('0'));
 			await underlyingToken.mock.approve.withArgs(idleToken.address, amount).returns(true);
 			await idleToken.mock.mintIdleToken
-				.withArgs(amount, false, '0x0000000000000000000000000000000000000000')
+				.withArgs(amount, false, randomWallet.address)
 				.reverts();
 			await expect(idleYieldSource.connect(yieldSourceOwner).sponsor(amount)).to.be.revertedWith('');
 		});

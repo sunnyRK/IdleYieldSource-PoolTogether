@@ -21,7 +21,10 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     using SafeERC20Upgradeable for IERC20Upgradeable;
 
     /// @notice Emitted when the yield source is initialized
-    event IdleYieldSourceInitialized(address indexed idleToken);
+    event IdleYieldSourceInitialized(
+        address indexed idleToken,
+        address indexed referralAddress
+    );
 
     /// @notice Emitted when asset tokens are redeemed from the yield source
     event RedeemedToken(
@@ -55,16 +58,23 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     /// @notice Interface for the yield-bearing Idle Token (eg: IdleDAI, IdleUSDC, etc...)
     IIdleToken public idleToken;
 
+    /// @notice Address for Idle referral rewards
+    address public referralAddress;
+
     /// @dev IdleToken has 18 decimals
-    uint256 public constant ONE_IDLE_TOKEN = 10**18;
+    uint256 private constant ONE_IDLE_TOKEN = 10**18;
 
     /// @notice Initializes the yield source with Idle Token
     /// @param _idleToken Idle Token address
     function initialize(
-        IIdleToken _idleToken
+        IIdleToken _idleToken,
+        address _referralAddress
     ) public initializer {
         require(address(_idleToken) != address(0), "IdleYieldSource/idleToken-not-zero-address");
         idleToken = _idleToken;
+
+        require(address(_referralAddress) != address(0), "IdleYieldSource/referralAddress-not-zero-address");
+        referralAddress = _referralAddress;
 
         __Ownable_init();
         __ERC20_init("IdleMintShare", "IMT");
@@ -73,7 +83,17 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
         IERC20Upgradeable _underlyingAsset = IERC20Upgradeable(_idleToken.token());
         _underlyingAsset.safeApprove(address(_idleToken), type(uint256).max);
 
-        emit IdleYieldSourceInitialized(address(_idleToken));
+        emit IdleYieldSourceInitialized(address(_idleToken), _referralAddress);
+    }
+
+    /// @notice Set Idle referral address
+    /// @dev Referral address can't be address zero
+    /// @dev This function is only callable by the owner or asset manager
+    /// @return true if operation is successful
+    function setReferralAddress(address _referralAddress) external onlyOwner returns (bool) {
+        require(address(_referralAddress) != address(0), "IdleYieldSource/referralAddress-not-zero-address");
+        referralAddress = _referralAddress;
+        return true;
     }
 
     /// @notice Approve Idle token contract to spend max uint256 amount
@@ -153,7 +173,7 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     /// @return number of minted tokens
     function _depositToIdle(uint256 mintAmount) internal returns (uint256) {
         IERC20Upgradeable(_tokenAddress()).safeTransferFrom(msg.sender, address(this), mintAmount);
-        return idleToken.mintIdleToken(mintAmount, false, address(0));
+        return idleToken.mintIdleToken(mintAmount, false, referralAddress);
     }
 
     /// @notice Allows assets to be supplied on other user's behalf using the `to` param.
