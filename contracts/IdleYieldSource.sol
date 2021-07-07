@@ -166,7 +166,7 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     /// @notice Allows someone to deposit into the yield source without receiving any shares
     /// @dev This allows anyone to distribute tokens among the share holders
     /// @param amount The amount of tokens to deposit
-    function sponsor(uint256 amount) external override {
+    function sponsor(uint256 amount) external override nonReentrant {
         _depositToIdle(amount);
         emit Sponsored(msg.sender, amount);
     }
