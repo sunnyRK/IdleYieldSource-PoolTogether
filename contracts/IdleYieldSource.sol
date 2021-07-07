@@ -67,13 +67,24 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
         idleToken = _idleToken;
 
         __Ownable_init();
-        __ERC20_init('IdleMintShare', 'IMT');
+        __ERC20_init("IdleMintShare", "IMT");
         __ReentrancyGuard_init();
 
         IERC20Upgradeable _underlyingAsset = IERC20Upgradeable(_idleToken.token());
         _underlyingAsset.safeApprove(address(_idleToken), type(uint256).max);
 
         emit IdleYieldSourceInitialized(address(_idleToken));
+    }
+
+    /// @notice Approve Idle token contract to spend max uint256 amount
+    /// @dev Emergency function to re-approve max amount if approval amount dropped too low
+    /// @return true if operation is successful
+    function approveMaxAmount() external onlyOwnerOrAssetManager returns (bool) {
+        IIdleToken _idleToken = idleToken;
+        IERC20Upgradeable _underlyingAsset = IERC20Upgradeable(_idleToken.token());
+
+        _underlyingAsset.safeApprove(address(_idleToken), type(uint256).max);
+        return true;
     }
 
     /// @notice Returns the ERC20 asset token used for deposits.
@@ -124,12 +135,13 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     /// @return Number of tokens
     function _sharesToToken(uint256 shares) internal view returns (uint256) {
         uint256 tokens = 0;
+        uint256 totalSupply = totalSupply();
 
-        if (totalSupply() == 0) {
+        if (totalSupply == 0) {
             tokens = shares;
         } else {
             // tokens = shares * (yieldSourceTotalSupply / totalShares)
-            uint256 exchangeMantissa = FixedPoint.calculateMantissa(idleToken.balanceOf(address(this)).mul(_price()).div(ONE_IDLE_TOKEN), totalSupply());
+            uint256 exchangeMantissa = FixedPoint.calculateMantissa(idleToken.balanceOf(address(this)).mul(_price()).div(ONE_IDLE_TOKEN), totalSupply);
             tokens = FixedPoint.multiplyUintByMantissa(shares, exchangeMantissa);
         }
 

@@ -40,7 +40,7 @@ describe('Idle Yield Source', () => {
 	let erc20Token: ERC20;
 	let underlyingToken: any;
 	let idleToken: IIdleToken;
-	let maxValue: any
+	let maxValue: BigNumber;
 
 	let isInitializeTest = false;
 
@@ -54,8 +54,8 @@ describe('Idle Yield Source', () => {
 
 	beforeEach(async() => {
 		[contractsOwner, yieldSourceOwner, wallet2] = await ethers.getSigners();
-		maxValue = "115792089237316195423570985008687907853269984665640564039457584007913129639935"
-        provider = waffle.provider;
+		maxValue = ethers.constants.MaxUint256;
+		provider = waffle.provider;
 
 		erc20Token = ((await deployMockContract(
 			contractsOwner,
@@ -98,7 +98,7 @@ describe('Idle Yield Source', () => {
 
 		await underlyingToken.mock.allowance
 			.withArgs(idleYieldSource.address, idleToken.address)
-			.returns(toWei('0'));
+			.returns(ethers.constants.Zero);
 		await underlyingToken.mock.approve.withArgs(idleToken.address, maxValue).returns(true);
 
 		if (!isInitializeTest) {
@@ -129,6 +129,28 @@ describe('Idle Yield Source', () => {
       ).to.be.revertedWith('IdleYieldSource/idleToken-not-zero-address');
     });
 	});
+
+	describe('approveMaxAmount()', () => {
+    it('should approve Idle token to spend max uint256 amount', async () => {
+      await underlyingToken.mock.allowance.withArgs(idleYieldSource.address, idleToken.address).returns(ethers.constants.Zero);
+      expect(await underlyingToken.allowance(idleYieldSource.address, idleToken.address)).to.equal(ethers.constants.Zero);
+
+      await underlyingToken.mock.approve.withArgs(idleToken.address, maxValue).returns(true);
+      expect(await idleYieldSource.connect(contractsOwner).callStatic.approveMaxAmount()).to.equal(true);
+
+      await underlyingToken.mock.allowance.withArgs(idleYieldSource.address, idleToken.address).returns(maxValue);
+      expect(await underlyingToken.allowance(idleYieldSource.address, idleToken.address)).to.equal(maxValue);
+    });
+
+		it('should approve Idle token to spend max uint256 amount if assetManager', async () => {
+      await idleYieldSource.connect(contractsOwner).setAssetManager(wallet2.address);
+			expect(await idleYieldSource.connect(wallet2).callStatic.approveMaxAmount()).to.equal(true);
+    });
+
+		it('should fail to approve Idle token to spend max uint256 amount if not contractsOwner or assetManager', async () => {
+			await expect(idleYieldSource.connect(wallet2).callStatic.approveMaxAmount()).to.be.revertedWith('OwnerOrAssetManager: caller is not owner or asset manager');
+    });
+  });
 
 	describe('depositToken()', () => {
 		it('should return the underlying token', async () => {
