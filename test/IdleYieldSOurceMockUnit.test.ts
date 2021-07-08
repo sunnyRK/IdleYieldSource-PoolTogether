@@ -163,23 +163,14 @@ describe('Idle Yield Source', () => {
 
 	describe('approveMaxAmount()', () => {
     it('should approve Idle token to spend max uint256 amount', async () => {
-      await underlyingToken.mock.allowance.withArgs(idleYieldSource.address, idleToken.address).returns(ethers.constants.Zero);
-      expect(await underlyingToken.allowance(idleYieldSource.address, idleToken.address)).to.equal(ethers.constants.Zero);
-
-      await underlyingToken.mock.approve.withArgs(idleToken.address, maxValue).returns(true);
-      expect(await idleYieldSource.connect(contractsOwner).callStatic.approveMaxAmount()).to.equal(true);
-
       await underlyingToken.mock.allowance.withArgs(idleYieldSource.address, idleToken.address).returns(maxValue);
+
+			expect(await idleYieldSource.connect(contractsOwner).callStatic.approveMaxAmount()).to.equal(true);
       expect(await underlyingToken.allowance(idleYieldSource.address, idleToken.address)).to.equal(maxValue);
     });
 
-		it('should succeed if assetManager', async () => {
-      await idleYieldSource.connect(contractsOwner).setAssetManager(wallet2.address);
-			expect(await idleYieldSource.connect(wallet2).callStatic.approveMaxAmount()).to.equal(true);
-    });
-
-		it('should fail if not contractsOwner or assetManager', async () => {
-			await expect(idleYieldSource.connect(wallet2).callStatic.approveMaxAmount()).to.be.revertedWith('OwnerOrAssetManager: caller is not owner or asset manager');
+		it('should fail if not contractsOwner', async () => {
+			await expect(idleYieldSource.connect(wallet2).callStatic.approveMaxAmount()).to.be.revertedWith('Ownable: caller is not the owner');
     });
   });
 

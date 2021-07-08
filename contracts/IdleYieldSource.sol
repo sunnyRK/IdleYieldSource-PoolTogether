@@ -99,11 +99,12 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     /// @notice Approve Idle token contract to spend max uint256 amount
     /// @dev Emergency function to re-approve max amount if approval amount dropped too low
     /// @return true if operation is successful
-    function approveMaxAmount() external onlyOwnerOrAssetManager returns (bool) {
+    function approveMaxAmount() external onlyOwner returns (bool) {
         IIdleToken _idleToken = idleToken;
         IERC20Upgradeable _underlyingAsset = IERC20Upgradeable(_idleToken.token());
+        uint256 allowance = _underlyingAsset.allowance(address(this), address(_idleToken));
 
-        _underlyingAsset.safeApprove(address(_idleToken), type(uint256).max);
+        _underlyingAsset.safeIncreaseAllowance(address(_idleToken), type(uint256).max.sub(allowance));
         return true;
     }
 
