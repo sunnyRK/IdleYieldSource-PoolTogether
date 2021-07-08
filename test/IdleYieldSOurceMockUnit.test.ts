@@ -161,6 +161,19 @@ describe('Idle Yield Source', () => {
 		});
 	});
 
+	describe('setRebalance()', () => {
+		it.only('should set rebalance', async () => {
+			expect(await idleYieldSource.connect(contractsOwner).callStatic.setRebalance(true)).to.equal(true);
+			expect(await idleYieldSource.connect(contractsOwner).callStatic.setRebalance(false)).to.equal(false);
+		});
+
+		it('should fail if not owner', async () => {
+			await expect(
+				idleYieldSource.connect(wallet2).setRebalance(true)
+			).to.be.revertedWith('Ownable: caller is not the owner');
+		});
+	});
+
 	describe('approveMaxAmount()', () => {
     it('should approve Idle token to spend max uint256 amount', async () => {
       await underlyingToken.mock.allowance.withArgs(idleYieldSource.address, idleToken.address).returns(maxValue);

@@ -64,6 +64,10 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     /// @dev IdleToken has 18 decimals
     uint256 private constant ONE_IDLE_TOKEN = 10**18;
 
+    /// @notice IdleToken boolean to skip the rebalance or not
+    /// @dev Set to `false`, it will rebalance and keep allocations up to date
+    bool private skipWholeRebalance = false;
+
     /// @notice Initializes the yield source with Idle Token
     /// @param _idleToken Idle Token address
     function initialize(
@@ -94,6 +98,13 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
         require(address(_referralAddress) != address(0), "IdleYieldSource/referralAddress-not-zero-address");
         referralAddress = _referralAddress;
         return true;
+    }
+
+    /// @notice Set Idle token skipWholeRebalance boolean used in the `idleToken.mintIdleToken()` function
+    /// @dev This function is only callable by the owner or asset manager
+    /// @return true if operation is successful
+    function setRebalance(bool skipRebalance) external onlyOwner returns (bool) {
+        return skipWholeRebalance = skipRebalance;
     }
 
     /// @notice Approve Idle token contract to spend max uint256 amount
@@ -174,7 +185,7 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     /// @return number of minted tokens
     function _depositToIdle(uint256 mintAmount) internal returns (uint256) {
         IERC20Upgradeable(_tokenAddress()).safeTransferFrom(msg.sender, address(this), mintAmount);
-        return idleToken.mintIdleToken(mintAmount, false, referralAddress);
+        return idleToken.mintIdleToken(mintAmount, skipWholeRebalance, referralAddress);
     }
 
     /// @notice Allows assets to be supplied on other user's behalf using the `to` param.
