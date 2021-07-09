@@ -55,6 +55,16 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
         address indexed token
     );
 
+    /// @notice Emitted when referralAddress is updated by the owner
+    event ReferralAddress(
+        address indexed referralAddress
+    );
+
+    /// @notice Emitted when skipWholeRebalance is updated by the owner
+    event Rebalance(
+        bool skipRebalance
+    );
+    
     /// @notice Interface for the yield-bearing Idle Token (eg: IdleDAI, IdleUSDC, etc...)
     IIdleToken public idleToken;
 
@@ -97,6 +107,7 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     function setReferralAddress(address _referralAddress) external onlyOwner returns (bool) {
         require(address(_referralAddress) != address(0), "IdleYieldSource/referralAddress-not-zero-address");
         referralAddress = _referralAddress;
+        emit ReferralAddress(_referralAddress);
         return true;
     }
 
@@ -104,6 +115,7 @@ contract IdleYieldSource is IProtocolYieldSource, Initializable, ReentrancyGuard
     /// @dev This function is only callable by the owner or asset manager
     /// @return true if operation is successful
     function setRebalance(bool skipRebalance) external onlyOwner returns (bool) {
+        emit Rebalance(skipRebalance);
         return skipWholeRebalance = skipRebalance;
     }
 
